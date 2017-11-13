@@ -35,5 +35,11 @@
   <ItemGroup>
     <Folder Include="Source\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
+      <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
+      <Name>Rise.Numerics</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Imaging", "Rise.Imagin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Framework", "Rise.Framework\Rise.Framework.csproj", "{B374B137-D5DE-41F2-AA8A-EDD234D400CA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Test", "Rise.Test\Rise.Test.csproj", "{AF2A75B7-3202-4425-9EF7-25223BB969C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF2A75B7-3202-4425-9EF7-25223BB969C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF2A75B7-3202-4425-9EF7-25223BB969C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF2A75B7-3202-4425-9EF7-25223BB969C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF2A75B7-3202-4425-9EF7-25223BB969C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
