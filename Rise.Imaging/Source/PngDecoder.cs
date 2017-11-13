@@ -24,7 +24,7 @@ namespace Rise.Imaging
     {
         static readonly byte[] signature = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
-        DeflateDecoder inflater = new DeflateDecoder();
+        DeflateDecoder inflater;
         byte[] compressed;
         int compressedSize;
         byte[] filtered;
@@ -70,8 +70,18 @@ namespace Rise.Imaging
 
         void Decode(byte[] source, ref Color[] pixels)
         {
+            //Parse the PNG file to get all our compressed bytes
             ParsePng(source);
-            Inflate();
+
+            //Make sure the ZLIB data is in good form
+            CheckZLibHeader();
+
+            //Inflate the compressed bytes
+            if (inflater == null)
+                inflater = new DeflateDecoder();
+            filtered = inflater.Decode(compressed, 2);
+
+            //Unfilter the filtered scanlines
             Unfilter(ref pixels);
         }
 
@@ -150,9 +160,13 @@ namespace Rise.Imaging
             }
             ind = prevInd;
 
-            //Make sure we ended correctly
+            //Make sure the stream ends on an IEND block
             if (chunkType != ChunkType.IEND)
                 throw new Exception("PNG must end with IEND chunk");
+
+            //Make sure we actually had data
+            if (compLen <= 0)
+                throw new Exception("no IDAT data to decode");
 
             //Make sure the compressed array is large enough
             if (compressed == null)
@@ -174,20 +188,12 @@ namespace Rise.Imaging
                 chunkLength = (int)ReadInt();
                 chunkType = (ChunkType)ReadInt();
             }
-
-            //Make sure we ended correctly
-            if (chunkType != ChunkType.IEND)
-                throw new Exception("PNG must end with IEND chunk");
-
-            //Make sure we actually had data
-            if (compressedSize <= 0)
-                throw new Exception("no IDAT data to decode");
         }
 
-        void ParseZLibHeader(ref int ind)
+        void CheckZLibHeader()
         {
-            byte cmf = compressed[ind++];
-            byte flg = compressed[ind++];
+            byte cmf = compressed[0];
+            byte flg = compressed[1];
 
             //Check checksum
             if (((256 * cmf + flg) % 31) != 0)
@@ -204,13 +210,6 @@ namespace Rise.Imaging
             //Make sure there's no preset dictionary
             if ((flg & 0x20) != 0)
                 throw new Exception("preset dictionary not allowed");
-        }
-
-        void Inflate()
-        {
-            int ind = 0;
-            ParseZLibHeader(ref ind);
-            filtered = inflater.Decode(compressed, ind);
         }
 
         static byte ByteCast(int val)
