@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Rectangle : IEquatable<Rectangle>, IShape
+    public struct Rectangle : IEquatable<Rectangle>, IShape, ICopyable<Rectangle>
     {
         public static readonly Rectangle Empty = new Rectangle();
 
@@ -155,6 +155,14 @@ namespace Rise
         public Vector2 RightCenter
         {
             get { return new Vector2(X + W, CenterY); }
+        }
+
+        public void CopyTo(out Rectangle other)
+        {
+            other.X = X;
+            other.Y = Y;
+            other.W = W;
+            other.H = H;
         }
 
         public override bool Equals(object obj)

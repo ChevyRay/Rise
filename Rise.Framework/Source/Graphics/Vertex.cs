@@ -4,16 +4,9 @@ namespace Rise
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct Vertex : ICopyable<Vertex>
     {
-        [VertexLayout(0, 2, VertexType.Float, false, 0)]
         public Vector2 Pos;
-
-        [VertexLayout(1, 2, VertexType.Float, false, 8)]
         public Vector2 Tex;
-
-        [VertexLayout(2, 4, VertexType.UnsignedByte, true, 16)]
         public Color Mul;
-
-        [VertexLayout(3, 4, VertexType.UnsignedByte, true, 16)]
         public Color Add;
 
         public Vertex(Vector2 pos, Vector2 tex, Color mul, Color add)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Rise.OpenGL;
 namespace Rise
 {
     abstract class UniformValue

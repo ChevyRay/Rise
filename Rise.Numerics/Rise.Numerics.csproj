@@ -57,6 +57,7 @@
     <Compile Include="Source\RayHit.cs" />
     <Compile Include="Source\Rectangle.cs" />
     <Compile Include="Source\Triangle.cs" />
+    <Compile Include="Source\ICopyable.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

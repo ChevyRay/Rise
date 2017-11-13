@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Matrix4x4 : IEquatable<Matrix4x4>
+    public struct Matrix4x4 : IEquatable<Matrix4x4>, ICopyable<Matrix4x4>
     {
         public static readonly Matrix4x4 Identity = new Matrix4x4(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f);
 

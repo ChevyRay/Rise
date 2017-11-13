@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct RectangleI : IEquatable<RectangleI>
+    public struct RectangleI : IEquatable<RectangleI>, ICopyable<RectangleI>
     {
         public static readonly RectangleI Empty = new RectangleI();
 
@@ -169,6 +169,14 @@ namespace Rise
         public bool Contains(Point2 p)
         {
             return p.X >= X && p.Y >= Y && p.X < Right && p.Y < Bottom;
+        }
+
+        public void CopyTo(out RectangleI other)
+        {
+            other.X = X;
+            other.Y = Y;
+            other.W = W;
+            other.H = H;
         }
 
         public override int GetHashCode()

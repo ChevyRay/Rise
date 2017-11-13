@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using Jump.OpenGL;
+using Rise.OpenGL;
 namespace Rise
 {
     public class Texture : ResourceHandle

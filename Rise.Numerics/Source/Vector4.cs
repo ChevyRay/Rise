@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Vector4 : IEquatable<Vector4>
+    public struct Vector4 : IEquatable<Vector4>, ICopyable<Vector4>
     {
         public static readonly Vector4 Zero = new Vector4(0f, 0f, 0f, 0f);
 

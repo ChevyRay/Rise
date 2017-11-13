@@ -1,5 +1,5 @@
 ﻿using System;
-using Jump.OpenGL;
+using Rise.OpenGL;
 namespace Rise
 {
     public class RenderTarget : ResourceHandle

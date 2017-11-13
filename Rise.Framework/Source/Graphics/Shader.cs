@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using Jump.OpenGL;
+using Rise.OpenGL;
 namespace Rise
 {
     class UniformDef
