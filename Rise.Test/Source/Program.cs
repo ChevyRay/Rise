@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Diagnostics;
 using Rise;
 using Rise.Imaging;
 using Rise.PlatformSDL;
@@ -28,7 +29,7 @@ namespace Rise.Test
 
         static void Render()
         {
-            
+            Graphics.Clear(Color.Black);
         }
     }
 }
