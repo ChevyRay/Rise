@@ -1,0 +1,39 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Numerics", "Rise.Numerics\Rise.Numerics.csproj", "{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Geometry", "Rise.Geometry\Rise.Geometry.csproj", "{9CF89602-A9CB-4879-B4BC-E985B3D138FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Imaging", "Rise.Imaging\Rise.Imaging.csproj", "{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Framework", "Rise.Framework\Rise.Framework.csproj", "{B374B137-D5DE-41F2-AA8A-EDD234D400CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CF89602-A9CB-4879-B4BC-E985B3D138FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CF89602-A9CB-4879-B4BC-E985B3D138FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CF89602-A9CB-4879-B4BC-E985B3D138FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CF89602-A9CB-4879-B4BC-E985B3D138FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B374B137-D5DE-41F2-AA8A-EDD234D400CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		Policies = $0
+		$0.DotNetNamingPolicy = $1
+	EndGlobalSection
+EndGlobal
