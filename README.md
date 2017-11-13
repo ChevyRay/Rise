@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="140" height="254" src="Assets/logo_large.png">
+  <img width="280" height="508" src="Assets/readme_logo.png">
 </p>
 
 # Rise
