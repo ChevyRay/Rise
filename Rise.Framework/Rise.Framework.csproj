@@ -38,7 +38,6 @@
     <Compile Include="Source\Core\ResourceHandle.cs" />
     <Compile Include="Source\Core\Screen.cs" />
     <Compile Include="Source\Core\Time.cs" />
-    <Compile Include="Source\Graphics\Bitmap.cs" />
     <Compile Include="Source\Graphics\BlendMode.cs" />
     <Compile Include="Source\Graphics\Graphics.cs" />
     <Compile Include="Source\Graphics\Material.cs" />
@@ -62,6 +61,10 @@
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rise.Imaging\Rise.Imaging.csproj">
+      <Project>{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}</Project>
+      <Name>Rise.Imaging</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

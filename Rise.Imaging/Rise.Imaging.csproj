@@ -41,6 +41,8 @@
     <Compile Include="Source\PngDecoder.cs" />
     <Compile Include="Source\DeflateDecoder.cs" />
     <Compile Include="Source\Bitmap.cs" />
+    <Compile Include="Source\ImageLoader.cs" />
+    <Compile Include="Source\FormatDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

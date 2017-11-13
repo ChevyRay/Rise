@@ -20,7 +20,7 @@ namespace Rise.Imaging
         PaethFirst
     }
 
-    public class PngDecoder
+    public class PngDecoder : FormatDecoder
     {
         static readonly byte[] signature = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
@@ -36,39 +36,12 @@ namespace Rise.Imaging
         int filterMethod;
         int interlaceMethod;
 
-        public Color[] Decode(byte[] source, out int w, out int h)
+        public PngDecoder() : base(".png")
         {
-            Color[] pixels = null;
-            Decode(source, ref pixels);
-            w = width;
-            h = height;
-            return pixels;
-        }
-        public void Decode(byte[] source, out int w, out int h, ref Color[] pixels)
-        {
-            Decode(source, ref pixels);
-            w = width;
-            h = height;
-        }
-        public Bitmap Decode(byte[] source)
-        {
-            Color[] pixels = null;
-            Decode(source, ref pixels);
-            return new Bitmap(pixels, width, height);
-        }
-        public void Decode(byte[] source, ref Bitmap bitmap)
-        {
-            if (bitmap != null)
-            {
-                int w, h;
-                Decode(source, out w, out h, ref bitmap.pixels);
-                bitmap.SetPixels(bitmap.pixels, w, h);
-            }
-            else
-                bitmap = Decode(source);
+            
         }
 
-        void Decode(byte[] source, ref Color[] pixels)
+        public override void Decode(byte[] source, out int w, out int h, ref Color[] pixels)
         {
             //Parse the PNG file to get all our compressed bytes
             ParsePng(source);
@@ -83,6 +56,10 @@ namespace Rise.Imaging
 
             //Unfilter the filtered scanlines
             Unfilter(ref pixels);
+
+            //Return the size
+            w = width;
+            h = height;
         }
 
         void ParsePng(byte[] source)

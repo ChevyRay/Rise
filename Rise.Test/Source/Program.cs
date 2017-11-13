@@ -2,26 +2,33 @@
 using System.IO;
 using Rise;
 using Rise.Imaging;
+using Rise.PlatformSDL;
 namespace Rise.Test
 {
-    class Program
+    static class Program
     {
         public static void Main(string[] args)
         {
-            var decoder = new PngDecoder();
-            int w, h;
-            var pixels = decoder.Decode(File.ReadAllBytes("Assets/face.png"), out w, out h);
+            App.Init<PlatformSDL2>();
+            App.OnInit += Init;
+            App.OnUpdate += Update;
+            App.OnRender += Render;
+            App.Run("Rise.Test", 640, 360, null);
+        }
 
-            int i = 0;
-            for (int y = 0; y < h; ++y)
-            {
-                for (int x = 0; x < w; ++x)
-                {
-                    Console.Write(pixels[i].A > 0 ? 'X' : ' ');
-                    ++i;
-                }
-                Console.WriteLine();
-            }
+        static void Init()
+        {
+            
+        }
+
+        static void Update()
+        {
+            
+        }
+
+        static void Render()
+        {
+            
         }
     }
 }

@@ -24,14 +24,14 @@ namespace Rise
             MagFilter = TextureFilter.Linear;
             Format = format;
         }
-        public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
+        /*public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
         {
             SetPixels(bitmap);
         }
         public Texture(string file, bool premultiply) : this(new Bitmap(file, premultiply))
         {
             
-        }
+        }*/
         public Texture(int width, int height, Color[] pixels) : this(TextureFormat.RGBA)
         {
             SetPixels(width, height, pixels);
@@ -78,7 +78,7 @@ namespace Rise
             MagFilter = filter;
         }
 
-        public void GetPixels(Bitmap bitmap)
+        /*public void GetPixels(Bitmap bitmap)
         {
             if (Width != bitmap.Width)
                 throw new Exception("Bitmap width does not match.");
@@ -95,12 +95,12 @@ namespace Rise
             var bitmap = new Bitmap(Width, Height);
             GetPixels(bitmap);
             return bitmap;
-        }
+        }*/
 
-        public void SetPixels(Bitmap bitmap)
+        /*public void SetPixels(Bitmap bitmap)
         {
             SetPixels(bitmap.Width, bitmap.Height, bitmap.Pixels);
-        }
+        }*/
         public unsafe void SetPixels(int width, int height, Color[] pixels)
         {
             if (pixels.Length < (width * height))

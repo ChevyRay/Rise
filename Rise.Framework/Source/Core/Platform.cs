@@ -75,10 +75,10 @@ namespace Rise
         public abstract void CenterWindow();
 
         public abstract bool BeginIO();
-        public abstract string ReadTextFile(string file);
+        /*public abstract string ReadTextFile(string file);
         public abstract Color[] ReadImageFile(string file, out int w, out int h);
         public abstract bool WriteTextFile(string file, ref string text);
-        public abstract bool WriteImageFile(string file, int w, int h, Color[] bytes);
+        public abstract bool WriteImageFile(string file, int w, int h, Color[] bytes);*/
         public abstract bool EndIO();
 
         public abstract string GetClipboard();
