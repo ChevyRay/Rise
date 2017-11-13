@@ -45,10 +45,6 @@
       <Project>{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}</Project>
       <Name>Rise.Imaging</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rise.Geometry\Rise.Geometry.csproj">
-      <Project>{9CF89602-A9CB-4879-B4BC-E985B3D138FC}</Project>
-      <Name>Rise.Geometry</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Rise.Framework\Rise.Framework.csproj">
       <Project>{B374B137-D5DE-41F2-AA8A-EDD234D400CA}</Project>
       <Name>Rise.Framework</Name>

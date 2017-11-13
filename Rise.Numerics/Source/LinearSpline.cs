@@ -142,7 +142,7 @@ namespace Rise
             {
                 if (updateLengths)
                     UpdateLengths();
-                return loopLength;
+                return length;
             }
         }
     }

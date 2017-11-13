@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    public struct Rectangle : IEquatable<Rectangle>
+    public struct Rectangle : IEquatable<Rectangle>, IShape
     {
         public static readonly Rectangle Empty = new Rectangle();
 
@@ -169,26 +170,62 @@ namespace Rise
             return X == other.X && Y == other.Y && W == other.W && H == other.H;
         }
 
-        public bool Intersects(ref Rectangle other)
-        {
-            return X < other.X + other.W && Y < other.Y + other.H && X + W > other.X && Y + H > other.Y;
-        }
-        public bool Intersects(Rectangle other)
-        {
-            return Intersects(ref other);
-        }
-
         public bool Contains(Vector2 point)
         {
             return point.X > X && point.Y > Y && point.X < Right && point.Y < Bottom;
         }
+        public bool Contains(ref Circle circle)
+        {
+            return Geom.Contains(ref this, ref circle);
+        }
         public bool Contains(ref Rectangle rect)
         {
-            return rect.X >= X && rect.Y >= Y && rect.Right <= Right && rect.Bottom <= Bottom;
+            return Geom.Contains(ref this, ref rect);
         }
-        public bool Contains(Rectangle rect)
+        public bool Contains(ref Triangle tri)
         {
-            return Contains(ref rect);
+            return Geom.Contains(ref this, ref tri);
+        }
+        public bool Contains(ref Quad quad)
+        {
+            return Geom.Contains(ref this, ref quad);
+        }
+        public bool Contains(Polygon poly)
+        {
+            return Geom.Contains(ref this, poly);
+        }
+
+        public float DistanceTo(Vector2 point)
+        {
+            return Geom.Distance(point, ref this);
+        }
+        public float DistanceTo(ref Circle circle)
+        {
+            return Geom.Distance(ref this, ref circle);
+        }
+        public float DistanceTo(ref Rectangle rect)
+        {
+            return Geom.Distance(ref this, ref rect);
+        }
+        public float DistanceTo(ref Triangle tri)
+        {
+            return Geom.Distance(ref this, ref tri);
+        }
+        public float DistanceTo(ref Quad quad)
+        {
+            return Geom.Distance(ref this, ref quad);
+        }
+        public float DistanceTo(Polygon poly)
+        {
+            return Geom.Distance(ref this, poly);
+        }
+
+        public void GetBounds(out Rectangle result)
+        {
+            result.X = X;
+            result.Y = Y;
+            result.W = W;
+            result.H = H;
         }
 
         public override int GetHashCode()
@@ -204,9 +241,86 @@ namespace Rise
             }
         }
 
+        public bool Intersects(ref Circle circle)
+        {
+            return Geom.Intersects(ref this, ref circle);
+        }
+        public bool Intersects(ref Rectangle rect)
+        {
+            return Geom.Intersects(ref this, ref rect);
+        }
+        public bool Intersects(ref Triangle tri)
+        {
+            return Geom.Intersects(ref this, ref tri);
+        }
+        public bool Intersects(ref Quad quad)
+        {
+            return Geom.Intersects(ref this, ref quad);
+        }
+        public bool Intersects(Polygon poly)
+        {
+            return Geom.Intersects(ref this, poly);
+        }
+
+        public bool Intersects(Vector2 point, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, point, out pushOut);
+        }
+        public bool Intersects(ref Circle circle, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, ref circle, out pushOut);
+        }
+        public bool Intersects(ref Rectangle rect, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, ref rect, out pushOut);
+        }
+        public bool Intersects(ref Triangle tri, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, ref tri, out pushOut);
+        }
+        public bool Intersects(ref Quad quad, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, ref quad, out pushOut);
+        }
+        public bool Intersects(Polygon poly, out Vector2 pushOut)
+        {
+            return Geom.Intersects(ref this, poly, out pushOut);
+        }
+
+        public void Project(Vector2 axis, out float min, out float max)
+        {
+            Geom.Project(ref this, axis, out min, out max);
+        }
+        public Vector2 Project(Vector2 point)
+        {
+            return Geom.Project(ref this, point);
+        }
+
+        public bool Raycast(ref Ray ray)
+        {
+            return Geom.Raycast(ref this, ref ray);
+        }
+        public bool Raycast(ref Ray ray, out RayHit hit)
+        {
+            return Geom.Raycast(ref this, ref ray, out hit);
+        }
+        public bool Raycast(ref Ray ray, out float dist)
+        {
+            return Geom.Raycast(ref this, ref ray, out dist);
+        }
+
         public override string ToString()
         {
             return string.Format("{0},{1},{2},{3}", X, Y, W, H);
+        }
+
+        public int CompareArea(ref Rectangle a, ref Rectangle b)
+        {
+            return Math.Sign(a.Area - b.Area);
+        }
+        public int CompareArea(Rectangle a, Rectangle b)
+        {
+            return CompareArea(ref a, ref b);
         }
 
         public static Rectangle Box(float centerX, float centerY, float size)
@@ -234,15 +348,6 @@ namespace Rise
             return new Rectangle(w * -0.5f, h * -0.5f, w, h);
         }
 
-        public static int CompareArea(ref Rectangle a, ref Rectangle b)
-        {
-            return Math.Sign(a.Area - b.Area);
-        }
-        public static int CompareArea(Rectangle a, Rectangle b)
-        {
-            return CompareArea(ref a, ref b);
-        }
-
         public static int ComparePerimeter(ref Rectangle a, ref Rectangle b)
         {
             return Math.Sign(Math.Abs(a.W + a.H) - Math.Abs(b.W + b.H));
@@ -250,21 +355,6 @@ namespace Rise
         public static int ComparePerimeter(Rectangle a, Rectangle b)
         {
             return ComparePerimeter(ref a, ref b);
-        }
-
-        public static void ScaleToFit(ref Rectangle outer, ref Rectangle inner, out Rectangle result)
-        {
-            float s = Math.Min(outer.W / inner.W, outer.H / inner.H);
-            result.W = inner.W * s;
-            result.H = inner.H * s;
-            result.X = (outer.W - result.W) * 0.5f;
-            result.Y = (outer.H - result.H) * 0.5f;
-        }
-        public static Rectangle ScaleToFit(Rectangle outer, Rectangle inner)
-        {
-            Rectangle r;
-            ScaleToFit(ref outer, ref inner, out r);
-            return r;
         }
 
         public static void Conflate(ref Rectangle a, ref Rectangle b, out Rectangle result)
@@ -283,14 +373,14 @@ namespace Rise
 
         public static Rectangle FromBounds(float minX, float minY, float maxX, float maxY)
         {
-            Calc.Order(ref minX, ref maxX);
-            Calc.Order(ref minY, ref maxY);
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
         public static Rectangle FromBounds(Vector2 min, Vector2 max)
         {
-            Calc.Order(ref min.X, ref max.X);
-            Calc.Order(ref min.Y, ref max.Y);
+            if (min.X > max.X)
+                Calc.Swap(ref min.X, ref max.X);
+            if (min.Y > max.Y)
+                Calc.Swap(ref min.Y, ref max.Y);
             return new Rectangle(min.X, min.Y, max.X - min.X, max.Y - min.Y);
         }
 
@@ -308,12 +398,9 @@ namespace Rise
             return Inflated(amount, amount);
         }
 
-        public static void Lerp(ref Rectangle a, ref Rectangle b, float t, out Rectangle result)
+        public static implicit operator Quad(Rectangle r)
         {
-            result.X = Calc.Lerp(a.X, b.X, t);
-            result.Y = Calc.Lerp(a.Y, b.Y, t);
-            result.W = Calc.Lerp(a.W, b.W, t);
-            result.H = Calc.Lerp(a.H, b.H, t);
+            return new Quad(r.TopLeft, r.TopRight, r.BottomRight, r.BottomLeft);
         }
 
         public static bool operator ==(Rectangle a, Rectangle b)
@@ -323,16 +410,6 @@ namespace Rise
         public static bool operator !=(Rectangle a, Rectangle b)
         {
             return !a.Equals(ref b);
-        }
-
-        public static Rectangle operator *(Rectangle a, float b)
-        {
-            return new Rectangle(a.X * b, a.Y * b, a.W * b, a.H * b);
-        }
-
-        public static Rectangle operator /(Rectangle a, float b)
-        {
-            return new Rectangle(a.X / b, a.Y / b, a.W / b, a.H / b);
         }
     }
 }

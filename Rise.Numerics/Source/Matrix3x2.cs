@@ -16,12 +16,12 @@ namespace Rise
 
         public Matrix3x2(float m0, float m1, float m2, float m3, float m4, float m5)
         {
-            this.M0 = m0;
-            this.M1 = m1;
-            this.M2 = m2;
-            this.M3 = m3;
-            this.M4 = m4;
-            this.M5 = m5;
+            M0 = m0;
+            M1 = m1;
+            M2 = m2;
+            M3 = m3;
+            M4 = m4;
+            M5 = m5;
         }
 
         public Vector2 Position

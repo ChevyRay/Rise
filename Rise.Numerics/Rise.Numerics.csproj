@@ -41,11 +41,20 @@
     <Compile Include="Source\Point2.cs" />
     <Compile Include="Source\Point3.cs" />
     <Compile Include="Source\Rand.cs" />
-    <Compile Include="Source\Rectangle.cs" />
     <Compile Include="Source\RectangleI.cs" />
     <Compile Include="Source\Vector2.cs" />
     <Compile Include="Source\Vector3.cs" />
     <Compile Include="Source\Vector4.cs" />
+    <Compile Include="Source\Circle.cs" />
+    <Compile Include="Source\Geom.cs" />
+    <Compile Include="Source\IShape.cs" />
+    <Compile Include="Source\Line.cs" />
+    <Compile Include="Source\Polygon.cs" />
+    <Compile Include="Source\Quad.cs" />
+    <Compile Include="Source\Ray.cs" />
+    <Compile Include="Source\RayHit.cs" />
+    <Compile Include="Source\Rectangle.cs" />
+    <Compile Include="Source\Triangle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
