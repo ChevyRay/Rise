@@ -295,7 +295,7 @@ namespace Rise
             return x != 0 && (x & (x - 1)) == 0;
         }
 
-        public static int NextPowerOf2(this int x)
+        public static int ToPowerOf2(this int x)
         {
             x--;
             x |= x >> 1;

@@ -31,6 +31,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\DeflateDecoder.cs" />
+    <Compile Include="Source\PngDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
