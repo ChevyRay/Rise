@@ -24,6 +24,7 @@ namespace Rise.Imaging
     {
         static readonly byte[] signature = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
+        DeflateDecoder inflater = new DeflateDecoder();
         byte[] compressed = new byte[256];
         int compressedSize;
         byte[] filtered;
@@ -35,13 +36,43 @@ namespace Rise.Imaging
         int filterMethod;
         int interlaceMethod;
 
-        public byte[] Decode(byte[] source, out int w, out int h)
+        public Color[] Decode(byte[] source, out int w, out int h)
         {
-            ParsePng(source);
+            Color[] pixels = null;
+            Decode(source, ref pixels);
             w = width;
             h = height;
+            return pixels;
+        }
+        public void Decode(byte[] source, out int w, out int h, ref Color[] pixels)
+        {
+            Decode(source, ref pixels);
+            w = width;
+            h = height;
+        }
+        public Bitmap Decode(byte[] source)
+        {
+            Color[] pixels = null;
+            Decode(source, ref pixels);
+            return new Bitmap(pixels, width, height);
+        }
+        public void Decode(byte[] source, ref Bitmap bitmap)
+        {
+            if (bitmap != null)
+            {
+                int w, h;
+                Decode(source, out w, out h, ref bitmap.pixels);
+                bitmap.SetPixels(bitmap.pixels, w, h);
+            }
+            else
+                bitmap = Decode(source);
+        }
+
+        void Decode(byte[] source, ref Color[] pixels)
+        {
+            ParsePng(source);
             Inflate();
-            return Unfilter();
+            Unfilter(ref pixels);
         }
 
         void ParsePng(byte[] source)
@@ -168,8 +199,6 @@ namespace Rise.Imaging
         {
             int ind = 0;
             ParseZLibHeader(ref ind);
-
-            var inflater = new DeflateDecoder();
             filtered = inflater.Decode(compressed, ind);
         }
 
@@ -191,117 +220,120 @@ namespace Rise.Imaging
             return c;
         }
 
-        byte[] Unfilter()
+        unsafe void Unfilter(ref Color[] pixels)
         {
             int bpp = colorType == 2 ? 3 : 4;
             const int rgba = 4;
             int bdiff = rgba - bpp;
 
-            int stride = width * 4;
-
-            var raw = filtered;
-            var cur = new byte[width * height * 4];
-            int rawi = 0;
-            int curi = 0;
-            int prei = curi - stride;
+            if (pixels == null)
+                pixels = new Color[width * height];
+            else if (pixels.Length < width * height)
+                Array.Resize(ref pixels, width * height);
 
             //If we're loading a RGB image with no alpha channel, load with full opacity
             if (bpp < rgba)
-                for (int i = 3; i < cur.Length; i += rgba)
-                    cur[i] = 255;
+                for (int i = 0; i < pixels.Length; ++i)
+                    pixels[i] = Color.White;
 
-            //For each scanline
-            for (int y = 0; y < height; ++y)
+            fixed (byte* cur = &pixels[0].R)
             {
-                var filter = (FilterType)raw[rawi++];
-                //Console.WriteLine(y + ": " + filter);
+                var raw = filtered;
+                int rawi = 0;
+                int curi = 0;
+                int prei = curi - (width * 4);
 
-                //Use special filters for the first scanline
-                if (y == 0)
+                //For each scanline
+                for (int y = 0; y < height; ++y)
                 {
+                    var filter = (FilterType)raw[rawi++];
+                    //Console.WriteLine(y + ": " + filter);
+
+                    //Use special filters for the first scanline
+                    if (y == 0)
+                    {
+                        switch (filter)
+                        {
+                            case FilterType.Up:
+                                filter = FilterType.None;
+                                break;
+                            case FilterType.Avg:
+                                filter = FilterType.AvgFirst;
+                                break;
+                            case FilterType.Paeth:
+                                filter = FilterType.PaethFirst;
+                                break;
+                        }
+                    }
+
+                    //Handle the first pixel on the scanline
                     switch (filter)
                     {
+                        case FilterType.None:
+                        case FilterType.Sub:
+                        case FilterType.AvgFirst:
+                        case FilterType.PaethFirst:
+                            for (int i = 0; i < bpp; ++i)
+                                cur[curi + i] = raw[rawi + i];
+                            break;
                         case FilterType.Up:
-                            filter = FilterType.None;
+                            for (int i = 0; i < bpp; ++i)
+                                cur[curi + i] = ByteCast(raw[rawi + i] + cur[prei + i]);
                             break;
                         case FilterType.Avg:
-                            filter = FilterType.AvgFirst;
+                            for (int i = 0; i < bpp; ++i)
+                                cur[curi + i] = ByteCast(raw[rawi + i] + (cur[prei + i] >> 1));
                             break;
                         case FilterType.Paeth:
-                            filter = FilterType.PaethFirst;
+                            for (int i = 0 ; i < bpp; ++i)
+                                cur[curi + i] = ByteCast(raw[rawi + i] + Paeth(0, cur[prei + i], 0));
+                            break;
+                    }
+                    rawi += bpp;
+                    curi += rgba;
+                    prei += rgba;
+
+                    //Handle the rest of the pixels on the scanline
+                    switch (filter)
+                    {
+                        case FilterType.None:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = raw[rawi];
+                            break;
+                        case FilterType.Sub:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + cur[curi - rgba]);
+                            break;
+                        case FilterType.Up:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + cur[prei]);
+                            break;
+                        case FilterType.Avg:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + ((cur[prei] + cur[curi - rgba]) >> 1));
+                            break;
+                        case FilterType.Paeth:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + Paeth(cur[curi - rgba], cur[prei], cur[prei - rgba]));
+                            break;
+                        case FilterType.AvgFirst:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + (cur[curi - rgba] >> 1));
+                            break;
+                        case FilterType.PaethFirst:
+                            for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
+                                for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
+                                    cur[curi] = ByteCast(raw[rawi] + Paeth(cur[curi - rgba], 0, 0));
                             break;
                     }
                 }
-
-                //Handle the first pixel on the scanline
-                switch (filter)
-                {
-                    case FilterType.None:
-                    case FilterType.Sub:
-                    case FilterType.AvgFirst:
-                    case FilterType.PaethFirst:
-                        for (int i = 0; i < bpp; ++i)
-                            cur[curi + i] = raw[rawi + i];
-                        break;
-                    case FilterType.Up:
-                        for (int i = 0; i < bpp; ++i)
-                            cur[curi + i] = ByteCast(raw[rawi + i] + cur[prei + i]);
-                        break;
-                    case FilterType.Avg:
-                        for (int i = 0; i < bpp; ++i)
-                            cur[curi + i] = ByteCast(raw[rawi + i] + (cur[prei + i] >> 1));
-                        break;
-                    case FilterType.Paeth:
-                        for (int i = 0 ; i < bpp; ++i)
-                            cur[curi + i] = ByteCast(raw[rawi + i] + Paeth(0, cur[prei + i], 0));
-                        break;
-                }
-                rawi += bpp;
-                curi += rgba;
-                prei += rgba;
-
-                //Handle the rest of the pixels on the scanline
-                switch (filter)
-                {
-                    case FilterType.None:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = raw[rawi];
-                        break;
-                    case FilterType.Sub:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + cur[curi - rgba]);
-                        break;
-                    case FilterType.Up:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + cur[prei]);
-                        break;
-                    case FilterType.Avg:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + ((cur[prei] + cur[curi - rgba]) >> 1));
-                        break;
-                    case FilterType.Paeth:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + Paeth(cur[curi - rgba], cur[prei], cur[prei - rgba]));
-                        break;
-                    case FilterType.AvgFirst:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + (cur[curi - rgba] >> 1));
-                        break;
-                    case FilterType.PaethFirst:
-                        for (int i = 0, n = width - 1; i < n; ++i, curi += bdiff, prei += bdiff)
-                            for (int j = 0; j < bpp; ++j, ++curi, ++prei, ++rawi)
-                                cur[curi] = ByteCast(raw[rawi] + Paeth(cur[curi - rgba], 0, 0));
-                        break;
-                }
             }
-
-            return cur;
         }
     }
 }

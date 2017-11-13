@@ -56,7 +56,23 @@ namespace Rise.Imaging
         ushort[] offs = new ushort[16];
         byte[] lengths = new byte[320];
 
+        public byte[] Decode(byte[] source)
+        {
+            byte[] results = null;
+            Decode(source, 0, ref results);
+            return results;
+        }
         public byte[] Decode(byte[] source, int sourceIndex)
+        {
+            byte[] results = null;
+            Decode(source, sourceIndex, ref results);
+            return results;
+        }
+        public void Decode(byte[] source, ref byte[] results)
+        {
+            Decode(source, 0, ref results);
+        }
+        public void Decode(byte[] source, int sourceIndex, ref byte[] results)
         {
             this.source = source;
             sourceInd = sourceIndex;
@@ -74,9 +90,12 @@ namespace Rise.Imaging
             while (!res)
                 res = Uncompress();
 
-            var results = new byte[destCount];
+            if (results == null)
+                results = new byte[destCount];
+            else if (destCount > results.Length)
+                Array.Resize(ref results, destCount);
+
             Buffer.BlockCopy(dest, 0, results, 0, destCount);
-            return results;
         }
 
         void BuildFixedTrees()

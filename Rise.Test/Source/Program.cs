@@ -10,15 +10,15 @@ namespace Rise.Test
         {
             var decoder = new PngDecoder();
             int w, h;
-            var bytes = decoder.Decode(File.ReadAllBytes("Assets/fanart.png"), out w, out h);
+            var pixels = decoder.Decode(File.ReadAllBytes("Assets/face.png"), out w, out h);
 
-            int i = 3;
+            int i = 0;
             for (int y = 0; y < h; ++y)
             {
                 for (int x = 0; x < w; ++x)
                 {
-                    Console.Write(bytes[i] > 0 ? 'X' : ' ');
-                    i += 4;
+                    Console.Write(pixels[i].A > 0 ? 'X' : ' ');
+                    ++i;
                 }
                 Console.WriteLine();
             }
