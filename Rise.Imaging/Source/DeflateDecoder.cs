@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 namespace Rise.Imaging
 {
     public class DeflateDecoder
@@ -9,7 +11,7 @@ namespace Rise.Imaging
         static readonly byte[] distBits;
         static readonly ushort[] distBase;
 
-        static byte[] clcidx = {
+        static readonly byte[] clcidx = {
             16, 17, 18, 0, 8, 7, 9, 6,
             10, 5, 11, 4, 12, 3, 13, 2,
             14, 1, 15
@@ -54,27 +56,27 @@ namespace Rise.Imaging
         ushort[] offs = new ushort[16];
         byte[] lengths = new byte[320];
 
-        public byte[] Decode(byte[] source)
+        public byte[] Decode(byte[] source, int sourceIndex)
         {
             this.source = source;
-            sourceInd = 0;
+            sourceInd = sourceIndex;
 
-            int len = source.Length.ToPowerOf2();
             if (dest == null)
-                dest = new byte[len];
-            else if (dest.Length < len)
-                Array.Resize(ref dest, len);
+                dest = new byte[source.Length.ToPowerOf2()];
+            else if (source.Length > dest.Length)
+                Array.Resize(ref dest, source.Length.ToPowerOf2());
 
+            destCount = 0;
             bitCount = 0;
             curLen = 0;
 
-            var res = true;
-            while (res)
+            var res = false;
+            while (!res)
                 res = Uncompress();
 
-            var result = new byte[destCount];
-            Buffer.BlockCopy(dest, 0, result, 0, destCount);
-            return result;
+            var results = new byte[destCount];
+            Buffer.BlockCopy(dest, 0, results, 0, destCount);
+            return results;
         }
 
         void BuildFixedTrees()

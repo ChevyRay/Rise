@@ -30,9 +30,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="Source\PngDecoder.cs" />
+    <Compile Remove="Source\Inflater.cs" />
+    <Compile Remove="Source\DeflateDecoder.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\DeflateDecoder.cs" />
     <Compile Include="Source\PngDecoder.cs" />
+    <Compile Include="Source\DeflateDecoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

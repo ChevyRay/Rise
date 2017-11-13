@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 namespace Rise.Imaging
 {
     enum ChunkType : uint
@@ -24,12 +24,9 @@ namespace Rise.Imaging
     {
         static readonly byte[] signature = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
-        DeflateDecoder inflater;
-
         byte[] compressed = new byte[256];
         int compressedSize;
         byte[] filtered;
-
         int width;
         int height;
         int bitDepth;
@@ -52,7 +49,6 @@ namespace Rise.Imaging
             compressedSize = 0;
 
             int ind = 0;
-
             uint ReadInt()
             {
                 return ((uint)source[ind++] << 24) | ((uint)source[ind++] << 16) | ((uint)source[ind++] << 8) | (uint)source[ind++];
@@ -129,7 +125,7 @@ namespace Rise.Imaging
                     Buffer.BlockCopy(source, ind, compressed, compressedSize, chunkLength);
                     compressedSize += chunkLength;
                 }
-                    
+
                 ind += chunkLength + 4;
 
                 //Read the next chunk type
@@ -173,10 +169,8 @@ namespace Rise.Imaging
             int ind = 0;
             ParseZLibHeader(ref ind);
 
-            if (inflater == null)
-                inflater = new DeflateDecoder();
-
-            filtered = inflater.Decode(compressed);
+            var inflater = new DeflateDecoder();
+            filtered = inflater.Decode(compressed, ind);
         }
 
         static byte ByteCast(int val)
