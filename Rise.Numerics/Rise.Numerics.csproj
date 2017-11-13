@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Rise.Numerics</RootNamespace>
+    <RootNamespace>Rise</RootNamespace>
     <AssemblyName>Rise.Numerics</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>

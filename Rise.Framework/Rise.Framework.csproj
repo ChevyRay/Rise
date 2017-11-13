@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{B374B137-D5DE-41F2-AA8A-EDD234D400CA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Rise.Framework</RootNamespace>
+    <RootNamespace>Rise</RootNamespace>
     <AssemblyName>Rise.Framework</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
@@ -31,6 +31,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Core\App.cs" />
+    <Compile Include="Source\Core\Platform.cs" />
+    <Compile Include="Source\Core\ResourceHandle.cs" />
+    <Compile Include="Source\Core\Screen.cs" />
+    <Compile Include="Source\Core\Time.cs" />
+    <Compile Include="Source\Graphics\Bitmap.cs" />
+    <Compile Include="Source\Graphics\BlendMode.cs" />
+    <Compile Include="Source\Graphics\Graphics.cs" />
+    <Compile Include="Source\Graphics\Material.cs" />
+    <Compile Include="Source\Graphics\Mesh.cs" />
+    <Compile Include="Source\Graphics\OpenGL.cs" />
+    <Compile Include="Source\Graphics\RenderTarget.cs" />
+    <Compile Include="Source\Graphics\Renderer.cs" />
+    <Compile Include="Source\Graphics\Shader.cs" />
+    <Compile Include="Source\Graphics\Texture.cs" />
+    <Compile Include="Source\Graphics\Vertex.cs" />
+    <Compile Include="Source\Input\Joystick.cs" />
+    <Compile Include="Source\Input\KeyCode.cs" />
+    <Compile Include="Source\Input\Keyboard.cs" />
+    <Compile Include="Source\Input\Mouse.cs" />
+    <Compile Include="Source\Input\ScanCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
