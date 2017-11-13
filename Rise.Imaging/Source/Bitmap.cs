@@ -142,30 +142,5 @@ namespace Rise.Imaging
                 return new RectangleI(minX, minY, (maxX - minX) + 1, (maxY - minY) + 1);
             return RectangleI.Empty;
         }
-
-        /*public void LoadFile(string file, bool premultiply)
-        {
-            int w, h;
-            pixels = App.platform.ReadImageFile(file, out w, out h);
-            Width = w;
-            Height = h;
-
-            if (premultiply)
-            {
-                double a;
-                for (int i = 0; i < pixels.Length; ++i)
-                {
-                    a = pixels[i].A / 255.0;
-                    pixels[i].R = (byte)(pixels[i].R * a);
-                    pixels[i].G = (byte)(pixels[i].G * a);
-                    pixels[i].B = (byte)(pixels[i].B * a);
-                }
-            }
-        }
-
-        public void SaveFile(string file)
-        {
-            App.platform.WriteImageFile(file, Width, Height, pixels);
-        }*/
     }
 }
