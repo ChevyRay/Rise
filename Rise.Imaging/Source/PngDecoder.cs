@@ -25,7 +25,7 @@ namespace Rise.Imaging
         static readonly byte[] signature = { 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a };
 
         DeflateDecoder inflater = new DeflateDecoder();
-        byte[] compressed = new byte[256];
+        byte[] compressed;
         int compressedSize;
         byte[] filtered;
         int width;
@@ -135,6 +135,31 @@ namespace Rise.Imaging
             //Skip the CRC
             ind += 4;
 
+            //Scan ahead to find out the compressed size
+            int prevInd = ind;
+            int compLen = 0;
+            chunkLength = (int)ReadInt();
+            chunkType = (ChunkType)ReadInt();
+            while (chunkType != ChunkType.IEND)
+            {
+                if (chunkType == ChunkType.IDAT)
+                    compLen += chunkLength;
+                ind += chunkLength + 4;
+                chunkLength = (int)ReadInt();
+                chunkType = (ChunkType)ReadInt();
+            }
+            ind = prevInd;
+
+            //Make sure we ended correctly
+            if (chunkType != ChunkType.IEND)
+                throw new Exception("PNG must end with IEND chunk");
+
+            //Make sure the compressed array is large enough
+            if (compressed == null)
+                compressed = new byte[compLen];
+            else if (compressed.Length < compLen)
+                Array.Resize(ref compressed, compLen);
+
             //Read all the IDAT chunks
             chunkLength = (int)ReadInt();
             chunkType = (ChunkType)ReadInt();
@@ -142,24 +167,10 @@ namespace Rise.Imaging
             {
                 if (chunkType == ChunkType.IDAT)
                 {
-                    //Make sure the array of compressed bytes can fit the chunk's bytes
-                    if (compressedSize + chunkLength > compressed.Length)
-                    {
-                        //Expand exponentially
-                        int newLength = compressed.Length * 2;
-                        while (compressedSize + chunkLength > newLength)
-                            newLength *= 2;
-                        Array.Resize(ref compressed, newLength);
-                    }
-
-                    //Copy the bytes the fast way
                     Buffer.BlockCopy(source, ind, compressed, compressedSize, chunkLength);
                     compressedSize += chunkLength;
                 }
-
                 ind += chunkLength + 4;
-
-                //Read the next chunk type
                 chunkLength = (int)ReadInt();
                 chunkType = (ChunkType)ReadInt();
             }
@@ -225,15 +236,16 @@ namespace Rise.Imaging
             int bpp = colorType == 2 ? 3 : 4;
             const int rgba = 4;
             int bdiff = rgba - bpp;
+            int pixelCount = width * height;
 
             if (pixels == null)
-                pixels = new Color[width * height];
-            else if (pixels.Length < width * height)
-                Array.Resize(ref pixels, width * height);
+                pixels = new Color[pixelCount];
+            else if (pixels.Length < pixelCount)
+                Array.Resize(ref pixels, pixelCount);
 
             //If we're loading a RGB image with no alpha channel, load with full opacity
             if (bpp < rgba)
-                for (int i = 0; i < pixels.Length; ++i)
+                for (int i = 0; i < pixelCount; ++i)
                     pixels[i] = Color.White;
 
             fixed (byte* cur = &pixels[0].R)
