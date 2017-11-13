@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center" style="background-color:#000">
   <img width="150" height="263" src="Assets/readme_logo.png">
 </p>
 
