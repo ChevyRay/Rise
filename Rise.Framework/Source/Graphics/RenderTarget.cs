@@ -48,8 +48,6 @@ namespace Rise
             textures[n] = texture;
             var col = (TextureAttachment)((uint)TextureAttachment.Color0 + n);
             GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, col, TextureTarget.Texture2D, texture.id, 0);
-            drawBuffers[0] = DrawBuffer.Color0;
-            GL.DrawBuffers(1, drawBuffers);
         }
 
         internal static void Bind(RenderTarget buffer)
@@ -67,7 +65,7 @@ namespace Rise
             if (buffer != target)
             {
                 target = buffer;
-                /*if (buffer != null)
+                if (buffer != null)
                 {
                     //Pipe each color output into its corresponding texture
                     int num = 0;
@@ -81,7 +79,7 @@ namespace Rise
                     //Pipe the first color output onto the back buffer
                     drawBuffers[0] = DrawBuffer.Back;
                     GL.DrawBuffers(1, drawBuffers);
-                }*/
+                }
             }
         }
     }
