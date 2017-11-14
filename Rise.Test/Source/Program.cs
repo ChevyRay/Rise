@@ -72,7 +72,7 @@ namespace Rise.Test
             Graphics.Draw(material, mesh);
 
             Graphics.SetTarget(null);
-            Graphics.Clear(Color.Black);
+            Graphics.Clear(0x1e4e50ff);
             Graphics.SetBlendMode(BlendMode.Alpha);
             Graphics.Draw(screenMaterial, screenMesh);
         }

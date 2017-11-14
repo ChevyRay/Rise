@@ -45,12 +45,15 @@ namespace Rise
 
         public static void SetTarget(RenderTarget target)
         {
-            state.Target = target;
-            RenderTarget.SetTarget(target);
-            if (target != null)
-                GL.Viewport(0, 0, target.Width, target.Height);
-            else
-                GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
+            if (state.Target != target)
+            {
+                state.Target = target;
+                RenderTarget.Bind(target);
+                if (target != null)
+                    GL.Viewport(0, 0, target.Width, target.Height);
+                else
+                    GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
+            }
         }
 
         public static void SetBlendMode(BlendMode? blendMode)
@@ -86,6 +89,9 @@ namespace Rise
         //public static void Draw<V>(Material material, Mesh<V> mesh) where V : struct, ICopyable<V>
         public static void Draw(Material material, Mesh mesh)
         {
+            //Just make sure the correct render target is always binded
+            RenderTarget.Bind(state.Target);
+
             if (material == null)
                 throw new ArgumentNullException(nameof(material));
             if (mesh == null)
