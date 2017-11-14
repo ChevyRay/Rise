@@ -23,9 +23,10 @@ namespace GameEngine
     //This protects objects from referencing invalid/unloaded assets
     //If an asset gets replaces, the reference will then point to the new one
     //This also allows asset references to serialize more accurately
+    [Data]
     public struct AssetRef<T> where T : Asset
     {
-        string name;
+        [Field(0)] string name;
 
         [NonSerialized]
         T asset;

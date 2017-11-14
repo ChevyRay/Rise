@@ -1,13 +1,19 @@
 ﻿using System;
+using System.IO;
 namespace GameEngine
 {
-    public interface IComponent<T> where T : struct
+    public interface IDataObject<T> where T : struct
     {
         void SetData(ref T value);
         void GetData(out T results);
     }
 
-    public abstract class Component<T> : IComponent<T> where T : struct
+    public abstract class Component
+    {
+        
+    }
+
+    public abstract class Component<T> : Component, IDataObject<T> where T : struct
     {
         protected T data;
 

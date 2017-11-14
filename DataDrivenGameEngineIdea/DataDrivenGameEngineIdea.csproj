@@ -41,6 +41,7 @@
     <Compile Include="Assets.cs" />
     <Compile Include="Vector2.cs" />
     <Compile Include="Tag.cs" />
+    <Compile Include="Serialization.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,13 +1,14 @@
 ﻿using System;
 namespace GameEngine
 {
+    [Data]
     public struct Vector2
     {
         public static readonly Vector2 Zero;
         public static readonly Vector2 One = new Vector2(1f, 1f);
 
-        public float X;
-        public float Y;
+        [Field(0)] public float X;
+        [Field(0)] public float Y;
 
         public Vector2(float x, float y)
         {

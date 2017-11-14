@@ -1,13 +1,14 @@
 ﻿using System;
 namespace GameEngine
 {
+    [Data]
     public struct Tag
     {
         public static readonly Tag None = new Tag(0);
         public static readonly Tag Default = new Tag(1);
         public static readonly Tag All = new Tag(uint.MaxValue);
 
-        public uint Value;
+        [Field(0)] public uint Value;
 
         public Tag(uint value)
         {

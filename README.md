@@ -81,6 +81,21 @@ A visual development studio for developing games.
 
 ---
 
-### Features and Tools to Provide
+### Features and Tools Ideas
 
-- 
+Some of these features it is yet-unclear if they should be part of the above libraries or in their own. This is where we can just list some things to consider or research if we want to add them.
+
+- Collision (basic, polygonal, physics)
+- Spacial partitioning?
+- Virtual Machine (to hook up scripting languages)
+- Command Console overlay
+- Object pooling and reusability
+- Texture packer tools
+- Extensible scene editor
+- Image editor
+- Aseprite importing tools
+- Animation format(s) for sprites?
+- Basic sprite editor
+- Part-based sprite editor
+- Skeletal/puppet animation
+- Particle system / particle editor?

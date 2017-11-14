@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 namespace GameEngine
 {
     public class SpriteAsset : Asset
@@ -9,14 +10,17 @@ namespace GameEngine
     public class SpriteRenderer : Component<SpriteRenderer.Data>, IRenderer
     {
         //By putting all data in a struct, we can easily copy/store/serialize it
+        [Data]
         public struct Data
         {
-            public bool Visible;
-            public Tag Tags;
-            public AssetRef<SpriteAsset> Sprite;
-            public Vector2 Position;
-            public Vector2 Scale;
-            public float Angle;
+            //By assigning unique IDs to field, we can ensure they're loaded properly
+            //Because in the binary format, fields will be preceded by their ID
+            [Field(0)] public bool Visible;
+            [Field(1)] public Tag Tags;
+            [Field(2)] public AssetRef<SpriteAsset> Sprite;
+            [Field(3)] public Vector2 Position;
+            [Field(4)] public Vector2 Scale;
+            [Field(5)] public float Angle;
         }
 
         public bool Visible { get { return data.Visible; } set { data.Visible = value; } }
