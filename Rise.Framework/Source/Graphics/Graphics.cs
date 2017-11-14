@@ -15,10 +15,15 @@ namespace Rise
     {
         static GraphicsState state;
 
+        public static GraphicsState State
+        {
+            get { return state; }
+        }
+
         internal static void Begin()
         {
             SetTarget(null);
-            SetViewport(Screen.Width, Screen.Height);
+            SetViewport(Screen.DrawWidth, Screen.DrawHeight);
             SetBlendMode(null);
             state.Material = null;
             state.Mesh = null;
@@ -42,8 +47,11 @@ namespace Rise
 
         public static void SetTarget(RenderTarget target)
         {
-            state.Target = target;
-            RenderTarget.SetTarget(target);
+            if (state.Target != target)
+            {
+                state.Target = target;
+                RenderTarget.SetTarget(target);
+            }
         }
 
         public static void SetViewport(ref RectangleI rect)

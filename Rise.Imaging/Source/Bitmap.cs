@@ -25,6 +25,11 @@ namespace Rise.Imaging
             SetPixels(pixels, width, height);
         }
 
+        public Color[] Pixels
+        {
+            get { return pixels; }
+        }
+
         public bool IsTransparent
         {
             get 
@@ -112,6 +117,17 @@ namespace Rise.Imaging
         public void Clear()
         {
             Clear(Color.Transparent);
+        }
+
+        public void Premultiply()
+        {
+            for (int i = 0; i < PixelCount; ++i)
+            {
+                float m = pixels[i].A / 255f;
+                pixels[i].R = (byte)(pixels[i].R * m);
+                pixels[i].G = (byte)(pixels[i].G * m);
+                pixels[i].B = (byte)(pixels[i].B * m);
+            }
         }
 
         public RectangleI GetPixelBounds(byte alphaThreshold)

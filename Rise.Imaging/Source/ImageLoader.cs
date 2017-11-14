@@ -37,5 +37,11 @@ namespace Rise.Imaging
             var bytes = File.ReadAllBytes(file);
             decoder.Decode(bytes, ref bitmap);
         }
+        public Bitmap LoadFile(string file)
+        {
+            Bitmap bitmap = null;
+            LoadFile(file, ref bitmap);
+            return bitmap;
+        }
     }
 }

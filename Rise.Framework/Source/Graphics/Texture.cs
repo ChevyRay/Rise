@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Rise.OpenGL;
+using Rise.Imaging;
 namespace Rise
 {
     public class Texture : ResourceHandle
     {
+        public static TextureFilter DefaultFilter = TextureFilter.Linear;
+        public static TextureWrap DefaultWrap = TextureWrap.ClampToEdge;
+
         static List<Texture> binded = new List<Texture>(new Texture[GL.MaxTextureUnits]);
         static HashSet<Texture> unbind = new HashSet<Texture>();
 
@@ -18,20 +22,23 @@ namespace Rise
         Texture(TextureFormat format)
         {
             id = GL.GenTexture();
-            WrapX = TextureWrap.ClampToEdge;
-            WrapY = TextureWrap.ClampToEdge;
-            MinFilter = TextureFilter.Linear;
-            MagFilter = TextureFilter.Linear;
+            WrapX = DefaultWrap;
+            WrapY = DefaultWrap;
+            MinFilter = DefaultFilter;
+            MagFilter = DefaultFilter;
             Format = format;
         }
-        /*public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
+        public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
         {
             SetPixels(bitmap);
         }
-        public Texture(string file, bool premultiply) : this(new Bitmap(file, premultiply))
+        public Texture(string file, bool premultiply) : this(TextureFormat.RGBA)
         {
-            
-        }*/
+            var bitmap = App.ImageLoader.LoadFile(file);
+            if (premultiply)
+                bitmap.Premultiply();
+            SetPixels(bitmap);
+        }
         public Texture(int width, int height, Color[] pixels) : this(TextureFormat.RGBA)
         {
             SetPixels(width, height, pixels);
@@ -78,7 +85,7 @@ namespace Rise
             MagFilter = filter;
         }
 
-        /*public void GetPixels(Bitmap bitmap)
+        public void GetPixels(Bitmap bitmap)
         {
             if (Width != bitmap.Width)
                 throw new Exception("Bitmap width does not match.");
@@ -95,16 +102,18 @@ namespace Rise
             var bitmap = new Bitmap(Width, Height);
             GetPixels(bitmap);
             return bitmap;
-        }*/
+        }
 
-        /*public void SetPixels(Bitmap bitmap)
+        public void SetPixels(Bitmap bitmap)
         {
             SetPixels(bitmap.Width, bitmap.Height, bitmap.Pixels);
-        }*/
+        }
         public unsafe void SetPixels(int width, int height, Color[] pixels)
         {
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
+
+            Format = TextureFormat.RGBA;
 
             fixed (Color* ptr = pixels)
                 SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));

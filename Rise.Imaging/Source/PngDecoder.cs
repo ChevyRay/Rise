@@ -86,38 +86,38 @@ namespace Rise.Imaging
             //Read the size
             width = (int)ReadInt();
             height = (int)ReadInt();
-            Console.WriteLine("width: " + width);
-            Console.WriteLine("height: " + height);
+            //Console.WriteLine("width: " + width);
+            //Console.WriteLine("height: " + height);
 
             //Read the bit depth
             bitDepth = source[ind++];
             if (bitDepth != 8)
                 throw new Exception("bit depth not supported: " + bitDepth);
-            Console.WriteLine("bitDepth: " + bitDepth);
+            //Console.WriteLine("bitDepth: " + bitDepth);
 
             //Read the color type
             colorType = source[ind++];
             if (colorType != 2 && colorType != 6)
                 throw new Exception("color type not supported: " + colorType);
-            Console.WriteLine("colorType: " + colorType);
+            //Console.WriteLine("colorType: " + colorType);
 
             //Read the compression method
             compressionMethod = source[ind++];
             if (compressionMethod != 0)
                 throw new Exception("compression method not supported: " + compressionMethod);
-            Console.WriteLine("compressionMethod: " + compressionMethod);
+            //Console.WriteLine("compressionMethod: " + compressionMethod);
 
             //Read the filter method
             filterMethod = source[ind++];
             if (filterMethod != 0)
                 throw new Exception("filter method not supported: " + filterMethod);
-            Console.WriteLine("filterMethod: " + filterMethod);
+            //Console.WriteLine("filterMethod: " + filterMethod);
 
             //Read the interlace method
             interlaceMethod = source[ind++];
             if (interlaceMethod != 0)
                 throw new Exception("interlace method not supported: " + interlaceMethod);
-            Console.WriteLine("interlaceMethod: " + interlaceMethod);
+            //Console.WriteLine("interlaceMethod: " + interlaceMethod);
 
             //Skip the CRC
             ind += 4;

@@ -1,5 +1,6 @@
 ﻿﻿using System;
 using Rise.OpenGL;
+using Rise.Imaging;
 namespace Rise
 {
     public delegate void ErrorHandler(Exception e);
@@ -15,11 +16,14 @@ namespace Rise
         internal static Platform platform;
         static bool running;
 
+        public static ImageLoader ImageLoader { get; private set; }
+
         public static void Init<PlatformType>() where PlatformType : Platform, new()
         {
             if (platform != null)
                 throw new Exception("App has already been initialized.");
             platform = new PlatformType();
+            ImageLoader = new ImageLoader();
         }
 
         public static void Run(string title, int width, int height, ErrorHandler errorHandler)
