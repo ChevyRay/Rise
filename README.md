@@ -12,30 +12,30 @@ A math library with vectors, matrices, helper functions, shapes, and useful geom
 
 ---
 
-<p><a href="../master/Rise.Imaging"><img width="265" height="32" src="Assets/header_imaging.png"></a></p>
+<p><a href="Rise.Imaging"><img width="265" height="32" src="Assets/header_imaging.png"></a></p>
 
 An image processing library with bitmaps and encoders/decoders for various image formats.
 
 ---
 
-<p><a href="../master/Rise.Framework"><img width="265" height="32" src="Assets/header_framework.png"></a></p>
+<p><a href="Rise.Framework"><img width="265" height="32" src="Assets/header_framework.png"></a></p>
 
 The core framework for managing windows, events, input, and low-level graphics rendering.
 
 ---
 
-<p><a href="../master/Rise.Engine"><img width="265" height="32" src="Assets/header_engine.png"></a></p>
+<p><a href="Rise.Engine"><img width="265" height="32" src="Assets/header_engine.png"></a></p>
 
 A robust and extensible engine for running games and apps.
 
 ---
 
-<p><a href="../master/Rise.Toolkit"><img width="265" height="32" src="Assets/header_toolkit.png"></a></p>
+<p><a href="Rise.Toolkit"><img width="265" height="32" src="Assets/header_toolkit.png"></a></p>
 
 A robust library to streamline development of apps and game development tools.
 
 ---
 
-<p><a href="../master/Rise.Studio"><img width="265" height="32" src="Assets/header_studio.png"></a></p>
+<p><a href="Rise.Studio"><img width="265" height="32" src="Assets/header_studio.png"></a></p>
 
 A visual development studio for developing games.
