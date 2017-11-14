@@ -6,7 +6,7 @@ A collection of C# libraries designed for creating games and developer tools.
 
 ---
 
-<p><a href="../blob/master/Rise.Numerics"><img width="265" height="32" src="Assets/header_numerics.png"></a></p>
+<p><a href="../master/Rise.Numerics"><img width="265" height="32" src="Assets/header_numerics.png"></a></p>
 
 A math library with vectors, matrices, helper functions, shapes, and useful geometry algorithms.
 
