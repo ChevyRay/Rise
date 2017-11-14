@@ -55,7 +55,7 @@ namespace Rise.Test
             screenMaterial.SetTexture("g_Texture", screenTexture);
 
             screenMesh = new Mesh();
-            screenMesh.AddRect(new Rectangle(0f, 0f, screenW, screenH), Vector2.Zero, Vector2.One);
+            screenMesh.AddRect(new Rectangle(0f, 0f, screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
             screenMesh.Update();
         }
 
@@ -64,34 +64,17 @@ namespace Rise.Test
             
         }
 
-        static bool first = true;
-
         static void Render()
         {
             Graphics.SetTarget(screenTarget);
-            //Graphics.SetTarget(null);
             Graphics.Clear(Color.Transparent);
             Graphics.SetBlendMode(BlendMode.Alpha);
             Graphics.Draw(material, mesh);
 
-            if (first)
-            {
-                first = false;
-                var bits = screenTexture.GetPixels();
-                for (int y = 0; y < bits.Height; ++y)
-                {
-                    for (int x = 0; x < bits.Width; ++x)
-                    {
-                        Console.Write(bits.GetPixel(x, y).A > 0 ? 'R' : ' ');
-                    }
-                    Console.WriteLine();
-                }
-            }
-
-            //Graphics.SetTarget(null);
-            //Graphics.Clear(Color.Black);
-            //Graphics.SetBlendMode(BlendMode.Alpha);
-            //Graphics.Draw(screenMaterial, screenMesh);
+            Graphics.SetTarget(null);
+            Graphics.Clear(Color.Black);
+            Graphics.SetBlendMode(BlendMode.Alpha);
+            Graphics.Draw(screenMaterial, screenMesh);
         }
     }
 }

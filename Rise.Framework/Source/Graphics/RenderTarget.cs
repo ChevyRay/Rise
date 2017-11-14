@@ -8,19 +8,23 @@ namespace Rise
         static RenderTarget target;
         static DrawBuffer[] drawBuffers = new DrawBuffer[16];
 
-        internal uint id;
+        public int Width { get; private set; }
+        public int Height { get; private set; }
 
+        internal uint id;
         Texture[] textures = new Texture[16];
 
-        public RenderTarget()
+        public RenderTarget(int width, int height)
         {
             id = GL.GenFramebuffer();
+            Width = width;
+            Height = height;
         }
-        public RenderTarget(Texture texture) : this()
+        public RenderTarget(Texture texture) : this(texture.Width, texture.Height)
         {
             SetTexture(0, texture);
         }
-        public RenderTarget(Texture[] textures) : this()
+        public RenderTarget(int width, int height, params Texture[] textures) : this(width, height)
         {
             for (int i = 0; i < textures.Length; ++i)
                 SetTexture(i, textures[i]);
@@ -43,6 +47,8 @@ namespace Rise
         {
             if (n < 0 || n >= textures.Length)
                 throw new ArgumentOutOfRangeException(nameof(n));
+            if (texture.Width != Width || texture.Height != Height)
+                throw new Exception("Texture size must be the same as RenderTarget.");
 
             Bind(this);
             textures[n] = texture;

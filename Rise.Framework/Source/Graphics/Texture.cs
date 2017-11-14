@@ -11,7 +11,7 @@ namespace Rise
         public static TextureWrap DefaultWrapX = TextureWrap.ClampToEdge;
         public static TextureWrap DefaultWrapY = TextureWrap.ClampToEdge;
 
-        static List<Texture> binded = new List<Texture>(new Texture[GL.MaxTextureUnits]);
+        static Texture[] binded = new Texture[GL.MaxTextureUnits];
         static HashSet<Texture> unbind = new HashSet<Texture>();
 
         internal uint id;
@@ -176,12 +176,12 @@ namespace Rise
             unbind.Remove(this);
 
             //If we're already binded, return our slot
-            int i = binded.IndexOf(this);
+            int i = Array.IndexOf(binded, this);
             if (i >= 0)
                 return i;
 
             //If we're not already binded, bind us and return the slot
-            for (i = 0; i < binded.Count; ++i)
+            for (i = 0; i < binded.Length; ++i)
             {
                 if (binded[i] == null)
                 {
@@ -197,16 +197,30 @@ namespace Rise
 
         internal static void MarkAllForUnbinding()
         {
-            for (int i = 0; i < binded.Count; ++i)
+            for (int i = 0; i < binded.Length; ++i)
                 if (binded[i] != null)
                     unbind.Add(binded[i]);
         }
 
         internal static void UnbindMarked()
         {
-            for (int i = 0; i < binded.Count; ++i)
+            for (int i = 0; i < binded.Length; ++i)
             {
                 if (binded[i] != null && unbind.Contains(binded[i]))
+                {
+                    binded[i] = null;
+                    GL.ActiveTexture((uint)i);
+                    GL.BindTexture(TextureTarget.Texture2D, 0);
+                }
+            }
+        }
+
+        internal static void UnbindAll()
+        {
+            unbind.Clear();
+            for (int i = 0; i < binded.Length; ++i)
+            {
+                if (binded[i] != null)
                 {
                     binded[i] = null;
                     GL.ActiveTexture((uint)i);

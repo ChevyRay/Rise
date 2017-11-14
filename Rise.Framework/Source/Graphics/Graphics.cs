@@ -5,7 +5,6 @@ namespace Rise
     public struct GraphicsState
     {
         public RenderTarget Target;
-        public RectangleI Viewport;
         public BlendMode? BlendMode;
         public Material Material;
         public Mesh Mesh;
@@ -23,7 +22,6 @@ namespace Rise
         internal static void Begin()
         {
             SetTarget(null);
-            SetViewport(Screen.DrawWidth, Screen.DrawHeight);
             SetBlendMode(null);
             state.Material = null;
             state.Mesh = null;
@@ -49,27 +47,10 @@ namespace Rise
         {
             state.Target = target;
             RenderTarget.SetTarget(target);
-        }
-
-        public static void SetViewport(ref RectangleI rect)
-        {
-            if (!state.Viewport.Equals(ref rect))
-            {
-                state.Viewport = rect;
-                GL.Viewport(rect.X, rect.Y, rect.W, rect.H);
-            }
-        }
-        public static void SetViewport(RectangleI rect)
-        {
-            SetViewport(ref rect);
-        }
-        public static void SetViewport(int x, int y, int w, int h)
-        {
-            SetViewport(new RectangleI(x, y, w, h));
-        }
-        public static void SetViewport(int w, int h)
-        {
-            SetViewport(new RectangleI(0, 0, w, h));
+            if (target != null)
+                GL.Viewport(0, 0, target.Width, target.Height);
+            else
+                GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
         }
 
         public static void SetBlendMode(BlendMode? blendMode)
@@ -94,7 +75,6 @@ namespace Rise
         public static void Draw(ref GraphicsState state)
         {
             SetTarget(state.Target);
-            SetViewport(ref state.Viewport);
             SetBlendMode(state.BlendMode);
             Draw(state.Material, state.Mesh);
         }
@@ -139,8 +119,6 @@ namespace Rise
                 state.Mesh = mesh;
                 //mesh.dirty = false;
             }
-
-            RenderTarget.SetTarget(state.Target);
 
             //Draw the mesh triangles
             GL.DrawElements(DrawMode.Triangles, mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);

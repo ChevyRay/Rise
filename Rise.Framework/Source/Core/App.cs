@@ -74,8 +74,7 @@ namespace Rise
                         Mouse.PostUpdate();
                         Keyboard.PostUpdate();
 
-                        Texture.MarkAllForUnbinding();
-                        Texture.UnbindMarked();
+                        Texture.UnbindAll();
 
                         Graphics.Begin();
                         OnRender?.Invoke();
