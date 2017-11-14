@@ -16,7 +16,9 @@ namespace Rise
         uint[] indices;
         int vertexCount;
         int indexCount;
-        internal bool dirty = true;
+        internal int uploadedVertexCount;
+        internal int uploadedIndexCount;
+        //internal bool dirty = true;
 
         public int VertexCount { get { return vertexCount; } }
         public int IndexCount { get { return indexCount; } }
@@ -64,7 +66,8 @@ namespace Rise
             GL.BindBuffer(BufferTarget.Array, arrayID);
             GL.BufferData(BufferTarget.Array, vertexSize * vertexCount, vertices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.Array, 0);
-            dirty = true;
+            uploadedVertexCount = vertexCount;
+            //dirty = true;
         }
 
         public void UpdateIndices()
@@ -72,7 +75,8 @@ namespace Rise
             GL.BindBuffer(BufferTarget.ElementArray, elementID);
             GL.BufferData(BufferTarget.ElementArray, sizeof(uint) * indexCount, indices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.ElementArray, 0);
-            dirty = true;
+            uploadedIndexCount = indexCount;
+            //dirty = true;
         }
 
         public void Update()

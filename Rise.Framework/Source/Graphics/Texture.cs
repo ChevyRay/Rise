@@ -7,8 +7,10 @@ namespace Rise
 {
     public class Texture : ResourceHandle
     {
-        public static TextureFilter DefaultFilter = TextureFilter.Linear;
-        public static TextureWrap DefaultWrap = TextureWrap.ClampToEdge;
+        public static TextureFilter DefaultMinFilter = TextureFilter.Linear;
+        public static TextureFilter DefaultMagFilter = TextureFilter.Linear;
+        public static TextureWrap DefaultWrapX = TextureWrap.ClampToEdge;
+        public static TextureWrap DefaultWrapY = TextureWrap.ClampToEdge;
 
         static List<Texture> binded = new List<Texture>(new Texture[GL.MaxTextureUnits]);
         static HashSet<Texture> unbind = new HashSet<Texture>();
@@ -22,10 +24,10 @@ namespace Rise
         Texture(TextureFormat format)
         {
             id = GL.GenTexture();
-            WrapX = DefaultWrap;
-            WrapY = DefaultWrap;
-            MinFilter = DefaultFilter;
-            MagFilter = DefaultFilter;
+            WrapX = DefaultWrapX;
+            WrapY = DefaultWrapY;
+            MinFilter = DefaultMinFilter;
+            MagFilter = DefaultMagFilter;
             Format = format;
         }
         public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)

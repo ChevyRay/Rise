@@ -111,6 +111,12 @@ namespace Rise
         {
             if (material == null)
                 throw new ArgumentNullException(nameof(material));
+            if (mesh == null)
+                throw new ArgumentNullException(nameof(mesh));
+
+            //If the mesh is empty, don't draw anything
+            if (mesh.uploadedIndexCount == 0 || mesh.uploadedVertexCount == 0)
+                return;
 
             //Sync the shader's state with the material
             var uploadAll = false;
@@ -127,18 +133,18 @@ namespace Rise
             material.Upload(uploadAll);
 
             //Bind the vertex array
-            if (state.Mesh != mesh || mesh.dirty)
+            if (state.Mesh != mesh)// || mesh.dirty)
             {
                 GL.BindVertexArray(mesh.vaoID);
                 GL.BindBuffer(BufferTarget.Array, mesh.arrayID);
                 GL.BindBuffer(BufferTarget.ElementArray, mesh.elementID);
 
                 state.Mesh = mesh;
-                mesh.dirty = false;
+                //mesh.dirty = false;
             }
 
             //Draw the mesh triangles
-            GL.DrawElements(DrawMode.Triangles, mesh.IndexCount, IndexType.UnsignedInt, IntPtr.Zero);
+            GL.DrawElements(DrawMode.Triangles, mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);
         }
 
         public static void BeginScissor(ref RectangleI rect)
