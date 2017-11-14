@@ -27,8 +27,8 @@ An image processing library with bitmaps and encoders/decoders for various image
 
 ### Notes
 - Possible formats to support?
- - TGA, BMP, JPG, GIF, WEBP, FLIF, BPG, ICO
- - RIF (_Rise Image Format_)
+    - TGA, BMP, JPG, GIF, WEBP, FLIF, BPG, ICO
+    - RIF (_Rise Image Format_)
 - Decoders and encoders both should be thread-safe, so asset processing can be threaded
 - Algorithms for processing images? Bitmap drawing, scaling, rotating, blitting tools, noise generation, etc.?
 
@@ -58,14 +58,14 @@ A robust and extensible engine for running games and apps.
 - It should be structured, so everything can be expected to work a certain way and can thus be optimized, but never at a loss of convenience or speed when coding games. (eg. Unity is too restrictive)
 - Parallelism/multi-threading? Which parts/etc. use the thread pooling and are able to split off their tasks. If not here, then it should be easy for sub-modules to be able to parallelize themselves.
 - Data-driven Entity-Component system?
- - `Entity` are in a big list and can have multiple `Component` attached.
- - Component are pure data, and `Manager` handle the actual logic of components, executing them in array batches.
- - Maybe there is a built-in `Script` and `ScriptManager` that are for attaching custom C# scripts as components, kind of like how non-data game engines work.
- - These custom Scripts should know how to serialize/deserialize, since that comes built-in with the data-driven component types.
+    - `Entity` are in a big list and can have multiple `Component` attached.
+    - Component are pure data, and `Manager` handle the actual logic of components, executing them in array batches.
+    - Maybe there is a built-in `Script` and `ScriptManager` that are for attaching custom C# scripts as components, kind of like how non-data game engines work.
+    - These custom Scripts should know how to serialize/deserialize, since that comes built-in with the data-driven component types.
 - Object pooling? It'll work by default with data-driven components, but scripts might have to be disallowed constructors... if this is done, it should be trivial and user-friendly to create handy factory methods for creating scripts with custom parameters.
 - Entire engine state should be serializable.
- - It should be possible to load/save states directly. This is difficult to have work efficiently, but if constructors are removed and data-driven types are prominent, it might be simpler.
- - This provides huge benefits to testing and debugging (eg. can see the game states leading up to a crash, can create jump points, easy undo/redo support, etc.)
+    - It should be possible to load/save states directly. This is difficult to have work efficiently, but if constructors are removed and data-driven types are prominent, it might be simpler.
+    - This provides huge benefits to testing and debugging (eg. can see the game states leading up to a crash, can create jump points, easy undo/redo support, etc.)
 
 ---
 
@@ -99,3 +99,13 @@ Some of these features it is yet-unclear if they should be part of the above lib
 - Part-based sprite editor
 - Skeletal/puppet animation
 - Particle system / particle editor?
+- Rendering effects
+    - Tinting
+    - Color matrix
+    - Gaussian blur
+    - Outline / drop shadow
+    - Bloom
+    - Color grading
+    - Antialiasing
+    - Mesh deforming
+- Tilemap rendering
