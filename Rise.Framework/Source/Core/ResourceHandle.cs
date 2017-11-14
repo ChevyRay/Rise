@@ -15,12 +15,8 @@ namespace Rise
         }
         ~ResourceHandle()
         {
-            if (weak != null)
-            {
-                resources.Remove(weak);
-                weak = null;
-                Dispose();
-            }
+            resources.Remove(weak);
+            Dispose();
         }
 
         protected abstract void Dispose();
@@ -32,8 +28,8 @@ namespace Rise
             {
                 if (weak.TryGetTarget(out res) && res.weak != null)
                 {
-                    res.weak = null;
                     res.Dispose();
+                    GC.SuppressFinalize(res);
                 }
             }
             resources.Clear();
