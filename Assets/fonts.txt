@@ -1,0 +1,3 @@
+Google Noto:
+    https://www.google.com/get/noto/
+    "Google has been developing a font family called Noto, which aims to support all languages with a harmonious look and feel."
