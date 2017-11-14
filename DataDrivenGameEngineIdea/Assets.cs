@@ -1,6 +1,8 @@
 ﻿using System;
 namespace GameEngine
 {
+    //This would be a static class that manages all assets
+    //You load/unload/etc. assets through this, and can track their progress, etc.
     public static class Assets
     {
         public static T Find<T>(string name) where T : Asset
@@ -9,6 +11,7 @@ namespace GameEngine
         }
     }
 
+    //Base class for all asset types
     public abstract class Asset
     {
         public string Name;
@@ -16,9 +19,15 @@ namespace GameEngine
         public bool Disposed;
     }
 
+    //Instead of referencing assets directly, you'd use an AssetRef to that type
+    //This protects objects from referencing invalid/unloaded assets
+    //If an asset gets replaces, the reference will then point to the new one
+    //This also allows asset references to serialize more accurately
     public struct AssetRef<T> where T : Asset
     {
         string name;
+
+        [NonSerialized]
         T asset;
 
         public T Asset
