@@ -540,8 +540,6 @@ namespace Rise.OpenGL
             CheckError();
         }
 
-        public const GLEnum ColorAttachment0 = 0x8CE0;
-
         delegate void _glFramebufferTexture2D(FramebufferTarget target, TextureAttachment attachment, TextureTarget textarget, uint texture, int level);
         static _glFramebufferTexture2D glFramebufferTexture2D;
         public static void FramebufferTexture2D(FramebufferTarget target, TextureAttachment attachment, TextureTarget textarget, uint texture, int level)

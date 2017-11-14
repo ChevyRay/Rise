@@ -49,12 +49,12 @@ namespace Rise.PlatformSDL
 
             //OpenGL attributes
             SDL.GLSetAttribute(GLAttr.ContextMajorVersion, 3);
-            SDL.GLSetAttribute(GLAttr.ContextMinorVersion, 2);
+            SDL.GLSetAttribute(GLAttr.ContextMinorVersion, 3);
             SDL.GLSetAttribute(GLAttr.ContextProfileMask, (int)GLContextProfile.Core);
             SDL.GLSetAttribute(GLAttr.ContextFlags, (int)GLContextFlag.ForwardCompatible);
             SDL.GLSetAttribute(GLAttr.DoubleBuffer, 1);
-            SDL.GLSetAttribute(GLAttr.MultisampleBuffers, 1);
-            SDL.GLSetAttribute(GLAttr.MultisampleSamples, 3);
+            //SDL.GLSetAttribute(GLAttr.MultisampleBuffers, 1);
+            //SDL.GLSetAttribute(GLAttr.MultisampleSamples, 3);
 
             //Create the window
             var windowFlags = WindowFlags.Shown | WindowFlags.OpenGL | WindowFlags.AllowHighDpi | WindowFlags.Resizable;

@@ -47,11 +47,8 @@ namespace Rise
 
         public static void SetTarget(RenderTarget target)
         {
-            if (state.Target != target)
-            {
-                state.Target = target;
-                RenderTarget.SetTarget(target);
-            }
+            state.Target = target;
+            RenderTarget.SetTarget(target);
         }
 
         public static void SetViewport(ref RectangleI rect)
@@ -142,6 +139,8 @@ namespace Rise
                 state.Mesh = mesh;
                 //mesh.dirty = false;
             }
+
+            RenderTarget.SetTarget(state.Target);
 
             //Draw the mesh triangles
             GL.DrawElements(DrawMode.Triangles, mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);

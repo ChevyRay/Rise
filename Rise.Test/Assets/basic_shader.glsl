@@ -23,7 +23,5 @@ in vec4 f_Add;
 layout(location = 0) out vec4 o_Col;
 void main(void)
 {
-    vec4 c = texture(g_Texture, f_Tex)  * f_Mul + f_Add;
-    c = vec4(1, 1, 1, 1);
-    o_Col = texture(g_Texture, f_Tex) * c;
+    o_Col = texture(g_Texture, f_Tex) * f_Mul + f_Add;
 }

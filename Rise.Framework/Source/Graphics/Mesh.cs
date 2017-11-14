@@ -300,5 +300,9 @@ namespace Rise
         {
             AddRect(ref rect, texMin, texMax, mul, add);
         }
+        public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
+        {
+            AddRect(ref rect, texMin, texMax, Color.White, Color.Transparent);
+        }
     }
 }

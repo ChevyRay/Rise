@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using Rise.OpenGL;
 using Rise.Imaging;
 namespace Rise
@@ -87,7 +86,7 @@ namespace Rise
             MagFilter = filter;
         }
 
-        public void GetPixels(Bitmap bitmap)
+        public unsafe void GetPixels(Bitmap bitmap)
         {
             if (Width != bitmap.Width)
                 throw new Exception("Bitmap width does not match.");
@@ -95,8 +94,10 @@ namespace Rise
                 throw new Exception("Bitmap height does not match.");
 
             GL.BindTexture(TextureTarget.Texture2D, id);
-            var ptr = Marshal.UnsafeAddrOfPinnedArrayElement(bitmap.Pixels, 0);
-            GL.GetTexImage(TextureTarget.Texture2D, 0, TextureFormat.RGBA, PixelType.UnsignedByte, ptr);
+            fixed (Color* ptr = bitmap.Pixels)
+            {
+                GL.GetTexImage(TextureTarget.Texture2D, 0, TextureFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+            }
             GL.BindTexture(TextureTarget.Texture2D, 0);
         }
         public Bitmap GetPixels()
@@ -112,10 +113,16 @@ namespace Rise
         }
         public unsafe void SetPixels(int width, int height, Color[] pixels)
         {
+            Format = TextureFormat.RGBA;
+
+            if (pixels == null)
+            {
+                SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
+                return;
+            }
+
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
-
-            Format = TextureFormat.RGBA;
 
             fixed (Color* ptr = pixels)
                 SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
