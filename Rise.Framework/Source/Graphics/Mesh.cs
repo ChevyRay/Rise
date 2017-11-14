@@ -13,7 +13,7 @@ namespace Rise
         internal uint arrayID;
         internal uint elementID;
         Vertex[] vertices;
-        uint[] indices;
+        int[] indices;
         int vertexCount;
         int indexCount;
         internal int uploadedVertexCount;
@@ -26,7 +26,7 @@ namespace Rise
         public Mesh(int vertexCapacity, int indexCapacity)
         {
             vertices = new Vertex[vertexCapacity];
-            indices = new uint[indexCapacity];
+            indices = new int[indexCapacity];
 
             vaoID = GL.GenVertexArray();
             GL.BindVertexArray(vaoID);
@@ -73,7 +73,7 @@ namespace Rise
         public void UpdateIndices()
         {
             GL.BindBuffer(BufferTarget.ElementArray, elementID);
-            GL.BufferData(BufferTarget.ElementArray, sizeof(uint) * indexCount, indices, BufferUsage.DynamicDraw);
+            GL.BufferData(BufferTarget.ElementArray, sizeof(int) * indexCount, indices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.ElementArray, 0);
             uploadedIndexCount = indexCount;
             //dirty = true;
@@ -160,17 +160,17 @@ namespace Rise
             Array.Copy(verts, 0, vertices, vertexCount, verts.Length);
         }
 
-        public uint GetIndex(int i)
+        public int GetIndex(int i)
         {
             return indices[i];
         }
 
-        public void SetIndex(int i, uint ind)
+        public void SetIndex(int i, int ind)
         {
             indices[i] = ind;
         }
 
-        public void SetIndices(uint[] inds, bool copy)
+        public void SetIndices(int[] inds, bool copy)
         {
             indexCount = inds.Length;
             if (copy)
@@ -183,21 +183,21 @@ namespace Rise
                 indices = inds;
         }
 
-        public void AddIndex(uint ind)
+        public void AddIndex(int ind)
         {
             if (indexCount == indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
             indices[indexCount++] = ind;
         }
 
-        public void AddIndices(uint a, uint b)
+        public void AddIndices(int a, int b)
         {
             while (indexCount + 2 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
             indices[indexCount++] = a;
             indices[indexCount++] = b;
         }
-        public void AddIndices(uint a, uint b, uint c)
+        public void AddIndices(int a, int b, int c)
         {
             while (indexCount + 3 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -205,7 +205,7 @@ namespace Rise
             indices[indexCount++] = b;
             indices[indexCount++] = c;
         }
-        public void AddIndices(uint a, uint b, uint c, uint d)
+        public void AddIndices(int a, int b, int c, int d)
         {
             while (indexCount + 4 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -214,7 +214,7 @@ namespace Rise
             indices[indexCount++] = c;
             indices[indexCount++] = d;
         }
-        public void AddIndices(uint a, uint b, uint c, uint d, uint e)
+        public void AddIndices(int a, int b, int c, int d, int e)
         {
             while (indexCount + 5 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -224,7 +224,7 @@ namespace Rise
             indices[indexCount++] = d;
             indices[indexCount++] = e;
         }
-        public void AddIndices(uint a, uint b, uint c, uint d, uint e, uint f)
+        public void AddIndices(int a, int b, int c, int d, int e, int f)
         {
             while (indexCount + 6 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -235,7 +235,7 @@ namespace Rise
             indices[indexCount++] = e;
             indices[indexCount++] = f;
         }
-        public void AddIndices(uint[] inds)
+        public void AddIndices(int[] inds)
         {
             while (indexCount + inds.Length > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -246,7 +246,7 @@ namespace Rise
         {
             while (indexCount + 3 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
-            uint i = (uint)vertexCount;
+            int i = (int)vertexCount;
             indices[indexCount++] = i;
             indices[indexCount++] = i + 1;
             indices[indexCount++] = i + 2;
@@ -262,7 +262,7 @@ namespace Rise
         {
             while (indexCount + 6 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
-            uint i = (uint)vertexCount;
+            int i = (int)vertexCount;
             indices[indexCount++] = i;
             indices[indexCount++] = i + 1;
             indices[indexCount++] = i + 2;
