@@ -4,14 +4,30 @@ namespace Rise
 {
     public class Entity : IComparable<Entity>
     {
-        static ulong nextSearchIndex;
-
-        internal Scene scene;
-        internal Entity parent;
+        Scene scene;
+        Entity parent;
         List<Entity> children;
-        ulong searchIndex;
         internal bool cleanup;
         List<Component> components;
+
+        //One thing I dislike is "deferred removal" of entities. I want the entity
+        //to be removed from the scene the moment I call RemoveChild()... but the problem
+        //with this is that it modifies the entity list, so if anything is removed during
+        //an iterater, the iterator will be corrupted.
+        //To solve this, instead of slicing the list, I "null" the index where the Entity
+        //exists, so the array keeps its shape and size. Then, at the end of the frame,
+        //we loop through and clean up all the null slots when it is safe to do so in one go.
+        //This means that iterators have to null-check as they iterate, but can always count
+        //on visiting each entity that exists, and also only visiting them once during iteration.
+        //To optimize slot-nulling, there is a global counter, and each time an entity is added
+        //to anything, it increments this value and uses it as its "searchIndex".
+        //This means that the entities in the list are *always*, by default, sorted by their
+        //search index, as later additions will always have a higher number.
+        //Since it now technically a sorted list, we can search it using BinarySearch(), whcih
+        //is considerably faster than calling IndexOf(), as it has to visit far less slots
+        //to locate the desired index.
+        static ulong nextSearchIndex;
+        ulong searchIndex;
 
         Vector2 position;
         Vector2 scale;
@@ -56,22 +72,36 @@ namespace Rise
             }
         }
 
+        public bool IsRoot
+        {
+            get { return scene != null && parent == null; }
+        }
+
         internal void AssignSearchIndex()
         {
+            //ulong.MaxValue is *very* large so this realistically will never happen
+            //if (nextSearchIndex == ulong.MaxValue)
+            //    throw new Exception("Houston, we have a problem.");
+
+            //If we wanted to be clever and solve this, we would just have to reset the
+            //search indexer to zero, then scan all entities and re-update their indices
+            
             searchIndex = nextSearchIndex++;
         }
 
+        //Used by BinarySorty() to speed up entity removal
         public int CompareTo(Entity e)
         {
             return searchIndex.CompareTo(e.searchIndex);
         }
 
+        //An entity can either be added as a child to an existing one, or to a scene
         public T AddChild<T>(T child) where T : Entity
         {
-            if (child.scene != null)
-                throw new Exception("Entity is already in a scene.");
             if (child.parent != null)
                 throw new Exception("Entity already has a parent.");
+            if (child.scene != null)
+                throw new Exception("Entity is already in a scene.");
             if (child.IsAncestorOf(this))
                 throw new Exception("Cannot add an ancestor as a child.");
 
@@ -88,6 +118,7 @@ namespace Rise
             return child;
         }
 
+        //A child can only be removed from its parent
         public T RemoveChild<T>(T child) where T : Entity
         {
             if (child.parent != this)
@@ -102,6 +133,40 @@ namespace Rise
                 child.RemovedFromScene();
 
             return child;
+        }
+
+        public void RemoveSelf()
+        {
+            if (parent != null)
+                parent.RemoveChild(this);
+            else
+                scene?.RemoveEntity(this);
+        }
+
+        public T AddComponent<T>(T comp) where T : Component
+        {
+            if (comp.Entity != null)
+                throw new Exception("An entity already owns this component.");
+
+            components.Add(comp);
+            comp.AddedToEntity(this);
+
+            return comp;
+        }
+
+        public T RemoveComponent<T>(T comp) where T : Component
+        {
+            if (comp.Entity != this)
+                throw new Exception("Component not owned by this Entity.");
+
+            //Could use the indexing trick here, but as entities are expected to
+            //have & keep a set of components, it's not really worth it.
+            //Entities are removed at a greater frequency, so they use it
+
+            components[components.IndexOf(comp)] = null;
+            comp.RemovedFromEntity();
+
+            return comp;
         }
 
         internal void AddedToScene(Scene s)

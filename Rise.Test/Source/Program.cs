@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Rise;
 using Rise.Imaging;

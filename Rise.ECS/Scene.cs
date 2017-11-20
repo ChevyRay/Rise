@@ -10,9 +10,9 @@ namespace Rise
 
         public T AddEntity<T>(T e) where T : Entity
         {
-            if (e.scene != null)
+            if (e.Scene != null)
                 throw new Exception("Entity is already in a scene.");
-            if (e.parent != null)
+            if (e.Parent != null)
                 throw new Exception("Can only add root entities to the scene.");
 
             e.AssignSearchIndex();
@@ -27,9 +27,9 @@ namespace Rise
 
         public T RemoveEntity<T>(T e) where T : Entity
         {
-            if (e.scene != this)
+            if (e.Scene != this)
                 throw new Exception("Entity is not in this scene.");
-            if (e.parent != null)
+            if (e.Parent != null)
                 throw new Exception("Can only remove root entities from the scene.");
 
             TriggerCleanup();

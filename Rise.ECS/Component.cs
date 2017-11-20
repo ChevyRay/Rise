@@ -5,35 +5,32 @@ namespace Rise
     {
         Entity entity;
 
-        public Component()
+        internal void AddedToEntity(Entity e)
         {
-            
+            entity = e;
         }
 
-        /*public Entity Entity
+        internal void RemovedFromEntity()
+        {
+            entity = null;
+        }
+
+        public Entity Entity
         {
             get { return entity; }
             set
             {
                 if (entity != value)
                 {
-                    if (entity != null)
-                    {
-                        entity.components[entity.components.IndexOf(this)] = null;
-                        entity.TriggerCleanup();
-                    }
-
-                    if (value != null)
-                    {
-                        entity = value;
-                        entity.components.Add(this);
-                    }
-                    else
-                    {
-                        entity = null;
-                    }
+                    entity?.RemoveComponent(this);
+                    value?.AddComponent(this);
                 }
             }
-        }*/
+        }
+
+        public Scene Scene
+        {
+            get { return entity != null ? entity.Scene : null; }
+        }
     }
 }
