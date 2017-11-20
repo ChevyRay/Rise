@@ -170,6 +170,17 @@ namespace Rise
             lock (randLock)
                 rand.NextBytes(buffer);
         }
+
+        public static bool NextBool(this Random rand)
+        {
+            return rand.Next(2) == 1;
+        }
+
+        public static bool Bool()
+        {
+            lock (randLock)
+                return rand.NextBool();
+        }
     }
 }
 

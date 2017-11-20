@@ -31,7 +31,7 @@ namespace Rise.Test
         static Mesh screenMesh;
 
         static void Init()
-        {
+        {       
             const int screenW = 320;
             const int screenH = 180;
 
