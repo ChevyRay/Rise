@@ -58,6 +58,7 @@
     <Compile Include="Source\Rectangle.cs" />
     <Compile Include="Source\Triangle.cs" />
     <Compile Include="Source\ICopyable.cs" />
+    <Compile Include="Source\Hash.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
