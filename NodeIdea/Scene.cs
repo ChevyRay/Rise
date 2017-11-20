@@ -43,9 +43,15 @@ namespace NodeIdea
             cleanup = true;
         }
 
-        internal void Cleanup()
+        internal void TriggerCleanup()
         {
-            Root.Cleanup();
+            cleanup = true;
+        }
+
+        void Cleanup()
+        {
+            root?.Cleanup();
+
             if (cleanup)
             {
                 cleanup = false;
@@ -59,6 +65,8 @@ namespace NodeIdea
             }
         }
 
+        //If you ever need to get an exact-sized array, you can use NodeCount,
+        //which is equal to how many non-null nodes in the array
         public Node[] GetAllNodes()
         {
             var arr = new Node[NodeCount];
