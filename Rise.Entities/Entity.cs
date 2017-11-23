@@ -5,13 +5,12 @@ namespace Rise.Entities
     public class Entity : IComparable<Entity>
     {
         public event Action OnAdded;
-        public event Action OnRemoved;
+        public event Action<Scene> OnRemoved;
 
         static Predicate<Component> whereNull = e => e == null;
-        static ulong nextSceneAddIndex;
 
         public Scene Scene { get; private set; }
-        ulong sceneAddIndex;
+        internal ulong sceneAddIndex;
 
         Entity parent;
 
@@ -23,6 +22,8 @@ namespace Rise.Entities
 
         List<Component> components = new List<Component>();
         bool cleanup;
+
+        bool changeLock;
 
         public Entity()
         {
@@ -44,7 +45,7 @@ namespace Rise.Entities
                 throw new Exception("Component is already on an entity.");
 
             components.Add(component);
-            component.AddedToEntity(this);
+            component.Added(this);
 
             return component;
         }
@@ -53,13 +54,11 @@ namespace Rise.Entities
         {
             if (component.Entity != this)
                 throw new Exception("Component is not on this entity.");
-
-            cleanup = true;
+            
             components[components.IndexOf(component)] = null;
-            component.RemovedFromEntity();
+            component.Removed();
 
-            if (Scene != null)
-                Scene.TriggerCleanup();
+            TriggerCleanup();
         }
 
         public int CompareTo(Entity other)
@@ -67,18 +66,53 @@ namespace Rise.Entities
             return sceneAddIndex.CompareTo(other.sceneAddIndex);
         }
 
-        internal void AddedToScene(Scene scene)
+        internal void Added(Scene scene, uint addIndex)
         {
+            if (changeLock)
+                throw new Exception("Cannot add entities during add/remove callbacks.");
+
+            changeLock = true;
+
             Scene = scene;
-            sceneAddIndex = nextSceneAddIndex++;
+            sceneAddIndex = addIndex;
+            OnAdded?.Invoke();
+
+            for (int i = 0, n = components.Count; i < n; ++i)
+                if (components[i] != null)
+                    components[i].AddedToScene(true);
 
             if (cleanup)
-                Scene.TriggerCleanup();
+                Scene.TriggerCleanupEntities();
+
+            changeLock = false;
         }
 
-        internal void RemovedFromScene()
+        internal void Removed()
         {
+            if (changeLock)
+                throw new Exception("Cannot remove entities during add/remove callbacks.");
+
+            changeLock = true;
+
+            var s = Scene;
             Scene = null;
+            OnRemoved?.Invoke(s);
+
+            for (int i = 0, n = components.Count; i < n; ++i)
+                if (components[i] != null)
+                    components[i].RemovedFromScene(s, true);
+
+            changeLock = false;
+        }
+
+        protected void TriggerCleanup()
+        {
+            if (!cleanup)
+            {
+                cleanup = true;
+                if (Scene != null)
+                    Scene.TriggerCleanupEntities();
+            }
         }
 
         public bool IsAncestorOf(Entity e)
