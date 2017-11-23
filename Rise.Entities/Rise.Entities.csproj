@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{77A89E45-1CA6-4822-81F1-D8AA418A1BA9}</ProjectGuid>
+    <ProjectGuid>{32F7D13B-49E4-4B66-B265-3B34A3CC9EA9}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Rise</RootNamespace>
-    <AssemblyName>Rise.ECS</AssemblyName>
+    <RootNamespace>Rise.Entities</RootNamespace>
+    <AssemblyName>Rise.Entities</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
