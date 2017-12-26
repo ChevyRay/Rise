@@ -48,17 +48,23 @@
     <Compile Include="Source\Vector3.cs" />
     <Compile Include="Source\Vector4.cs" />
     <Compile Include="Source\Circle.cs" />
-    <Compile Include="Source\Geom.cs" />
+    <Compile Include="Source\Geom2D.cs" />
     <Compile Include="Source\IShape.cs" />
     <Compile Include="Source\Line.cs" />
     <Compile Include="Source\Polygon.cs" />
     <Compile Include="Source\Quad.cs" />
-    <Compile Include="Source\Ray.cs" />
-    <Compile Include="Source\RayHit.cs" />
+    <Compile Include="Source\Ray2D.cs" />
+    <Compile Include="Source\RayHit2D.cs" />
     <Compile Include="Source\Rectangle.cs" />
     <Compile Include="Source\Triangle.cs" />
     <Compile Include="Source\ICopyable.cs" />
     <Compile Include="Source\Hash.cs" />
+    <Compile Include="Source\Box.cs" />
+    <Compile Include="Source\Geom3D.cs" />
+    <Compile Include="Source\Plane.cs" />
+    <Compile Include="Source\Quaternion.cs" />
+    <Compile Include="Source\Ray3D.cs" />
+    <Compile Include="Source\Sphere.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

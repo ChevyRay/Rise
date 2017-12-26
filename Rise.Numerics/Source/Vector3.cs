@@ -35,6 +35,10 @@ namespace Rise
         {
             
         }
+        public Vector3(float value) : this(value, value, value)
+        {
+            
+        }
 
         public Vector2 XY
         {

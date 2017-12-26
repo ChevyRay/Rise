@@ -2,6 +2,19 @@
 using Rise.OpenGL;
 namespace Rise
 {
+    public struct DrawCall
+    {
+        public RenderTarget Target;
+        public Material Material;
+        public Mesh Mesh;
+        public bool Blend;
+        public BlendMode BlendMode;
+        public bool Clear;
+        public Color ClearColor;
+        public bool Scissor;
+        public RectangleI ScissorRect;
+    }
+
     public struct GraphicsState
     {
         public RenderTarget Target;

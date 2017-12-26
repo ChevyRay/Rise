@@ -30,10 +30,12 @@ namespace Rise.Entities
                 throw new Exception("Cannot add a manager in its add/remove callbacks.");
 
             changeLock = true;
+
             Scene = scene;
             scene.OnComponentAdded += ComponentAdded;
             scene.OnComponentRemoved += ComponentRemoved;
             OnAdded?.Invoke();
+
             changeLock = false;
         }
 
@@ -43,11 +45,13 @@ namespace Rise.Entities
                 throw new Exception("Cannot remove a manager in its add/remove callbacks.");
             
             changeLock = true;
+
             var scene = Scene;
             Scene = null;
             scene.OnComponentAdded -= ComponentAdded;
             scene.OnComponentRemoved -= ComponentRemoved;
             OnRemoved?.Invoke(scene);
+
             changeLock = false;
         }
 

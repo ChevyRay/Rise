@@ -1,7 +1,7 @@
 ﻿using System;
 namespace Rise
 {
-    public static class Geom
+    public static class Geom2D
     {
         static bool IsSeparatingAxis<T, U>(ref T a, ref U b, Vector2 axis) where T : IShape where U : IShape
         {
@@ -36,7 +36,7 @@ namespace Rise
             return true;
         }
 
-        static bool RaySegment(ref Ray ray, Vector2 a, Vector2 b, out float t)
+        static bool RaySegment(ref Ray2D ray, Vector2 a, Vector2 b, out float t)
         {
             var perp = Vector2.TurnLeft(b - a);
             var dot = Vector2.Dot(ray.Normal, perp);
@@ -221,12 +221,12 @@ namespace Rise
             return result;
         }
 
-        public static bool Raycast(ref Circle circle, ref Ray ray)
+        public static bool Raycast(ref Circle circle, ref Ray2D ray)
         {
             float dist;
             return Raycast(ref circle, ref ray, out dist);
         }
-        public static bool Raycast(ref Circle circle, ref Ray ray, out RayHit hit)
+        public static bool Raycast(ref Circle circle, ref Ray2D ray, out RayHit2D hit)
         {
             if (Raycast(ref circle, ref ray, out hit.Distance))
             {
@@ -236,7 +236,7 @@ namespace Rise
             hit.Normal = Vector2.Zero;
             return false;
         }
-        public static bool Raycast(ref Circle circle, ref Ray ray, out float dist)
+        public static bool Raycast(ref Circle circle, ref Ray2D ray, out float dist)
         {
             dist = 0f;
 
@@ -259,7 +259,7 @@ namespace Rise
             return true;
         }
 
-        public static bool Raycast(ref Rectangle rect, ref Ray ray)
+        public static bool Raycast(ref Rectangle rect, ref Ray2D ray)
         {
             float d;
             return RaySegment(ref ray, rect.TopLeft, rect.TopRight, out d)
@@ -267,7 +267,7 @@ namespace Rise
                 || RaySegment(ref ray, rect.BottomRight, rect.BottomLeft, out d)
                 || RaySegment(ref ray, rect.BottomLeft, rect.TopLeft, out d);
         }
-        public static bool Raycast(ref Rectangle rect, ref Ray ray, out RayHit hit)
+        public static bool Raycast(ref Rectangle rect, ref Ray2D ray, out RayHit2D hit)
         {
             hit.Distance = float.MaxValue;
             hit.Normal = Vector2.Zero;
@@ -316,7 +316,7 @@ namespace Rise
             }
             return false;
         }
-        public static bool Raycast(ref Rectangle rect, ref Ray ray, out float dist)
+        public static bool Raycast(ref Rectangle rect, ref Ray2D ray, out float dist)
         {
             dist = float.MaxValue;
             float d;
@@ -348,14 +348,14 @@ namespace Rise
             return crossings > 0 && (crossings % 2) == 0;
         }
 
-        public static bool Raycast(ref Triangle tri, ref Ray ray)
+        public static bool Raycast(ref Triangle tri, ref Ray2D ray)
         {
             float d;
             return RaySegment(ref ray, tri.A, tri.B, out d)
                 || RaySegment(ref ray, tri.B, tri.C, out d)
                 || RaySegment(ref ray, tri.C, tri.A, out d);
         }
-        public static bool Raycast(ref Triangle tri, ref Ray ray, out RayHit hit)
+        public static bool Raycast(ref Triangle tri, ref Ray2D ray, out RayHit2D hit)
         {
             hit.Distance = float.MaxValue;
             hit.Normal = Vector2.Zero;
@@ -395,7 +395,7 @@ namespace Rise
             }
             return false;
         }
-        public static bool Raycast(ref Triangle tri, ref Ray ray, out float dist)
+        public static bool Raycast(ref Triangle tri, ref Ray2D ray, out float dist)
         {
             dist = float.MaxValue;
             float d;
@@ -421,7 +421,7 @@ namespace Rise
             return crossings > 0 && (crossings % 2) == 0;
         }
 
-        public static bool Raycast(ref Quad quad, ref Ray ray)
+        public static bool Raycast(ref Quad quad, ref Ray2D ray)
         {
             float d;
             return RaySegment(ref ray, quad.A, quad.B, out d)
@@ -429,7 +429,7 @@ namespace Rise
                 || RaySegment(ref ray, quad.C, quad.D, out d)
                 || RaySegment(ref ray, quad.D, quad.A, out d);
         }
-        public static bool Raycast(ref Quad quad, ref Ray ray, out RayHit hit)
+        public static bool Raycast(ref Quad quad, ref Ray2D ray, out RayHit2D hit)
         {
             hit.Distance = float.MaxValue;
             hit.Normal = Vector2.Zero;
@@ -478,7 +478,7 @@ namespace Rise
             }
             return false;
         }
-        public static bool Raycast(ref Quad quad, ref Ray ray, out float dist)
+        public static bool Raycast(ref Quad quad, ref Ray2D ray, out float dist)
         {
             dist = float.MaxValue;
             float d;
@@ -510,7 +510,7 @@ namespace Rise
             return crossings > 0 && (crossings % 2) == 0;
         }
 
-        public static bool Raycast(Polygon poly, ref Ray ray)
+        public static bool Raycast(Polygon poly, ref Ray2D ray)
         {
             float d;
             var points = poly.points;
@@ -519,7 +519,7 @@ namespace Rise
                     return true;
             return false;
         }
-        public static bool Raycast(Polygon poly, ref Ray ray, out RayHit hit)
+        public static bool Raycast(Polygon poly, ref Ray2D ray, out RayHit2D hit)
         {
             hit.Distance = float.MaxValue;
             hit.Normal = Vector2.Zero;
@@ -548,7 +548,7 @@ namespace Rise
             }
             return false;
         }
-        public static bool Raycast(Polygon poly, ref Ray ray, out float dist)
+        public static bool Raycast(Polygon poly, ref Ray2D ray, out float dist)
         {
             dist = float.MaxValue;
             float d;

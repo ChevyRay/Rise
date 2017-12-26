@@ -8,8 +8,8 @@ namespace Rise
         void GetBounds(out Rectangle result);
         void Project(Vector2 axis, out float min, out float max);
         Vector2 Project(Vector2 point);
-        bool Raycast(ref Ray ray);
-        bool Raycast(ref Ray ray, out float dist);
-        bool Raycast(ref Ray ray, out RayHit hit);
+        bool Raycast(ref Ray2D ray);
+        bool Raycast(ref Ray2D ray, out float dist);
+        bool Raycast(ref Ray2D ray, out RayHit2D hit);
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System;
 namespace Rise
 {
-    public struct Ray : IEquatable<Ray>
+    public struct Ray2D : IEquatable<Ray2D>
     {
         public Vector2 Point;
         public Vector2 Normal;
 
-        public Ray(Vector2 point, Vector2 normal)
+        public Ray2D(Vector2 point, Vector2 normal)
         {
             Point = point;
             Normal = normal;
@@ -14,13 +14,13 @@ namespace Rise
 
         public override bool Equals(object obj)
         {
-            return obj is Ray && Equals((Ray)obj);
+            return obj is Ray2D && Equals((Ray2D)obj);
         }
-        public bool Equals(ref Ray other)
+        public bool Equals(ref Ray2D other)
         {
             return Point.Equals(other.Point) && Normal.Equals(other.Normal);
         }
-        public bool Equals(Ray other)
+        public bool Equals(Ray2D other)
         {
             return Equals(ref other);
         }
@@ -43,11 +43,11 @@ namespace Rise
             return Point + Normal * dist;
         }
 
-        public static bool operator ==(Ray a, Ray b)
+        public static bool operator ==(Ray2D a, Ray2D b)
         {
             return a.Equals(ref b);
         }
-        public static bool operator !=(Ray a, Ray b)
+        public static bool operator !=(Ray2D a, Ray2D b)
         {
             return !a.Equals(ref b);
         }

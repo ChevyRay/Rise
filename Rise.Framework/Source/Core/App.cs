@@ -15,8 +15,45 @@ namespace Rise
         internal static ErrorHandler errorHandler;
         internal static Platform platform;
         static bool running;
+        static bool focused;
+        static bool updateWhileFocused;
+
+        static bool fixedFramerate = true;
+        static float framerate = 60f;
+        static double frameDuration = 1.0 / 60.0;
+        static double frameTimer;
 
         public static ImageLoader ImageLoader { get; private set; }
+
+        public static int FPS { get; private set; }
+
+        public static float Framerate
+        {
+            get { return framerate; }
+            set
+            {
+                if (framerate != value)
+                {
+                    if (value <= 0f)
+                        throw new Exception("Framerate must be > 0");
+                    framerate = value;
+                    frameDuration = 1.0 / value;
+                }
+            }
+        }
+
+        public static bool FixedFramerate
+        {
+            get { return fixedFramerate; }
+            set
+            {
+                if (fixedFramerate != value)
+                {
+                    fixedFramerate = value;
+                    frameTimer = 0.0;
+                }
+            }
+        }
 
         public static void Init<PlatformType>() where PlatformType : Platform, new()
         {
@@ -51,6 +88,8 @@ namespace Rise
 
                 platform.OnQuit += Quit;
                 platform.OnWinClose += Quit;
+                platform.OnWinFocusGained += () => focused = true;
+                platform.OnWinFocusLost += () => focused = false;
 
                 GL.Init();
                 Time.Init(1f / 60f);
@@ -60,27 +99,65 @@ namespace Rise
 
                 OnInit?.Invoke();
 
+                double prevTime = platform.GetTime();
+                double frameTimer = 0.0;
+
+                Screen.SetVSync(false);
+                FixedFramerate = false;
+
                 while (running)
                 {
                     platform.PollEvents();
 
+                    if (!focused)
+                    {
+                        prevTime = (float)platform.GetTime();
+                        continue;
+                    }
+
                     if (running)
                     {
-                        Mouse.PreUpdate();
+                        double currTime = platform.GetTime();
+                        double deltaTime = currTime - prevTime;
+                        if (deltaTime > 0.0)
+                            FPS = (int)(1.0 / (currTime - prevTime));
+                        prevTime = currTime;
 
-                        OnUpdate?.Invoke();
+                        if (fixedFramerate)
+                        {
+                            if (!Screen.VSync)
+                            {
+                                frameTimer += deltaTime;
+                                while (frameTimer >= frameDuration)
+                                {
+                                    frameTimer -= frameDuration;
+                                    Update(frameDuration);
+                                }
+                            }
+                            else
+                                Update(frameDuration);
+                        }
+                        else
+                            Update(deltaTime);
 
-                        Time.PostUpdate(1f / 60f);
-                        Mouse.PostUpdate();
-                        Keyboard.PostUpdate();
+                        void Update(double dt)
+                        {
+                            Time.PreUpdate((float)dt);
+                            Mouse.PreUpdate();
 
-                        Texture.UnbindAll();
+                            OnUpdate?.Invoke();
 
-                        Graphics.Begin();
-                        OnRender?.Invoke();
-                        Graphics.End();
+                            Mouse.PostUpdate();
+                            Keyboard.PostUpdate();
 
-                        platform.SwapBuffers();
+                            Texture.UnbindAll();
+
+                            Graphics.Begin();
+                            OnRender?.Invoke();
+                            Graphics.End();
+
+                            platform.SwapBuffers();
+                        }
                     }
                 }
 

@@ -70,7 +70,6 @@ namespace Rise.Entities
         {
             if (changeLock)
                 throw new Exception("Cannot add entities during add/remove callbacks.");
-
             changeLock = true;
 
             Scene = scene;
@@ -78,8 +77,7 @@ namespace Rise.Entities
             OnAdded?.Invoke();
 
             for (int i = 0, n = components.Count; i < n; ++i)
-                if (components[i] != null)
-                    components[i].AddedToScene(true);
+                components[i]?.AddedToScene(true);
 
             if (cleanup)
                 Scene.TriggerCleanupEntities();
@@ -99,8 +97,7 @@ namespace Rise.Entities
             OnRemoved?.Invoke(s);
 
             for (int i = 0, n = components.Count; i < n; ++i)
-                if (components[i] != null)
-                    components[i].RemovedFromScene(s, true);
+                components[i]?.RemovedFromScene(s, true);
 
             changeLock = false;
         }
@@ -110,8 +107,7 @@ namespace Rise.Entities
             if (!cleanup)
             {
                 cleanup = true;
-                if (Scene != null)
-                    Scene.TriggerCleanupEntities();
+                Scene?.TriggerCleanupEntities();
             }
         }
 

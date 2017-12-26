@@ -30,9 +30,8 @@ namespace Rise
             Delta = dt;
         }
 
-        internal static void PostUpdate(float dt)
+        internal static void PreUpdate(float dt)
         {
-            ++Frames;
             Delta = dt * Rate;
             Total += Delta;
         }

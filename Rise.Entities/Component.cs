@@ -53,8 +53,14 @@ namespace Rise.Entities
             if (checkLock && changeLock)
                 throw new Exception("Cannot change a component's scene in add/remove callbacks.");
 
+            if (checkLock)
+                changeLock = true;
+
             Scene.ComponentAdded(this);
             OnAddedToScene?.Invoke();
+
+            if (checkLock)
+                changeLock = false;
         }
 
         internal void RemovedFromScene(Scene scene, bool checkLock)

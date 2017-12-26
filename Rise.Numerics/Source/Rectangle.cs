@@ -184,48 +184,48 @@ namespace Rise
         }
         public bool Contains(ref Circle circle)
         {
-            return Geom.Contains(ref this, ref circle);
+            return Geom2D.Contains(ref this, ref circle);
         }
         public bool Contains(ref Rectangle rect)
         {
-            return Geom.Contains(ref this, ref rect);
+            return Geom2D.Contains(ref this, ref rect);
         }
         public bool Contains(ref Triangle tri)
         {
-            return Geom.Contains(ref this, ref tri);
+            return Geom2D.Contains(ref this, ref tri);
         }
         public bool Contains(ref Quad quad)
         {
-            return Geom.Contains(ref this, ref quad);
+            return Geom2D.Contains(ref this, ref quad);
         }
         public bool Contains(Polygon poly)
         {
-            return Geom.Contains(ref this, poly);
+            return Geom2D.Contains(ref this, poly);
         }
 
         public float DistanceTo(Vector2 point)
         {
-            return Geom.Distance(point, ref this);
+            return Geom2D.Distance(point, ref this);
         }
         public float DistanceTo(ref Circle circle)
         {
-            return Geom.Distance(ref this, ref circle);
+            return Geom2D.Distance(ref this, ref circle);
         }
         public float DistanceTo(ref Rectangle rect)
         {
-            return Geom.Distance(ref this, ref rect);
+            return Geom2D.Distance(ref this, ref rect);
         }
         public float DistanceTo(ref Triangle tri)
         {
-            return Geom.Distance(ref this, ref tri);
+            return Geom2D.Distance(ref this, ref tri);
         }
         public float DistanceTo(ref Quad quad)
         {
-            return Geom.Distance(ref this, ref quad);
+            return Geom2D.Distance(ref this, ref quad);
         }
         public float DistanceTo(Polygon poly)
         {
-            return Geom.Distance(ref this, poly);
+            return Geom2D.Distance(ref this, poly);
         }
 
         public void GetBounds(out Rectangle result)
@@ -251,70 +251,70 @@ namespace Rise
 
         public bool Intersects(ref Circle circle)
         {
-            return Geom.Intersects(ref this, ref circle);
+            return Geom2D.Intersects(ref this, ref circle);
         }
         public bool Intersects(ref Rectangle rect)
         {
-            return Geom.Intersects(ref this, ref rect);
+            return Geom2D.Intersects(ref this, ref rect);
         }
         public bool Intersects(ref Triangle tri)
         {
-            return Geom.Intersects(ref this, ref tri);
+            return Geom2D.Intersects(ref this, ref tri);
         }
         public bool Intersects(ref Quad quad)
         {
-            return Geom.Intersects(ref this, ref quad);
+            return Geom2D.Intersects(ref this, ref quad);
         }
         public bool Intersects(Polygon poly)
         {
-            return Geom.Intersects(ref this, poly);
+            return Geom2D.Intersects(ref this, poly);
         }
 
         public bool Intersects(Vector2 point, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, point, out pushOut);
+            return Geom2D.Intersects(ref this, point, out pushOut);
         }
         public bool Intersects(ref Circle circle, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, ref circle, out pushOut);
+            return Geom2D.Intersects(ref this, ref circle, out pushOut);
         }
         public bool Intersects(ref Rectangle rect, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, ref rect, out pushOut);
+            return Geom2D.Intersects(ref this, ref rect, out pushOut);
         }
         public bool Intersects(ref Triangle tri, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, ref tri, out pushOut);
+            return Geom2D.Intersects(ref this, ref tri, out pushOut);
         }
         public bool Intersects(ref Quad quad, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, ref quad, out pushOut);
+            return Geom2D.Intersects(ref this, ref quad, out pushOut);
         }
         public bool Intersects(Polygon poly, out Vector2 pushOut)
         {
-            return Geom.Intersects(ref this, poly, out pushOut);
+            return Geom2D.Intersects(ref this, poly, out pushOut);
         }
 
         public void Project(Vector2 axis, out float min, out float max)
         {
-            Geom.Project(ref this, axis, out min, out max);
+            Geom2D.Project(ref this, axis, out min, out max);
         }
         public Vector2 Project(Vector2 point)
         {
-            return Geom.Project(ref this, point);
+            return Geom2D.Project(ref this, point);
         }
 
-        public bool Raycast(ref Ray ray)
+        public bool Raycast(ref Ray2D ray)
         {
-            return Geom.Raycast(ref this, ref ray);
+            return Geom2D.Raycast(ref this, ref ray);
         }
-        public bool Raycast(ref Ray ray, out RayHit hit)
+        public bool Raycast(ref Ray2D ray, out RayHit2D hit)
         {
-            return Geom.Raycast(ref this, ref ray, out hit);
+            return Geom2D.Raycast(ref this, ref ray, out hit);
         }
-        public bool Raycast(ref Ray ray, out float dist)
+        public bool Raycast(ref Ray2D ray, out float dist)
         {
-            return Geom.Raycast(ref this, ref ray, out dist);
+            return Geom2D.Raycast(ref this, ref ray, out dist);
         }
 
         public override string ToString()
