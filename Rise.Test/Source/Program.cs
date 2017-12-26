@@ -19,16 +19,8 @@ namespace Rise.Test
             App.Run("Rise.Test", 640, 360, null);
         }
 
-        static Shader shader;
-
-        static Material material;
-        static Texture face;
-        static Mesh mesh;
-
-        static Texture screenTexture;
-        static Material screenMaterial;
-        static RenderTarget screenTarget;
-        static Mesh screenMesh;
+        static DrawCall drawToCanvas;
+        static DrawCall drawToScreen;
 
         static void Init()
         {       
@@ -37,28 +29,27 @@ namespace Rise.Test
 
             Texture.DefaultMinFilter = TextureFilter.Linear;
             Texture.DefaultMagFilter = TextureFilter.Nearest;
-            face = new Texture("Assets/face.png", true);
+            var face = new Texture("Assets/face.png", true);
 
-            mesh = new Mesh();
-            mesh.AddRect(new Rectangle(0f, 0f, face.Width, face.Height), Vector2.Zero, Vector2.One);
-            mesh.Update();
+            var shader = Shader.FromFile("Assets/basic_shader.glsl");
+            var canvasTexture = new Texture(screenW, screenH, null);
 
-            shader = Shader.FromFile("Assets/basic_shader.glsl");
+            drawToCanvas.SetBlendMode(BlendMode.Alpha);
+            drawToCanvas.Target = new RenderTarget(canvasTexture);
+            drawToCanvas.Material = new Material(shader);
+            drawToCanvas.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
+            drawToCanvas.Material.SetTexture("g_Texture", face);
+            drawToCanvas.Mesh = new Mesh();
+            drawToCanvas.Mesh.AddRect(new Rectangle(0f, 0f, face.Width, face.Height), Vector2.Zero, Vector2.One);
+            drawToCanvas.Mesh.Update();
 
-            material = new Material(shader);
-            material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
-            material.SetTexture("g_Texture", face);
-
-            screenTexture = new Texture(screenW, screenH, null);
-            screenTarget = new RenderTarget(screenTexture);
-
-            screenMaterial = new Material(shader);
-            screenMaterial.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
-            screenMaterial.SetTexture("g_Texture", screenTexture);
-
-            screenMesh = new Mesh();
-            screenMesh.AddRect(new Rectangle(0f, 0f, screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
-            screenMesh.Update();
+            drawToScreen.SetBlendMode(BlendMode.Alpha);
+            drawToScreen.Material = new Material(shader);
+            drawToScreen.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
+            drawToScreen.Material.SetTexture("g_Texture", canvasTexture);
+            drawToScreen.Mesh = new Mesh();
+            drawToScreen.Mesh.AddRect(new Rectangle(0f, 0f, screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
+            drawToScreen.Mesh.Update();
         }
 
         static void Update()
@@ -68,15 +59,8 @@ namespace Rise.Test
 
         static void Render()
         {
-            Graphics.SetTarget(screenTarget);
-            Graphics.Clear(Color.Transparent);
-            Graphics.SetBlendMode(BlendMode.Alpha);
-            Graphics.Draw(material, mesh);
-
-            Graphics.SetTarget(null);
-            Graphics.Clear(0x1e4e50ff);
-            Graphics.SetBlendMode(BlendMode.Alpha);
-            Graphics.Draw(screenMaterial, screenMesh);
+            drawToCanvas.Perform(Color.Transparent);
+            drawToScreen.Perform(Color.Black);
         }
     }
 }

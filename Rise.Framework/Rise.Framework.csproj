@@ -39,7 +39,7 @@
     <Compile Include="Source\Core\Screen.cs" />
     <Compile Include="Source\Core\Time.cs" />
     <Compile Include="Source\Graphics\BlendMode.cs" />
-    <Compile Include="Source\Graphics\Graphics.cs" />
+    <Compile Include="Source\Graphics\DrawCall.cs" />
     <Compile Include="Source\Graphics\Material.cs" />
     <Compile Include="Source\Graphics\Mesh.cs" />
     <Compile Include="Source\Graphics\OpenGL.cs" />

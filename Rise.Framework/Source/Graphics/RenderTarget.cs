@@ -34,6 +34,13 @@ namespace Rise
             GL.DeleteFramebuffer(id);
         }
 
+        public void Clear(Color color)
+        {
+            Bind(this);
+            GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+            GL.Clear(BufferBit.Color | BufferBit.Depth);
+        }
+
         public Texture GetTexture(int n)
         {
             if (n < 0 || n >= textures.Length)

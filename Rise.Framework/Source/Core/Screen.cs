@@ -26,6 +26,8 @@ namespace Rise
 
         public static RectangleI Position { get { return new RectangleI(x, y, width, height); } }
 
+        public static Color ClearColor = Color.Black;
+
         internal static void Init()
         {
             UpdatePosition();

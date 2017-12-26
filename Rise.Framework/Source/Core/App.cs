@@ -152,9 +152,9 @@ namespace Rise
 
                             Texture.UnbindAll();
 
-                            Graphics.Begin();
+                            DrawCall.Begin();
                             OnRender?.Invoke();
-                            Graphics.End();
+                            DrawCall.End();
 
                             platform.SwapBuffers();
                         }
