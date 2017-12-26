@@ -7,7 +7,7 @@ namespace Rise
 {
     public class Mesh : ResourceHandle
     {
-        const int vertexSize = 24;
+        const int vertexSize = 28;
 
         internal uint vaoID;
         internal uint arrayID;
@@ -40,10 +40,10 @@ namespace Rise
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
-            GL.VertexAttribPointer(0, 2, VertexType.Float, false, vertexSize, new IntPtr(0));
-            GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(8));
-            GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(16));
-            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+            GL.VertexAttribPointer(0, 3, VertexType.Float, false, vertexSize, new IntPtr(0));
+            GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(12));
+            GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(24));
 
             GL.BindBuffer(BufferTarget.ElementArray, 0);
             GL.BindBuffer(BufferTarget.Array, 0);
