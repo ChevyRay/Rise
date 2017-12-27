@@ -20,6 +20,10 @@ namespace Rise.Test
         }
 
         static DrawCall draw;
+        static Matrix4x4 model;
+        static Matrix4x4 view;
+        static Matrix4x4 proj;
+        static float angle;
 
         static void Init()
         {       
@@ -31,11 +35,11 @@ namespace Rise.Test
             var shader = Shader.FromFile("Assets/basic_3d.glsl");
             var texture = new Texture("Assets/pink_square.png", true);
 
-            var model = Matrix4x4.CreateRotationX(-90f * Calc.Rad);
-            var view = Matrix4x4.CreateLookAt(new Vector3(20f, 20f, 20f), Vector2.Zero, Vector3.Up);
-            var projection = Matrix4x4.CreatePerspectiveFOV(45f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
+            model = Matrix4x4.CreateRotationX(-90f * Calc.Rad);
+            view = Matrix4x4.CreateLookAt(new Vector3(20f, 20f, 20f), Vector2.Zero, Vector3.Up);
+            proj = Matrix4x4.CreatePerspectiveFOV(45f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
             //var projection = Matrix4x4.CreateOrthographic(screenW, screenH, 0.1f, 100000f);
-            var mvp = model * view * projection;
+            var mvp = model * view * proj;
 
             draw.Material = new Material(shader);
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
@@ -49,7 +53,11 @@ namespace Rise.Test
 
         static void Update()
         {
-            
+            angle += Time.Delta;
+            model = Matrix4x4.CreateRotationX(-90f * Calc.Rad) * Matrix4x4.CreateRotationY(angle);
+            var mvp = model * view * proj;
+            draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
+            draw.Material.SetMatrix4x4("g_Model", ref model);
         }
 
         static void Render()
