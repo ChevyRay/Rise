@@ -47,13 +47,14 @@
     <Compile Include="Source\Graphics\Renderer.cs" />
     <Compile Include="Source\Graphics\Shader.cs" />
     <Compile Include="Source\Graphics\Texture.cs" />
-    <Compile Include="Source\Graphics\Vertex.cs" />
+    <Compile Include="Source\Graphics\Vertex2D.cs" />
     <Compile Include="Source\Input\Joystick.cs" />
     <Compile Include="Source\Input\KeyCode.cs" />
     <Compile Include="Source\Input\Keyboard.cs" />
     <Compile Include="Source\Input\Mouse.cs" />
     <Compile Include="Source\Input\ScanCode.cs" />
     <Compile Include="Source\Graphics\Mesh.cs" />
+    <Compile Include="Source\Graphics\Vertex3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

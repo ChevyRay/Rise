@@ -9,14 +9,14 @@ namespace Rise
     {
         const int vertexSize = 24;
 
-        Vertex[] vertices;
+        Vertex2D[] vertices;
         int vertexCount;
 
         public override int VertexCount { get { return vertexCount; } }
 
         public Mesh2D(int vertexCapacity, int indexCapacity) : base(indexCapacity)
         {
-            vertices = new Vertex[vertexCapacity];
+            vertices = new Vertex2D[vertexCapacity];
         }
         public Mesh2D() : this(4, 6)
         {
@@ -70,21 +70,21 @@ namespace Rise
             vertexCount = 0;
         }
 
-        public void GetVertex(int i, out Vertex result)
+        public void GetVertex(int i, out Vertex2D result)
         {
             vertices[i].CopyTo(out result);
         }
-        public Vertex GetVertex(int i)
+        public Vertex2D GetVertex(int i)
         {
             return vertices[i];
         }
 
-        public void SetVertex(int i, ref Vertex vert)
+        public void SetVertex(int i, ref Vertex2D vert)
         {
             vert.CopyTo(out vertices[i]);
         }
 
-        public void SetVertices(Vertex[] verts, bool copy)
+        public void SetVertices(Vertex2D[] verts, bool copy)
         {
             vertexCount = verts.Length;
             if (copy)
@@ -97,25 +97,25 @@ namespace Rise
                 vertices = verts;
         }
 
-        public void AddVertex(ref Vertex vert)
+        public void AddVertex(ref Vertex2D vert)
         {
             if (vertexCount == vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
             vert.CopyTo(out vertices[vertexCount++]);
         }
-        public void AddVertex(Vertex vert)
+        public void AddVertex(Vertex2D vert)
         {
             AddVertex(ref vert);
         }
 
-        public void AddVertices(ref Vertex a, ref Vertex b)
+        public void AddVertices(ref Vertex2D a, ref Vertex2D b)
         {
             while (vertexCount + 2 > vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
             a.CopyTo(out vertices[vertexCount++]);
             b.CopyTo(out vertices[vertexCount++]);
         }
-        public void AddVertices(ref Vertex a, ref Vertex b, ref Vertex c)
+        public void AddVertices(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c)
         {
             while (vertexCount + 3 > vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
@@ -123,7 +123,7 @@ namespace Rise
             b.CopyTo(out vertices[vertexCount++]);
             c.CopyTo(out vertices[vertexCount++]);
         }
-        public void AddVertices(ref Vertex a, ref Vertex b, ref Vertex c, ref Vertex d)
+        public void AddVertices(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c, ref Vertex2D d)
         {
             while (vertexCount + 4 > vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
@@ -132,14 +132,14 @@ namespace Rise
             c.CopyTo(out vertices[vertexCount++]);
             d.CopyTo(out vertices[vertexCount++]);
         }
-        public void AddVertices(Vertex[] verts)
+        public void AddVertices(Vertex2D[] verts)
         {
             while (vertexCount + verts.Length > vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
             Array.Copy(verts, 0, vertices, vertexCount, verts.Length);
         }
 
-        public void AddTriangle(ref Vertex a, ref Vertex b, ref Vertex c)
+        public void AddTriangle(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c)
         {
             while (indexCount + 3 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -150,12 +150,12 @@ namespace Rise
 
             AddVertices(ref a, ref b, ref c);
         }
-        public void AddTriangle(Vertex a, Vertex b, Vertex c)
+        public void AddTriangle(Vertex2D a, Vertex2D b, Vertex2D c)
         {
             AddTriangle(ref a, ref b, ref c);
         }
 
-        public void AddQuad(ref Vertex a, ref Vertex b, ref Vertex c, ref Vertex d)
+        public void AddQuad(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c, ref Vertex2D d)
         {
             while (indexCount + 6 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
@@ -169,14 +169,14 @@ namespace Rise
 
             AddVertices(ref a, ref b, ref c, ref d);
         }
-        public void AddQuad(Vertex a, Vertex b, Vertex c, Vertex d)
+        public void AddQuad(Vertex2D a, Vertex2D b, Vertex2D c, Vertex2D d)
         {
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
         public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color mul, Color add)
         {
-            Vertex a, b, c, d;
+            Vertex2D a, b, c, d;
             a.Pos = rect.TopLeft;
             b.Pos = rect.TopRight;
             c.Pos = rect.BottomRight;
