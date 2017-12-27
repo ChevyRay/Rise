@@ -2,7 +2,7 @@
 using Rise.OpenGL;
 namespace Rise
 {
-    public struct DrawCall
+    public struct DrawCall : IEquatable<DrawCall>
     {
         static DrawCall state;
 
@@ -188,6 +188,53 @@ namespace Rise
 
             //Draw the mesh triangles
             GL.DrawElements(DrawMode.Triangles, Mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);
+        }
+
+        public bool Equals(ref DrawCall call)
+        {
+            return Target == call.Target
+                && Material == call.Material
+                && Mesh == call.Mesh
+                && Blend == call.Blend
+                && Clip == call.Clip
+                && BlendMode.Equals(ref call.BlendMode)
+                && ClipRect.Equals(ref call.ClipRect);
+        }
+        public bool Equals(DrawCall call)
+        {
+            return Equals(ref call);
+        }
+        public override bool Equals(object obj)
+        {
+            return obj is DrawCall && Equals((DrawCall)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = 17;
+                if (Target != null)
+                    hash = hash * 23 + Target.GetHashCode();
+                if (Material != null)
+                    hash = hash * 23 + Material.GetHashCode();
+                if (Mesh != null)
+                    hash = hash * 23 + Mesh.GetHashCode();
+                hash = hash * 23 + Blend.GetHashCode();
+                hash = hash * 23 + Clip.GetHashCode();
+                hash = hash * 23 + BlendMode.GetHashCode();
+                hash = hash * 23 + ClipRect.GetHashCode();
+                return hash;
+            }
+        }
+
+        public static bool operator ==(DrawCall a, DrawCall b)
+        {
+            return a.Equals(ref b);
+        }
+        public static bool operator !=(DrawCall a, DrawCall b)
+        {
+            return !a.Equals(ref b);
         }
     }
 }

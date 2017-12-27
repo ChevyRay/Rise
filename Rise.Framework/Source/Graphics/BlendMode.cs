@@ -45,6 +45,7 @@ namespace Rise
                 int hash = 17;
                 hash = hash * 23 + Src.GetHashCode();
                 hash = hash * 23 + Dst.GetHashCode();
+                hash = hash * 23 + Eq.GetHashCode();
                 return hash;
             }
         }

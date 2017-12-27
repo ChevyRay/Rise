@@ -55,6 +55,7 @@
     <Compile Include="Source\Input\ScanCode.cs" />
     <Compile Include="Source\Graphics\Mesh.cs" />
     <Compile Include="Source\Graphics\Vertex3D.cs" />
+    <Compile Include="Source\Graphics\Mesh3D.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
