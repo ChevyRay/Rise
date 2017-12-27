@@ -19,33 +19,31 @@ namespace Rise.Test
             App.Run("Rise.Test", 640, 360, null);
         }
 
-        static DrawCall drawToCanvas;
-        static DrawCall drawToScreen;
+        static DrawCall draw;
 
         static void Init()
         {       
-            const int screenW = 320;
-            const int screenH = 180;
-
+            int screenW = Screen.DrawWidth;
+            int screenH = Screen.DrawHeight;
             Texture.DefaultMinFilter = TextureFilter.Linear;
             Texture.DefaultMagFilter = TextureFilter.Nearest;
+
+            var shader = Shader.FromFile("Assets/basic_3d.glsl");
             var face = new Texture("Assets/face.png", true);
 
-            var shader = Shader.FromFile("Assets/basic_shader.glsl");
-            var canvasTexture = new Texture(screenW, screenH, null);
+            var model = Matrix4x4.Identity;
+            var view = Matrix4x4.CreateLookAt(new Vector3(0f, 5f, 20f), Vector2.Zero, Vector3.Up);
+            var projection = Matrix4x4.CreatePerspectiveFOV(45f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
+            //var projection = Matrix4x4.CreateOrthographic(screenW, screenH, 0.1f, 100000f);
+            var mvp = model * view * projection;
 
-            drawToCanvas.SetBlendMode(BlendMode.Alpha);
-            drawToCanvas.Target = new RenderTarget(canvasTexture);
-            drawToCanvas.Material = new Material(shader);
-            drawToCanvas.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
-            drawToCanvas.Material.SetTexture("g_Texture", face);
-            drawToCanvas.Mesh = Mesh2D.CreateRect(new Rectangle(face.Width, face.Height));
+            draw.Material = new Material(shader);
+            draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
+            draw.Material.SetMatrix4x4("g_Model", ref model);
+            draw.Material.SetTexture("g_Texture", face);
+            draw.Material.SetColor("g_AmbientColor", Color.White);
 
-            drawToScreen.SetBlendMode(BlendMode.Alpha);
-            drawToScreen.Material = new Material(shader);
-            drawToScreen.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
-            drawToScreen.Material.SetTexture("g_Texture", canvasTexture);
-            drawToScreen.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
+            draw.Mesh = Mesh3D.CreateQuad(10f, 10f, Color.White);
         }
 
         static void Update()
@@ -55,8 +53,7 @@ namespace Rise.Test
 
         static void Render()
         {
-            drawToCanvas.Perform(Color.Transparent);
-            drawToScreen.Perform(Color.Black);
+            draw.Perform(Color.Grey);
         }
     }
 }

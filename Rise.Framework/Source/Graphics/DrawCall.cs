@@ -82,13 +82,19 @@ namespace Rise
             GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.ScissorTest);
-            GL.Disable(EnableCap.DepthTest);
             GL.UseProgram(0);
             GL.BindVertexArray(0);
 
             //Clear the screen
             GL.ClearColor(Screen.ClearColor.R / 255f, Screen.ClearColor.G / 255f, Screen.ClearColor.B / 255f, Screen.ClearColor.A / 255f);
             GL.Clear(BufferBit.Color | BufferBit.Depth);
+
+            //TODO: temp, this should be 2d/3d specific
+            //GL.Disable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFace.Back);
         }
 
         internal static void End()

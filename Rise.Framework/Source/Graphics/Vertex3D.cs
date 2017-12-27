@@ -7,34 +7,27 @@ namespace Rise
         public Vector3 Pos;
         public Vector3 Nor;
         public Vector2 Tex;
-        public Color Mul;
-        public Color Add;
+        public Color Col;
 
-        public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex, Color mul, Color add)
+        public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex, Color col)
         {
             Pos = pos;
             Nor = nor;
             Tex = tex;
-            Mul = mul;
-            Add = add;
-        }
-        public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex, Color mul)
-            : this(pos, nor, tex, mul, Color.Transparent)
-        {
-
+            Col = col;
         }
         public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex)
-            : this(pos, nor, tex, Color.White, Color.Transparent)
+            : this(pos, nor, tex, Color.White)
         {
 
         }
-        public Vertex3D(Vector3 pos, Vector3 nor, Color add)
-            : this(pos, nor, Vector2.Zero, Color.Transparent, add)
+        public Vertex3D(Vector3 pos, Vector3 nor, Color col)
+            : this(pos, nor, Vector2.Zero, col)
         {
 
         }
         public Vertex3D(Vector3 pos, Vector3 nor)
-            : this(pos, nor, Vector2.Zero, Color.White, Color.Transparent)
+            : this(pos, nor, Vector2.Zero, Color.White)
         {
 
         }
@@ -44,8 +37,7 @@ namespace Rise
             other.Pos = Pos;
             other.Nor = Nor;
             other.Tex = Tex;
-            other.Mul = Mul;
-            other.Add = Add;
+            other.Col = Col;
         }
     }
 }

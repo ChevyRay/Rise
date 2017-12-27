@@ -412,21 +412,45 @@ namespace Rise
             return m;
         }
             
-        public static Matrix4x4 Orthographic(float left, float right, float bottom, float top, float zNear, float zFar)
+        public static void CreateOrthographic(float width, float height, float near, float far, out Matrix4x4 result)
         {
-            return new Matrix4x4(
-                2f / (right - left), 0f, 0f, 0f,
-                0f, 2f / (top - bottom), 0f, 0f,
-                0f, 0f, 1f / (zNear - zFar), 0f,
-                (left + right) / (left - right), (top + bottom) / (bottom - top), zNear / (zNear - zFar), 1f
-            );
+            result.M11 = 2f / width;
+            result.M12 = result.M13 = result.M14 = 0f;
+            result.M22 = 2f / height;
+            result.M21 = result.M23 = result.M24 = 0f;
+            result.M33 = 1f / (near - far);
+            result.M31 = result.M32 = result.M34 = 0f;
+            result.M41 = result.M42 = 0f;
+            result.M43 = near / (near - far);
+            result.M44 = 1f;
         }
-        public static Matrix4x4 Orthographic(float width, float height, float zNear, float zFar)
+        public static Matrix4x4 CreateOrthographic(float width, float height, float near, float far)
         {
-            return Orthographic(0f, width, height, 0f, zNear, zFar);
+            Matrix4x4 result;
+            CreateOrthographic(width, height, near, far, out result);
+            return result;
+        }
+        public static void CreateOrthographic(float left, float right, float bottom, float top, float near, float far, out Matrix4x4 result)
+        {
+            result.M11 = (float)(2.0 / ((double)right - (double)left));
+            result.M12 = result.M13 = result.M14 = result.M21 = 0.0f;
+            result.M22 = (float)(2.0 / ((double)top - (double)bottom));
+            result.M23 = result.M24 = result.M31 = result.M32 = 0.0f;
+            result.M33 = (float)(1.0 / ((double)near - (double)far));
+            result.M34 = 0.0f;
+            result.M41 = (float)(((double)left + (double)right) / ((double)left - (double)right));
+            result.M42 = (float)(((double)top + (double)bottom) / ((double)bottom - (double)top));
+            result.M43 = (float)((double)near / ((double)near - (double)far));
+            result.M44 = 1.0f;
+        }
+        public static Matrix4x4 CreateOrthographic(float left, float right, float bottom, float top, float near, float far)
+        {
+            Matrix4x4 result;
+            CreateOrthographic(left, right, bottom, top, near, far, out result);
+            return result;
         }
 
-        public static void RotationX(float angle, out Matrix4x4 result)
+        public static void CreateRotationX(float angle, out Matrix4x4 result)
         {
             result = Identity;
             var val1 = (float)Math.Cos(angle);
@@ -436,14 +460,14 @@ namespace Rise
             result.M32 = -val2;
             result.M33 = val1;
         }
-        public static Matrix4x4 RotationX(float angle)
+        public static Matrix4x4 CreateRotationX(float angle)
         {
             Matrix4x4 result;
-            RotationX(angle, out result);
+            CreateRotationX(angle, out result);
             return result;
         }
 
-        public static void RotationY(float angle, out Matrix4x4 result)
+        public static void CreateRotationY(float angle, out Matrix4x4 result)
         {
             result = Identity;
             var val1 = (float)Math.Cos(angle);
@@ -453,14 +477,14 @@ namespace Rise
             result.M31 = val2;
             result.M33 = val1;
         }
-        public static Matrix4x4 RotationY(float angle)
+        public static Matrix4x4 CreateRotationY(float angle)
         {
             Matrix4x4 result;
-            RotationY(angle, out result);
+            CreateRotationY(angle, out result);
             return result;
         }
 
-        public static void RotationZ(float radians, out Matrix4x4 result)
+        public static void CreateRotationZ(float radians, out Matrix4x4 result)
         {
             result = Identity;
             var val1 = (float)Math.Cos(radians);
@@ -470,60 +494,95 @@ namespace Rise
             result.M21 = -val2;
             result.M22 = val1;
         }
-        public static Matrix4x4 RotationZ(float radians)
+        public static Matrix4x4 CreateRotationZ(float radians)
         {
             Matrix4x4 result;
-            RotationZ(radians, out result);
+            CreateRotationZ(radians, out result);
             return result;
         }
 
-        public static Matrix4x4 Scale(float x, float y, float z)
+        public static void CreateRotation(ref Quaternion quaternion, out Matrix4x4 result)
+        {
+            float num9 = quaternion.X * quaternion.X;
+            float num8 = quaternion.Y * quaternion.Y;
+            float num7 = quaternion.Z * quaternion.Z;
+            float num6 = quaternion.X * quaternion.Y;
+            float num5 = quaternion.Z * quaternion.W;
+            float num4 = quaternion.Z * quaternion.X;
+            float num3 = quaternion.Y * quaternion.W;
+            float num2 = quaternion.Y * quaternion.Z;
+            float num = quaternion.X * quaternion.W;
+            result.M11 = 1f - (2f * (num8 + num7));
+            result.M12 = 2f * (num6 + num5);
+            result.M13 = 2f * (num4 - num3);
+            result.M14 = 0f;
+            result.M21 = 2f * (num6 - num5);
+            result.M22 = 1f - (2f * (num7 + num9));
+            result.M23 = 2f * (num2 + num);
+            result.M24 = 0f;
+            result.M31 = 2f * (num4 + num3);
+            result.M32 = 2f * (num2 - num);
+            result.M33 = 1f - (2f * (num8 + num9));
+            result.M34 = 0f;
+            result.M41 = 0f;
+            result.M42 = 0f;
+            result.M43 = 0f;
+            result.M44 = 1f;
+        }
+        public static Matrix4x4 CreateRotation(Quaternion quaternion)
+        {
+            Matrix4x4 result;
+            CreateRotation(ref quaternion, out result);
+            return result;
+        }
+
+        public static Matrix4x4 CreateScale(float x, float y, float z)
         {
             return new Matrix4x4(x, 0f, 0f, 0f, 0f, y, 0f, 0f, 0f, 0f, z, 0f, 0f, 0f, 0f, 1f);
         }
-        public static Matrix4x4 Scale(ref Vector3 scale)
+        public static Matrix4x4 CreateScale(ref Vector3 scale)
         {
-            return Scale(scale.X, scale.Y, scale.Z);
+            return CreateScale(scale.X, scale.Y, scale.Z);
         }
-        public static Matrix4x4 Scale(Vector3 scale)
+        public static Matrix4x4 CreateScale(Vector3 scale)
         {
-            return Scale(scale.X, scale.Y, scale.Z);
+            return CreateScale(scale.X, scale.Y, scale.Z);
         }
-        public static Matrix4x4 Scale(Vector2 scale)
+        public static Matrix4x4 CreateScale(Vector2 scale)
         {
-            return Scale(scale.X, scale.Y, 1f);
+            return CreateScale(scale.X, scale.Y, 1f);
         }
-        public static Matrix4x4 Scale(float x, float y)
+        public static Matrix4x4 CreateScale(float x, float y)
         {
-            return Scale(x, y, 1f);
+            return CreateScale(x, y, 1f);
         }
-        public static Matrix4x4 Scale(float scale)
+        public static Matrix4x4 CreateScale(float scale)
         {
-            return Scale(scale, scale, scale);
+            return CreateScale(scale, scale, scale);
         }
 
-        public static Matrix4x4 Translation(float x, float y, float z)
+        public static Matrix4x4 CreateTranslation(float x, float y, float z)
         {
             return new Matrix4x4(1f, 0f, 0f, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1f, 0f, x, y, z, 1f);
         }
-        public static Matrix4x4 Translation(ref Vector3 translation)
+        public static Matrix4x4 CreateTranslation(ref Vector3 translation)
         {
-            return Translation(translation.X, translation.Y, translation.Z);
+            return CreateTranslation(translation.X, translation.Y, translation.Z);
         }
-        public static Matrix4x4 Translation(Vector3 translation)
+        public static Matrix4x4 CreateTranslation(Vector3 translation)
         {
-            return Translation(translation.X, translation.Y, translation.Z);
+            return CreateTranslation(translation.X, translation.Y, translation.Z);
         }
-        public static Matrix4x4 Translation(Vector2 translation)
+        public static Matrix4x4 CreateTranslation(Vector2 translation)
         {
-            return Translation(translation.X, translation.Y, 0f);
+            return CreateTranslation(translation.X, translation.Y, 0f);
         }
-        public static Matrix4x4 Translation(float x, float y)
+        public static Matrix4x4 CreateTranslation(float x, float y)
         {
-            return Translation(x, y, 0f);
+            return CreateTranslation(x, y, 0f);
         }
 
-        public static void FromAxisAngle(ref Vector3 axis, float angle, out Matrix4x4 result)
+        public static void CreateAxisAngle(ref Vector3 axis, float angle, out Matrix4x4 result)
         {
             float x = axis.X;
             float y = axis.Y;
@@ -553,14 +612,14 @@ namespace Rise
             result.M43 = 0;
             result.M44 = 1;
         }
-        public static Matrix4x4 FromAxisAngle(Vector3 axis, float angle)
+        public static Matrix4x4 CreateAxisAngle(Vector3 axis, float angle)
         {
             Matrix4x4 result;
-            FromAxisAngle(ref axis, angle, out result);
+            CreateAxisAngle(ref axis, angle, out result);
             return result;
         }
 
-        public static void LookAt(ref Vector3 cameraPosition, ref Vector3 cameraTarget, ref Vector3 cameraUpVector, out Matrix4x4 result)
+        public static void CreateLookAt(ref Vector3 cameraPosition, ref Vector3 cameraTarget, ref Vector3 cameraUpVector, out Matrix4x4 result)
         {
             var vector = Vector3.Normalize(cameraPosition - cameraTarget);
             var vector2 = Vector3.Normalize(Vector3.Cross(cameraUpVector, vector));
@@ -582,14 +641,14 @@ namespace Rise
             result.M43 = -Vector3.Dot(vector, cameraPosition);
             result.M44 = 1f;
         }
-        public static Matrix4x4 LookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
+        public static Matrix4x4 CreateLookAt(Vector3 cameraPosition, Vector3 cameraTarget, Vector3 cameraUpVector)
         {
             Matrix4x4 result;
-            LookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out result);
+            CreateLookAt(ref cameraPosition, ref cameraTarget, ref cameraUpVector, out result);
             return result;
         }
 
-        public static void Perspective(float width, float height, float near, float far, out Matrix4x4 result)
+        public static void CreatePerspective(float width, float height, float near, float far, out Matrix4x4 result)
         {
             result.M11 = (2f * near) / width;
             result.M12 = result.M13 = result.M14 = 0f;
@@ -601,14 +660,14 @@ namespace Rise
             result.M41 = result.M42 = result.M44 = 0f;
             result.M43 = (near * far) / (near - far);
         }
-        public static Matrix4x4 Perspective(float width, float height, float near, float far)
+        public static Matrix4x4 CreatePerspective(float width, float height, float near, float far)
         {
             Matrix4x4 result;
-            Perspective(width, height, near, far, out result);
+            CreatePerspective(width, height, near, far, out result);
             return result;
         }
 
-        public static void PerspectiveFOV(float fov, float aspect, float near, float far, out Matrix4x4 result)
+        public static void CreatePerspectiveFOV(float fov, float aspect, float near, float far, out Matrix4x4 result)
         {
             float num = 1f / ((float)Math.Tan((double)(fov * 0.5f)));
             float num9 = num / aspect;
@@ -627,10 +686,128 @@ namespace Rise
             result.M41 = result.M42 = result.M44 = 0;
             result.M43 = (near * far) / (near - far);
         }
-        public static Matrix4x4 PerspectiveFOV(float fov, float aspect, float near, float far)
+        public static Matrix4x4 CreatePerspectiveFOV(float fov, float aspect, float near, float far)
         {
             Matrix4x4 result;
-            PerspectiveFOV(fov, aspect, near, far, out result);
+            CreatePerspectiveFOV(fov, aspect, near, far, out result);
+            return result;
+        }
+
+        public static void CreateTransform(ref Vector3 translate, ref Quaternion rotation, ref Vector3 scale, out Matrix4x4 result)
+        {
+            float xx = rotation.X * rotation.X;
+            float yy = rotation.Y * rotation.Y;
+            float zz = rotation.Z * rotation.Z;
+            float xy = rotation.X * rotation.Y;
+            float zw = rotation.Z * rotation.W;
+            float zx = rotation.Z * rotation.X;
+            float yw = rotation.Y * rotation.W;
+            float yz = rotation.Y * rotation.Z;
+            float xw = rotation.X * rotation.W;
+
+            result.M11 = 1f - (2f * (yy + zz));
+            result.M12 = 2f * (xy + zw);
+            result.M13 = 2f * (zx - yw);
+            result.M21 = 2f * (xy - zw);
+            result.M22 = 1f - (2f * (zz + xx));
+            result.M23 = 2f * (yz + xw);
+            result.M31 = 2f * (zx + yw);
+            result.M32 = 2f * (yz - xw);
+            result.M33 = 1f - (2f * (yy + xx));
+
+            // Position
+            result.M41 = translate.X;
+            result.M42 = translate.Y;
+            result.M43 = translate.Z;
+
+            // Scale
+            if (scale.X != 1f)
+            {
+                result.M11 *= scale.X;
+                result.M12 *= scale.X;
+                result.M13 *= scale.X;
+            }
+            if (scale.Y != 1f)
+            {
+                result.M21 *= scale.Y;
+                result.M22 *= scale.Y;
+                result.M23 *= scale.Y;
+            }
+            if (scale.Z != 1f)
+            {
+                result.M31 *= scale.Z;
+                result.M32 *= scale.Z;
+                result.M33 *= scale.Z;
+            }
+
+            result.M14 = 0f;
+            result.M24 = 0f;
+            result.M34 = 0f;
+            result.M44 = 1f;
+        }
+
+        public static void CreateShadow(ref Vector3 light, ref Plane plane, out Matrix4x4 result)
+        {
+            float dot = (plane.Normal.X * light.X) + (plane.Normal.Y * light.Y) + (plane.Normal.Z * light.Z);
+            float x = -plane.Normal.X;
+            float y = -plane.Normal.Y;
+            float z = -plane.Normal.Z;
+            float d = -plane.Distance;
+            result.M11 = (x * light.X) + dot;
+            result.M12 = x * light.Y;
+            result.M13 = x * light.Z;
+            result.M14 = 0;
+            result.M21 = y * light.X;
+            result.M22 = (y * light.Y) + dot;
+            result.M23 = y * light.Z;
+            result.M24 = 0;
+            result.M31 = z * light.X;
+            result.M32 = z * light.Y;
+            result.M33 = (z * light.Z) + dot;
+            result.M34 = 0;
+            result.M41 = d * light.X;
+            result.M42 = d * light.Y;
+            result.M43 = d * light.Z;
+            result.M44 = dot;
+        }
+        public static Matrix4x4 CreateShadow(Vector3 light, Plane plane)
+        {
+            Matrix4x4 result;
+            CreateShadow(ref light, ref plane, out result);
+            return result;
+        }
+
+        public static void CreateReflection(ref Plane value, out Matrix4x4 result)
+        {
+            Plane plane;
+            Plane.Normalize(ref value, out plane);
+            float x = plane.Normal.X;
+            float y = plane.Normal.Y;
+            float z = plane.Normal.Z;
+            float num3 = -2f * x;
+            float num2 = -2f * y;
+            float num = -2f * z;
+            result.M11 = (num3 * x) + 1f;
+            result.M12 = num2 * x;
+            result.M13 = num * x;
+            result.M14 = 0;
+            result.M21 = num3 * y;
+            result.M22 = (num2 * y) + 1;
+            result.M23 = num * y;
+            result.M24 = 0;
+            result.M31 = num3 * z;
+            result.M32 = num2 * z;
+            result.M33 = (num * z) + 1;
+            result.M34 = 0;
+            result.M41 = num3 * plane.Distance;
+            result.M42 = num2 * plane.Distance;
+            result.M43 = num * plane.Distance;
+            result.M44 = 1;
+        }
+        public static Matrix4x4 CreateReflection(Plane plane)
+        {
+            Matrix4x4 result;
+            CreateReflection(ref plane, out result);
             return result;
         }
 

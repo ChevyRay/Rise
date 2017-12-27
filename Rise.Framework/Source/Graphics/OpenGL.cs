@@ -116,6 +116,14 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        delegate void _glCullFace(CullFace face);
+        static _glCullFace glCullFace;
+        public static void CullFace(CullFace face)
+        {
+            glCullFace(face);
+            CheckError();
+        }
+
         unsafe delegate void _glGetIntegerv(GLEnum name, int* data);
         static _glGetIntegerv glGetIntegerv;
         static unsafe void GetIntegerV(GLEnum name, out int val)
@@ -1242,5 +1250,12 @@ namespace Rise
         Int,
         UnsignedInt,
         Float
+    }
+
+    public enum CullFace : GLEnum
+    {
+        Front = 0x0404,
+        Back = 0x0405,
+        FrontAndBack = 0x0408
     }
 }

@@ -7,7 +7,7 @@ namespace Rise
 {
     public class Mesh3D : Mesh
     {
-        const int vertexSize = 24;
+        const int vertexSize = 36;
 
         Vertex3D[] vertices;
         int vertexCount;
@@ -29,10 +29,10 @@ namespace Rise
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
-            GL.VertexAttribPointer(0, 2, VertexType.Float, false, vertexSize, new IntPtr(0));
-            GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(8));
-            GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(16));
-            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+            GL.VertexAttribPointer(0, 3, VertexType.Float, false, vertexSize, new IntPtr(0));
+            GL.VertexAttribPointer(1, 3, VertexType.Float, false, vertexSize, new IntPtr(12));
+            GL.VertexAttribPointer(2, 2, VertexType.Float, false, vertexSize, new IntPtr(24));
+            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(32));
         }
 
         public override void UpdateVertices()
@@ -73,6 +73,26 @@ namespace Rise
             }
             else
                 vertices = verts;
+        }
+
+        public void SetPosition(int i, Vector3 val)
+        {
+            vertices[i].Pos = val;
+        }
+
+        public void SetNormal(int i, Vector3 val)
+        {
+            vertices[i].Nor = val;
+        }
+
+        public void SetTexCoord(int i, Vector2 val)
+        {
+            vertices[i].Tex = val;
+        }
+
+        public void SetColor(int i, Color val)
+        {
+            vertices[i].Col = val;
         }
 
         public void AddVertex(ref Vertex3D vert)
@@ -150,6 +170,18 @@ namespace Rise
         public void AddQuad(Vertex3D a, Vertex3D b, Vertex3D c, Vertex3D d)
         {
             AddQuad(ref a, ref b, ref c, ref d);
+        }
+
+        public static Mesh3D CreateQuad(float w, float h, Color color)
+        {
+            var mesh = new Mesh3D(4, 6);
+            var a = new Vertex3D(new Vector3(w * 0.5f, h * 0.5f), Vector3.Forward, new Vector2(0f, 0f), color);
+            var b = new Vertex3D(new Vector3(w * -0.5f, h * 0.5f), Vector3.Forward, new Vector2(1f, 0f), color);
+            var c = new Vertex3D(new Vector3(w * -0.5f, h * -0.5f), Vector3.Forward, new Vector2(1f, 1f), color);
+            var d = new Vertex3D(new Vector3(w * 0.5f, h * -0.5f), Vector3.Forward, new Vector2(0f, 1f), color);
+            mesh.AddQuad(ref a, ref b, ref c, ref d);
+            mesh.Update();
+            return mesh;
         }
     }
 }
