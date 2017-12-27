@@ -34,7 +34,7 @@ namespace Rise
                 if (framerate != value)
                 {
                     if (value <= 0f)
-                        throw new Exception("Framerate must be > 0");
+                        throw new Exception("Framerate must be greater than 0.");
                     framerate = value;
                     frameDuration = 1.0 / value;
                 }
@@ -159,24 +159,5 @@ namespace Rise
 
             running = false;
         }
-
-        /*public static async Task<T> RunTask<T>(Task<T> task)
-        {
-            await task;
-            if (errorHandler != null)
-                errorHandler(task.Exception);
-            else
-                throw task.Exception;
-            return task.Result;
-        }
-        public static async Task RunTask(Action action)
-        {
-            var task = Task.Run(action);
-            await task;
-            if (errorHandler != null)
-                errorHandler(task.Exception);
-            else
-                throw task.Exception;
-        }*/
     }
 }
