@@ -61,6 +61,10 @@ namespace Rise
         {
             vert.CopyTo(out vertices[i]);
         }
+        public void SetVertex(int i, Vertex3D vert)
+        {
+            vert.CopyTo(out vertices[i]);
+        }
 
         public void SetVertices(Vertex3D[] verts, bool copy)
         {
@@ -73,6 +77,18 @@ namespace Rise
             }
             else
                 vertices = verts;
+        }
+
+        public void SetVertexCount(int count)
+        {
+            if (vertices.Length < count)
+            {
+                int cap = vertices.Length;
+                while (cap < count)
+                    cap *= 2;
+                Array.Resize(ref vertices, cap);
+            }
+            vertexCount = count;
         }
 
         public void SetPosition(int i, Vector3 val)
@@ -172,6 +188,29 @@ namespace Rise
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
+        public void CalculateNormals()
+        {
+            //Zero all normals
+            Array.Clear(vertices, 0, VertexCount);
+
+            //For each triangle, add the normal of that face to each of its vertices
+            Vector3 ab, ac, n;
+            for (int i = 0; i < IndexCount; i += 3)
+            {
+                Vector3.Subtract(ref vertices[indices[i + 1]].Pos, ref vertices[indices[i]].Pos, out ab);
+                Vector3.Subtract(ref vertices[indices[i + 2]].Pos, ref vertices[indices[i]].Pos, out ac);
+                Vector3.Cross(ref ab, ref ac, out n);
+                Vector3.Normalize(ref n, out n);
+                vertices[indices[i]].Nor += n;
+                vertices[indices[i + 1]].Nor += n;
+                vertices[indices[i + 2]].Nor += n;
+            }
+
+            //Normalize the vertices so their normals blend between the vertices they share
+            for (int i = 0; i < VertexCount; ++i)
+                Vector3.Normalize(ref vertices[i].Nor, out vertices[i].Nor);
+        }
+
         public static Mesh3D CreateQuad(float w, float h, Color color)
         {
             var mesh = new Mesh3D(4, 6);
@@ -182,6 +221,57 @@ namespace Rise
             mesh.AddQuad(ref a, ref b, ref c, ref d);
             mesh.Update();
             return mesh;
+        }
+
+        public static Mesh3D CreateCube(Vector3 size, Color color)
+        {
+            var cube = new Mesh3D(24, 36);
+            cube.SetVertexCount(24);
+            cube.SetIndexCount(36);
+            size *= 0.5f;
+            cube.SetVertex(0, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Up, new Vector2(0, 0), color));
+            cube.SetVertex(1, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Up, new Vector2(1, 0), color));
+            cube.SetVertex(2, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Up, new Vector2(1, 1), color));
+            cube.SetVertex(3, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Up, new Vector2(0, 1), color));
+            cube.SetVertex(4, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Down, new Vector2(0, 0), color));
+            cube.SetVertex(5, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Down, new Vector2(1, 0), color));
+            cube.SetVertex(6, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Down, new Vector2(1, 1), color));
+            cube.SetVertex(7, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Down, new Vector2(0, 1), color));
+            cube.SetVertex(8, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Forward, new Vector2(0, 0), color));
+            cube.SetVertex(9, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Forward, new Vector2(1, 0), color));
+            cube.SetVertex(10, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Forward, new Vector2(1, 1), color));
+            cube.SetVertex(11, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Forward, new Vector2(0, 1), color));
+            cube.SetVertex(12, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Back, new Vector2(0, 0), color));
+            cube.SetVertex(13, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Back, new Vector2(1, 0), color));
+            cube.SetVertex(14, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Back, new Vector2(1, 1), color));
+            cube.SetVertex(15, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Back, new Vector2(0, 1), color));
+            cube.SetVertex(16, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Left, new Vector2(0, 0), color));
+            cube.SetVertex(17, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Left, new Vector2(1, 0), color));
+            cube.SetVertex(18, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Left, new Vector2(1, 1), color));
+            cube.SetVertex(19, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Left, new Vector2(0, 1), color));
+            cube.SetVertex(20, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Right, new Vector2(0, 0), color));
+            cube.SetVertex(21, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Right, new Vector2(1, 0), color));
+            cube.SetVertex(22, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Right, new Vector2(1, 1), color));
+            cube.SetVertex(23, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Right, new Vector2(0, 1), color));
+            for (int i = 0, f = 0; i < 12; i += 2, f += 4)
+            {
+                cube.SetTriangle(i, (ushort)f, (ushort)(f + 1), (ushort)(f + 2));
+                cube.SetTriangle(i + 1, (ushort)f, (ushort)(f + 2), (ushort)(f + 3));
+            }
+            cube.Update();
+            return cube;
+        }
+        public static Mesh3D CreateCube(Vector3 size)
+        {
+            return CreateCube(size, Color.White);
+        }
+        public static Mesh3D CreateCube(float size, Color color)
+        {
+            return CreateCube(new Vector3(size), Color.White);
+        }
+        public static Mesh3D CreateCube(float size)
+        {
+            return CreateCube(new Vector3(size), Color.White);
         }
     }
 }

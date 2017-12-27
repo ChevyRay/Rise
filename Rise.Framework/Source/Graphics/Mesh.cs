@@ -92,6 +92,26 @@ namespace Rise
                 indices = inds;
         }
 
+        public void SetIndexCount(int count)
+        {
+            if (indices.Length < count)
+            {
+                int cap = indices.Length;
+                while (cap < count)
+                    cap *= 2;
+                Array.Resize(ref indices, cap);
+            }
+            indexCount = count;
+        }
+
+        public void SetTriangle(int i, ushort a, ushort b, ushort c)
+        {
+            i *= 3;
+            indices[i++] = a;
+            indices[i++] = b;
+            indices[i] = c;
+        }
+
         public void AddIndex(int ind)
         {
             if (indexCount == indices.Length)

@@ -97,6 +97,18 @@ namespace Rise
                 vertices = verts;
         }
 
+        public void SetVertexCount(int count)
+        {
+            if (vertices.Length < count)
+            {
+                int cap = vertices.Length;
+                while (cap < count)
+                    cap *= 2;
+                Array.Resize(ref vertices, cap);
+            }
+            vertexCount = count;
+        }
+
         public void AddVertex(ref Vertex2D vert)
         {
             if (vertexCount == vertices.Length)

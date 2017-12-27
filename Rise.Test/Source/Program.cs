@@ -29,10 +29,10 @@ namespace Rise.Test
             Texture.DefaultMagFilter = TextureFilter.Nearest;
 
             var shader = Shader.FromFile("Assets/basic_3d.glsl");
-            var face = new Texture("Assets/face.png", true);
+            var texture = new Texture("Assets/pink_square.png", true);
 
-            var model = Matrix4x4.Identity;
-            var view = Matrix4x4.CreateLookAt(new Vector3(0f, 5f, 20f), Vector2.Zero, Vector3.Up);
+            var model = Matrix4x4.CreateRotationX(-90f * Calc.Rad);
+            var view = Matrix4x4.CreateLookAt(new Vector3(20f, 20f, 20f), Vector2.Zero, Vector3.Up);
             var projection = Matrix4x4.CreatePerspectiveFOV(45f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
             //var projection = Matrix4x4.CreateOrthographic(screenW, screenH, 0.1f, 100000f);
             var mvp = model * view * projection;
@@ -40,10 +40,11 @@ namespace Rise.Test
             draw.Material = new Material(shader);
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
             draw.Material.SetMatrix4x4("g_Model", ref model);
-            draw.Material.SetTexture("g_Texture", face);
+            draw.Material.SetTexture("g_Texture", texture);
             draw.Material.SetColor("g_AmbientColor", Color.White);
 
-            draw.Mesh = Mesh3D.CreateQuad(10f, 10f, Color.White);
+            //draw.Mesh = Mesh3D.CreateQuad(10f, 10f, Color.White);
+            draw.Mesh = Mesh3D.CreateCube(10f, Color.White);
         }
 
         static void Update()
@@ -53,7 +54,7 @@ namespace Rise.Test
 
         static void Render()
         {
-            draw.Perform(Color.Grey);
+            draw.Perform(0x242029ff);
         }
     }
 }

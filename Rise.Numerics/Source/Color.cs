@@ -90,6 +90,34 @@ namespace Rise
             );
         }
 
+        public static Color Floats(float r, float g, float b, float a)
+        {
+            return new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f), (byte)(a * 255f));
+        }
+        public static Color Floats(float r, float g, float b)
+        {
+            return new Color((byte)(r * 255f), (byte)(g * 255f), (byte)(b * 255f), 255);
+        }
+
+        public static Color FromHue(float h)
+        {
+            h = (h % 1f) * 360f;
+            if (h < 0f)
+                h += 360f;
+            if (h < 60f)
+                return Floats(1f, h / 60f, 0f);
+            else if (h < 120f)
+                return Floats(1f - (h - 60f) / 60f, 1f, 0f);
+            else if (h < 180f)
+                return Floats(0f, 1f, (h - 120f) / 60f);
+            else if (h < 240f)
+                return Floats(0f, 1f - (h - 180f) / 60f, 1f);
+            else if (h < 300f)
+                return Floats((h - 240f) / 60f, 0f, 1f);
+            else
+                return Floats(1f, 0f, 1f - (h - 300f) / 60f);
+        }
+
         public static bool operator ==(Color a, Color b)
         {
             return a.Equals(b);
