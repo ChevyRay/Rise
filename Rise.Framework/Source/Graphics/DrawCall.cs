@@ -14,7 +14,7 @@ namespace Rise
         public bool Clip;
         public RectangleI ClipRect;
 
-        public DrawCall(Material material, Mesh mesh)
+        public DrawCall(Material material, Mesh2D mesh)
         {
             Target = null;
             Material = material;
@@ -24,7 +24,7 @@ namespace Rise
             Clip = false;
             ClipRect = default(RectangleI);
         }
-        public DrawCall(RenderTarget target, Material material, Mesh mesh)
+        public DrawCall(RenderTarget target, Material material, Mesh2D mesh)
         {
             Target = target;
             Material = material;
@@ -34,7 +34,7 @@ namespace Rise
             Clip = false;
             ClipRect = default(RectangleI);
         }
-        public DrawCall(RenderTarget target, Material material, Mesh mesh, BlendMode blendMode)
+        public DrawCall(RenderTarget target, Material material, Mesh2D mesh, BlendMode blendMode)
         {
             Target = target;
             Material = material;
@@ -44,7 +44,7 @@ namespace Rise
             Clip = false;
             ClipRect = default(RectangleI);
         }
-        public DrawCall(RenderTarget target, Material material, Mesh mesh, BlendMode blendMode, RectangleI clipRect)
+        public DrawCall(RenderTarget target, Material material, Mesh2D mesh, BlendMode blendMode, RectangleI clipRect)
         {
             Target = target;
             Material = material;

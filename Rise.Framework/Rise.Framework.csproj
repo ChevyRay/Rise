@@ -41,7 +41,7 @@
     <Compile Include="Source\Graphics\BlendMode.cs" />
     <Compile Include="Source\Graphics\DrawCall.cs" />
     <Compile Include="Source\Graphics\Material.cs" />
-    <Compile Include="Source\Graphics\Mesh.cs" />
+    <Compile Include="Source\Graphics\Mesh2D.cs" />
     <Compile Include="Source\Graphics\OpenGL.cs" />
     <Compile Include="Source\Graphics\RenderTarget.cs" />
     <Compile Include="Source\Graphics\Renderer.cs" />
@@ -53,6 +53,7 @@
     <Compile Include="Source\Input\Keyboard.cs" />
     <Compile Include="Source\Input\Mouse.cs" />
     <Compile Include="Source\Input\ScanCode.cs" />
+    <Compile Include="Source\Graphics\Mesh.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

@@ -39,17 +39,13 @@ namespace Rise.Test
             drawToCanvas.Material = new Material(shader);
             drawToCanvas.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
             drawToCanvas.Material.SetTexture("g_Texture", face);
-            drawToCanvas.Mesh = new Mesh();
-            drawToCanvas.Mesh.AddRect(new Rectangle(0f, 0f, face.Width, face.Height), Vector2.Zero, Vector2.One);
-            drawToCanvas.Mesh.Update();
+            drawToCanvas.Mesh = Mesh2D.CreateRect(new Rectangle(face.Width, face.Height));
 
             drawToScreen.SetBlendMode(BlendMode.Alpha);
             drawToScreen.Material = new Material(shader);
             drawToScreen.Material.SetMatrix4x4("g_Matrix", Matrix4x4.Orthographic(screenW, screenH, 0f, 1f));
             drawToScreen.Material.SetTexture("g_Texture", canvasTexture);
-            drawToScreen.Mesh = new Mesh();
-            drawToScreen.Mesh.AddRect(new Rectangle(0f, 0f, screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
-            drawToScreen.Mesh.Update();
+            drawToScreen.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH), new Vector2(0f, 1f), new Vector2(1f, 0f));
         }
 
         static void Update()
