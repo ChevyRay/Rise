@@ -23,7 +23,12 @@ namespace Rise.Test
         static Matrix4x4 model;
         static Matrix4x4 view;
         static Matrix4x4 proj;
-        static float angle;
+        static float angleX;
+        static float angleY;
+
+        static Texture gDiffuse;
+        static Texture gNormal;
+        static Texture gDepth;
 
         static void Init()
         {       
@@ -35,9 +40,9 @@ namespace Rise.Test
             var shader = Shader.FromFile("Assets/basic_3d.glsl");
             var texture = new Texture("Assets/pink_square.png", true);
 
-            model = Matrix4x4.CreateRotationX(-90f * Calc.Rad);
-            view = Matrix4x4.CreateLookAt(new Vector3(20f, 20f, 20f), Vector2.Zero, Vector3.Up);
-            proj = Matrix4x4.CreatePerspectiveFOV(45f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
+            model = Matrix4x4.Identity;
+            view = Matrix4x4.CreateLookAt(new Vector3(0f, 15f, -20f), Vector2.Zero, Vector3.Up);
+            proj = Matrix4x4.CreatePerspectiveFOV(60f * Calc.Rad, (float)screenW / screenH, 0.1f, 100000f);
             //var projection = Matrix4x4.CreateOrthographic(screenW, screenH, 0.1f, 100000f);
             var mvp = model * view * proj;
 
@@ -48,13 +53,21 @@ namespace Rise.Test
             draw.Material.SetColor("g_AmbientColor", Color.White);
 
             //draw.Mesh = Mesh3D.CreateQuad(10f, 10f, Color.White);
-            draw.Mesh = Mesh3D.CreateCube(10f, Color.White);
+            draw.Mesh = Mesh3D.CreateCube(new Vector3(10f, 10f, 10f), Color.White);
         }
 
         static void Update()
         {
-            angle += Time.Delta;
-            model = Matrix4x4.CreateRotationX(-90f * Calc.Rad) * Matrix4x4.CreateRotationY(angle);
+            if (Keyboard.Down(KeyCode.Right))
+                angleY -= Time.Delta;
+            if (Keyboard.Down(KeyCode.Left))
+                angleY += Time.Delta;
+            if (Keyboard.Down(KeyCode.Up))
+                angleX += Time.Delta;
+            if (Keyboard.Down(KeyCode.Down))
+                angleX -= Time.Delta;
+
+            model = Matrix4x4.CreateRotationX(angleX) * Matrix4x4.CreateRotationY(angleY);
             var mvp = model * view * proj;
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
             draw.Material.SetMatrix4x4("g_Model", ref model);

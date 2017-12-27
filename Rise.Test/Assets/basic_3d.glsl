@@ -38,4 +38,5 @@ void main(void)
     //o_Color = vec4(pow(linearColor, vec3(1.0 / 2.2)), 1.0);
 
     o_Col = vec4(col, 1.0);
+    o_Col = vec4(abs(f_Nor), 1.0);
 }

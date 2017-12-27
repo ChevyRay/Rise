@@ -44,6 +44,10 @@ namespace Rise
         {
             SetPixels(width, height, pixels);
         }
+        public Texture(int width, int height, TextureFormat format) : this(format)
+        {
+            SetSize(width, height);
+        }
 
         protected override void Dispose()
         {
@@ -134,16 +138,20 @@ namespace Rise
             fixed (byte* ptr = pixels)
                 SetPixels(width, height, format, PixelType.UnsignedByte, new IntPtr(ptr));
         }
-        public void SetPixels(int width, int height, PixelFormat format, PixelType type)
-        {
-            SetPixels(width, height, format, type, IntPtr.Zero);
-        }
         void SetPixels(int w, int h, PixelFormat format, PixelType type, IntPtr data)
         {
             Width = w;
             Height = h;
             MakeCurrent();
             GL.TexImage2D(TextureTarget.Texture2D, 0, Format, w, h, 0, format, type, data);
+        }
+
+        public void SetSize(int width, int height)
+        {
+            Width = width;
+            Height = height;
+            MakeCurrent();
+            GL.TexImage2D(TextureTarget.Texture2D, 0, Format, width, height, 0, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         int GetParam(TextureParam p)

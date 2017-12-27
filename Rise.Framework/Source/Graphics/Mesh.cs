@@ -104,7 +104,7 @@ namespace Rise
             indexCount = count;
         }
 
-        public void SetTriangle(int i, ushort a, ushort b, ushort c)
+        public void SetTriangle(int i, int a, int b, int c)
         {
             i *= 3;
             indices[i++] = a;
