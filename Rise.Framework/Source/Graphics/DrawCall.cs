@@ -142,7 +142,7 @@ namespace Rise
             }
 
             //TODO: might be nice if clipping actually used proper coordinates,
-            //but we'd have to make it *always* update, and use the Target's height
+            //but we'll have to make it *always* update, and use the Target's height
 
             //Set clipping
             if (Clip)
