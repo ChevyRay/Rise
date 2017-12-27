@@ -16,12 +16,11 @@ namespace Rise
         internal static Platform platform;
         static bool running;
         static bool focused;
-        static bool updateWhileFocused;
 
-        static bool fixedFramerate = true;
+        public static bool UpdateWhileFocused;
+        public static bool FixedFramerate = true;
         static float framerate = 60f;
         static double frameDuration = 1.0 / 60.0;
-        static double frameTimer;
 
         public static ImageLoader ImageLoader { get; private set; }
 
@@ -38,19 +37,6 @@ namespace Rise
                         throw new Exception("Framerate must be > 0");
                     framerate = value;
                     frameDuration = 1.0 / value;
-                }
-            }
-        }
-
-        public static bool FixedFramerate
-        {
-            get { return fixedFramerate; }
-            set
-            {
-                if (fixedFramerate != value)
-                {
-                    fixedFramerate = value;
-                    frameTimer = 0.0;
                 }
             }
         }
@@ -102,14 +88,11 @@ namespace Rise
                 double prevTime = platform.GetTime();
                 double frameTimer = 0.0;
 
-                Screen.SetVSync(false);
-                FixedFramerate = false;
-
                 while (running)
                 {
                     platform.PollEvents();
 
-                    if (!focused)
+                    if (!focused && !UpdateWhileFocused)
                     {
                         prevTime = (float)platform.GetTime();
                         continue;
@@ -123,7 +106,7 @@ namespace Rise
                             FPS = (int)(1.0 / (currTime - prevTime));
                         prevTime = currTime;
 
-                        if (fixedFramerate)
+                        if (FixedFramerate)
                         {
                             if (!Screen.VSync)
                             {
