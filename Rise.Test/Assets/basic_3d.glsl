@@ -21,12 +21,15 @@ void main()
 ...
 #version 330
 uniform sampler2D g_Texture;
+//uniform vec2 g_ZRange;
 uniform vec4 g_AmbientColor;
 in vec4 f_Pos;
 in vec3 f_Nor;
 in vec2 f_Tex;
 in vec4 f_Col;
-out vec4 o_Col;
+layout(location = 0) out vec3 o_Dif;
+layout(location = 1) out vec3 o_Nor;
+layout(location = 2) out vec3 o_Pos;
 void main(void)
 {
     vec3 surfPos = f_Pos.xyz / f_Pos.w;
@@ -37,6 +40,8 @@ void main(void)
     //Apply gamma correction
     //o_Color = vec4(pow(linearColor, vec3(1.0 / 2.2)), 1.0);
 
-    o_Col = vec4(col, 1.0);
-    o_Col = vec4(abs(f_Nor), 1.0);
+    o_Dif = col;
+    o_Nor = f_Nor;
+    o_Pos = f_Pos.xyz;
+    //o_Dep = (1.0 / gl_FragCoord.w) / (g_ZRange.y - g_ZRange.x);
 }

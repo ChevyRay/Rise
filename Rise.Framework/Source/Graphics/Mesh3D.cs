@@ -235,32 +235,32 @@ namespace Rise
             mesh.SetVertex(0, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Forward, new Vector2(0, 0), color));
             mesh.SetVertex(1, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Forward, new Vector2(1, 0), color));
             mesh.SetVertex(2, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Forward, new Vector2(1, 1), color));
-            mesh.SetVertex(3, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Forward, new Vector2(1, 1), color));
+            mesh.SetVertex(3, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Forward, new Vector2(0, 1), color));
 
             mesh.SetVertex(4, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Back, new Vector2(0, 0), color));
             mesh.SetVertex(5, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Back, new Vector2(1, 0), color));
             mesh.SetVertex(6, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Back, new Vector2(1, 1), color));
-            mesh.SetVertex(7, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Back, new Vector2(1, 1), color));
+            mesh.SetVertex(7, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Back, new Vector2(0, 1), color));
 
             mesh.SetVertex(8, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Left, new Vector2(0, 0), color));
             mesh.SetVertex(9, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Left, new Vector2(1, 0), color));
             mesh.SetVertex(10, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Left, new Vector2(1, 1), color));
-            mesh.SetVertex(11, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Left, new Vector2(1, 1), color));
+            mesh.SetVertex(11, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Left, new Vector2(0, 1), color));
 
             mesh.SetVertex(12, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Right, new Vector2(0, 0), color));
             mesh.SetVertex(13, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Right, new Vector2(1, 0), color));
             mesh.SetVertex(14, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Right, new Vector2(1, 1), color));
-            mesh.SetVertex(15, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Right, new Vector2(1, 1), color));
+            mesh.SetVertex(15, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Right, new Vector2(0, 1), color));
 
             mesh.SetVertex(16, new Vertex3D(new Vector3(-1, -1, 1) * size, Vector3.Down, new Vector2(0, 0), color));
             mesh.SetVertex(17, new Vertex3D(new Vector3(-1, -1, -1) * size, Vector3.Down, new Vector2(1, 0), color));
             mesh.SetVertex(18, new Vertex3D(new Vector3(1, -1, -1) * size, Vector3.Down, new Vector2(1, 1), color));
-            mesh.SetVertex(19, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Down, new Vector2(1, 1), color));
+            mesh.SetVertex(19, new Vertex3D(new Vector3(1, -1, 1) * size, Vector3.Down, new Vector2(0, 1), color));
 
             mesh.SetVertex(20, new Vertex3D(new Vector3(-1, 1, 1) * size, Vector3.Up, new Vector2(0, 0), color));
             mesh.SetVertex(21, new Vertex3D(new Vector3(1, 1, 1) * size, Vector3.Up, new Vector2(1, 0), color));
             mesh.SetVertex(22, new Vertex3D(new Vector3(1, 1, -1) * size, Vector3.Up, new Vector2(1, 1), color));
-            mesh.SetVertex(23, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Up, new Vector2(1, 1), color));
+            mesh.SetVertex(23, new Vertex3D(new Vector3(-1, 1, -1) * size, Vector3.Up, new Vector2(0, 1), color));
 
             for (int i = 0, f = 0; i < 12; i += 2, f += 4)
             {
