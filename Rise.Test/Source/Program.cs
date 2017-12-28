@@ -33,6 +33,7 @@ namespace Rise.Test
         static Texture gPosition;
 
         static DrawCall lighting;
+        static float shininess = 1f;
 
         static DrawCall toScreen;
 
@@ -52,7 +53,7 @@ namespace Rise.Test
 
             gDiffuse = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB);
             gNormal = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB16F);
-            gPosition = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB16F);
+            gPosition = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB32F);
             gBuffer = new RenderTarget(screenW, screenH, gDiffuse, gNormal, gPosition);
 
             model = Matrix4x4.Identity;
@@ -74,12 +75,12 @@ namespace Rise.Test
             lighting.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
             lighting.Material.SetTexture("g_Normal", gNormal);
             lighting.Material.SetTexture("g_Position", gPosition);
-            //lighting.Material.SetVector3("g_CameraPosition", cameraPos);
-            lighting.Material.SetColor("g_AmbientLight", 0x211b33ff);
+            lighting.Material.SetVector3("g_CameraPosition", cameraPos);
+            lighting.Material.SetColor("g_AmbientLight", Color.Black);
             lighting.Material.SetVector3("g_LightDirection", Vector3.Down);
             lighting.Material.SetColor("g_LightColor", Color.White);
-            //lighting.Material.SetColor("g_SpecularColor", Color.White);
-            //lighting.Material.SetFloat("g_Shininess", 0.1f);
+            lighting.Material.SetColor("g_SpecularColor", Color.White);
+            lighting.Material.SetFloat("g_Shininess", shininess);
             lighting.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
 
             toScreen.Material = new Material(shader2D);
@@ -101,16 +102,24 @@ namespace Rise.Test
             if (Keyboard.Down(KeyCode.Down))
                 angleX -= Time.Delta;
 
+            var prev = cameraPos;
             if (Keyboard.Down(KeyCode.Q))
                 cameraPos.Z += 2f * Time.Delta;
             if (Keyboard.Down(KeyCode.W))
                 cameraPos.Z -= 2f * Time.Delta;
+
+            if (Keyboard.Down(KeyCode.LeftBracket))
+                shininess = Math.Max(0f, shininess - 2f * Time.Delta);
+            if (Keyboard.Down(KeyCode.RightBracket))
+                shininess = Math.Min(100f, shininess + 2f * Time.Delta);
 
             model = Matrix4x4.CreateRotationX(angleX) * Matrix4x4.CreateRotationY(angleY);
             view = Matrix4x4.CreateLookAt(cameraPos, Vector2.Zero, Vector3.Up);
             var mvp = model * view * proj;
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
             draw.Material.SetMatrix4x4("g_Model", ref model);
+            lighting.Material.SetVector3("g_CameraPosition", cameraPos);
+            lighting.Material.SetFloat("g_Shininess", shininess);
         }
 
         static void Render()

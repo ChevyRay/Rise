@@ -22,21 +22,22 @@ in vec2 f_Tex;
 layout(location = 0) out vec3 o_Col;
 void main(void)
 {
-    vec3 surfacePosition = texture(g_Position, f_Tex).rgb;
-    vec3 surfaceNormal = texture(g_Normal, f_Tex).rgb;
-
     //Ambient
-    vec3 lightColor = g_AmbientLight.rgb;
+    vec3 light = g_AmbientLight.rgb;
 
     //Diffuse
+    vec3 surfaceNormal = texture(g_Normal, f_Tex).rgb;
     float diffuse = max(0.0, dot(-g_LightDirection, surfaceNormal));
-    lightColor += g_LightColor.rgb * diffuse;
+    light += g_LightColor.rgb * diffuse;
+
+    vec3 prev = light;
 
     //Specular (Blinn-Phong)
-    /*vec3 surfaceToCamera = normalize(g_CameraPosition - surfacePosition);
-    vec3 halfDir = normalize(-g_LightDirection + surfaceToCamera);
-    float specular = pow(max(dot(surfaceNormal, halfDir), 0.0), g_Shininess);
-    lightColor += g_SpecularColor.rgb * g_LightColor.rgb * specular;*/
+    vec3 surfacePosition = texture(g_Position, f_Tex).rgb;
+    vec3 surfaceToCamera = normalize(g_CameraPosition - surfacePosition);
+	vec3 halfDir = normalize(-g_LightDirection + surfaceToCamera);
+	float specular = pow(max(dot(surfaceNormal, halfDir), 0.0), g_Shininess);
+    light += light * g_SpecularColor.rgb * g_LightColor.rgb * specular;
 
-    o_Col = lightColor;
+    o_Col = prev;
 }
