@@ -13,9 +13,10 @@ void main(void)
 uniform sampler2D g_Diffuse;
 uniform sampler2D g_Normal;
 uniform sampler2D g_Position;
+uniform sampler2D g_Lighting;
 in vec2 f_Tex;
 layout(location = 0) out vec4 o_Col;
 void main(void)
 {
-    o_Col = texture(g_Diffuse, f_Tex);
+    o_Col = texture(g_Diffuse, f_Tex) * texture(g_Lighting, f_Tex);
 }

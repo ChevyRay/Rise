@@ -42,7 +42,7 @@ namespace Rise.Test
             int screenH = Screen.DrawHeight;
             const float zMin = 0.1f;
             const float zMax = 10.0f;
-            Texture.DefaultMinFilter = TextureFilter.Nearest;
+            Texture.DefaultMinFilter = TextureFilter.Linear;
             Texture.DefaultMagFilter = TextureFilter.Nearest;
 
             var shader3D = Shader.FromFile("Assets/basic_3d.glsl");
@@ -65,9 +65,9 @@ namespace Rise.Test
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
             draw.Material.SetMatrix4x4("g_Model", ref model);
             draw.Material.SetTexture("g_Texture", pinkSquare);
-            draw.Material.SetColor("g_AmbientColor", Color.White);
             draw.Mesh = Mesh3D.CreateCube(new Vector3(1f, 1f, 1f), Color.White);
 
+            //Directional light
             var lightTexture = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB);
             lighting.Target = new RenderTarget(screenW, screenH, lightTexture);
             lighting.Material = new Material(directionalLightShader);
@@ -75,6 +75,7 @@ namespace Rise.Test
             lighting.Material.SetTexture("g_Normal", gNormal);
             lighting.Material.SetTexture("g_Position", gPosition);
             //lighting.Material.SetVector3("g_CameraPosition", cameraPos);
+            lighting.Material.SetColor("g_AmbientLight", 0x211b33ff);
             lighting.Material.SetVector3("g_LightDirection", Vector3.Down);
             lighting.Material.SetColor("g_LightColor", Color.White);
             //lighting.Material.SetColor("g_SpecularColor", Color.White);
@@ -83,7 +84,8 @@ namespace Rise.Test
 
             toScreen.Material = new Material(shader2D);
             toScreen.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, Screen.DrawWidth, 0f, Screen.DrawHeight, -1f, 1f));
-            toScreen.Material.SetTexture("g_Diffuse", lightTexture);
+            toScreen.Material.SetTexture("g_Diffuse", gDiffuse);
+            toScreen.Material.SetTexture("g_Lighting", lightTexture);
             toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(Screen.DrawWidth, Screen.DrawHeight));
             toScreen.SetBlendMode(BlendMode.Alpha);
         }

@@ -13,6 +13,7 @@ void main(void)
 uniform sampler2D g_Normal;
 uniform sampler2D g_Position;
 uniform vec3 g_CameraPosition;
+uniform vec4 g_AmbientLight;
 uniform vec3 g_LightDirection;
 uniform vec4 g_LightColor;
 uniform vec4 g_SpecularColor;
@@ -24,9 +25,12 @@ void main(void)
     vec3 surfacePosition = texture(g_Position, f_Tex).rgb;
     vec3 surfaceNormal = texture(g_Normal, f_Tex).rgb;
 
+    //Ambient
+    vec3 lightColor = g_AmbientLight.rgb;
+
     //Diffuse
     float diffuse = max(0.0, dot(-g_LightDirection, surfaceNormal));
-    vec3 lightColor = g_LightColor.rgb * diffuse;
+    lightColor += g_LightColor.rgb * diffuse;
 
     //Specular (Blinn-Phong)
     /*vec3 surfaceToCamera = normalize(g_CameraPosition - surfacePosition);
