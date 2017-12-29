@@ -33,7 +33,7 @@ namespace Rise.Test
         static Texture gPosition;
 
         static DrawCall lighting;
-        static float shininess = 1f;
+        static float shininess = 16f;
 
         static DrawCall toScreen;
 
@@ -76,9 +76,9 @@ namespace Rise.Test
             lighting.Material.SetTexture("g_Normal", gNormal);
             lighting.Material.SetTexture("g_Position", gPosition);
             lighting.Material.SetVector3("g_CameraPosition", cameraPos);
-            lighting.Material.SetColor("g_AmbientLight", Color.Black);
+            lighting.Material.SetColor("g_AmbientColor", Color.Black);
             lighting.Material.SetVector3("g_LightDirection", Vector3.Down);
-            lighting.Material.SetColor("g_LightColor", Color.White);
+            lighting.Material.SetColor("g_DiffuseColor", Color.White);
             lighting.Material.SetColor("g_SpecularColor", Color.White);
             lighting.Material.SetFloat("g_Shininess", shininess);
             lighting.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
