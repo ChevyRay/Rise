@@ -67,7 +67,7 @@ namespace Rise
             ClipRect = clipRect;
         }
 
-        public void Clear(Color color)
+        public void Clear(Color4 color)
         {
             RenderTarget.Bind(Target);
             GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
@@ -103,7 +103,7 @@ namespace Rise
             GL.BindVertexArray(0);
         }
 
-        public void Perform(Color clearColor)
+        public void Perform(Color4 clearColor)
         {
             RenderTarget.Bind(Target);
             GL.ClearColor(clearColor.R / 255f, clearColor.G / 255f, clearColor.B / 255f, clearColor.A / 255f);

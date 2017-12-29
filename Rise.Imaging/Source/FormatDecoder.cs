@@ -10,11 +10,11 @@ namespace Rise.Imaging
             Extensions = extensions;
         }
 
-        public abstract void Decode(byte[] source, out int w, out int h, ref Color[] pixels);
+        public abstract void Decode(byte[] source, out int w, out int h, ref Color4[] pixels);
 
-        public Color[] Decode(byte[] source, out int w, out int h)
+        public Color4[] Decode(byte[] source, out int w, out int h)
         {
-            Color[] pixels = null;
+            Color4[] pixels = null;
             Decode(source, out w, out h, ref pixels);
             return pixels;
         }

@@ -153,13 +153,13 @@ namespace Rise
                 return rand.NextDirection();
         }
 
-        public static Color NextColor(this Random rand)
+        public static Color4 NextColor(this Random rand)
         {
             rand.NextBytes(bytes);
-            return new Color(bytes[0], bytes[1], bytes[2], bytes[3]);
+            return new Color4(bytes[0], bytes[1], bytes[2], bytes[3]);
         }
 
-        public static Color Color()
+        public static Color4 Color()
         {
             lock (randLock)
                 return rand.NextColor();

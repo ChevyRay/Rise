@@ -13,8 +13,8 @@ void main(void)
 uniform sampler2D g_Normal;
 uniform sampler2D g_Position;
 uniform vec3 g_CameraPosition;
-uniform vec4 g_AmbientColor;
 uniform vec3 g_LightDirection;
+uniform vec4 g_AmbientColor;
 uniform vec4 g_DiffuseColor;
 uniform vec4 g_SpecularColor;
 uniform float g_Shininess;

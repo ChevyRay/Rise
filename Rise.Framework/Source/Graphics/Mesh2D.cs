@@ -23,7 +23,7 @@ namespace Rise
 
         }
 
-        public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color mul, Color add)
+        public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
         {
             var mesh = new Mesh2D(4, 6);
             mesh.AddRect(ref rect, texMin, texMax, mul, add);
@@ -33,14 +33,14 @@ namespace Rise
         public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
         {
             var mesh = new Mesh2D(4, 6);
-            mesh.AddRect(ref rect, texMin, texMax, Color.White, Color.Transparent);
+            mesh.AddRect(ref rect, texMin, texMax, Color4.White, Color4.Transparent);
             mesh.Update();
             return mesh;
         }
         public static Mesh2D CreateRect(Rectangle rect)
         {
             var mesh = new Mesh2D(4, 6);
-            mesh.AddRect(ref rect, Vector2.Zero, Vector2.One, Color.White, Color.Transparent);
+            mesh.AddRect(ref rect, Vector2.Zero, Vector2.One, Color4.White, Color4.Transparent);
             mesh.Update();
             return mesh;
         }
@@ -186,7 +186,7 @@ namespace Rise
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
-        public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color mul, Color add)
+        public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
         {
             Vertex2D a, b, c, d;
             a.Pos = rect.TopLeft;
@@ -205,13 +205,13 @@ namespace Rise
             a.Add = b.Add = c.Add = d.Add = add;
             AddQuad(ref a, ref b, ref c, ref d);
         }
-        public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color mul, Color add)
+        public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
         {
             AddRect(ref rect, texMin, texMax, mul, add);
         }
         public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
         {
-            AddRect(ref rect, texMin, texMax, Color.White, Color.Transparent);
+            AddRect(ref rect, texMin, texMax, Color4.White, Color4.Transparent);
         }
     }
 }

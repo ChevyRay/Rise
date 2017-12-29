@@ -199,14 +199,24 @@ namespace Rise
             SetVector4(ref name, val);
         }
 
-        public void SetColor(ref string name, Color val)
+        public void SetColor4(ref string name, Color4 val)
         {
             var uniform = GetUniform<UniformVec4>(ref name, UniformType.Vec4);
             uniform.Val = new Vector4(val.R / 255f, val.G / 255f, val.B / 255f, val.A / 255f);
         }
-        public void SetColor(string name, Color val)
+        public void SetColor4(string name, Color4 val)
         {
-            SetColor(ref name, val);
+            SetColor4(ref name, val);
+        }
+
+        public void SetColor3(ref string name, Color3 val)
+        {
+            var uniform = GetUniform<UniformVec3>(ref name, UniformType.Vec3);
+            uniform.Val = new Vector3(val.R / 255f, val.G / 255f, val.B / 255f);
+        }
+        public void SetColor3(string name, Color3 val)
+        {
+            SetColor3(ref name, val);
         }
 
         public void SetMatrix3x2(ref string name, ref Matrix3x2 val)

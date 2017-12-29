@@ -7,9 +7,9 @@ namespace Rise
         public Vector3 Pos;
         public Vector3 Nor;
         public Vector2 Tex;
-        public Color Col;
+        public Color4 Col;
 
-        public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex, Color col)
+        public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex, Color4 col)
         {
             Pos = pos;
             Nor = nor;
@@ -17,17 +17,17 @@ namespace Rise
             Col = col;
         }
         public Vertex3D(Vector3 pos, Vector3 nor, Vector2 tex)
-            : this(pos, nor, tex, Color.White)
+            : this(pos, nor, tex, Color4.White)
         {
 
         }
-        public Vertex3D(Vector3 pos, Vector3 nor, Color col)
+        public Vertex3D(Vector3 pos, Vector3 nor, Color4 col)
             : this(pos, nor, Vector2.Zero, col)
         {
 
         }
         public Vertex3D(Vector3 pos, Vector3 nor)
-            : this(pos, nor, Vector2.Zero, Color.White)
+            : this(pos, nor, Vector2.Zero, Color4.White)
         {
 
         }

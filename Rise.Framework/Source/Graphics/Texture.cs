@@ -17,6 +17,7 @@ namespace Rise
         internal uint id;
 
         public TextureFormat Format { get; private set; }
+
         public int Width { get; private set; }
         public int Height { get; private set; }
 
@@ -130,13 +131,6 @@ namespace Rise
 
             fixed (Color* ptr = pixels)
                 SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
-        }
-        public unsafe void SetPixels(int width, int height, PixelFormat format, byte[] pixels)
-        {
-            if (pixels.Length < width * height * format.Size())
-                throw new Exception("Pixels array is too small.");
-            fixed (byte* ptr = pixels)
-                SetPixels(width, height, format, PixelType.UnsignedByte, new IntPtr(ptr));
         }
         void SetPixels(int w, int h, PixelFormat format, PixelType type, IntPtr data)
         {

@@ -106,7 +106,7 @@ namespace Rise
             vertices[i].Tex = val;
         }
 
-        public void SetColor(int i, Color val)
+        public void SetColor(int i, Color4 val)
         {
             vertices[i].Col = val;
         }
@@ -212,7 +212,7 @@ namespace Rise
                 Vector3.Normalize(ref vertices[i].Nor, out vertices[i].Nor);
         }
 
-        public static Mesh3D CreateQuad(float w, float h, Color color)
+        public static Mesh3D CreateQuad(float w, float h, Color4 color)
         {
             var mesh = new Mesh3D(4, 6);
             var a = new Vertex3D(new Vector3(w * 0.5f, h * 0.5f), Vector3.Forward, new Vector2(0f, 0f), color);
@@ -225,7 +225,7 @@ namespace Rise
             return mesh;
         }
 
-        public static Mesh3D CreateCube(Vector3 size, Color color)
+        public static Mesh3D CreateCube(Vector3 size, Color4 color)
         {
             var mesh = new Mesh3D(24, 36);
             mesh.SetVertexCount(24);
@@ -273,15 +273,15 @@ namespace Rise
         }
         public static Mesh3D CreateCube(Vector3 size)
         {
-            return CreateCube(size, Color.White);
+            return CreateCube(size, Color4.White);
         }
-        public static Mesh3D CreateCube(float size, Color color)
+        public static Mesh3D CreateCube(float size, Color4 color)
         {
-            return CreateCube(new Vector3(size), Color.White);
+            return CreateCube(new Vector3(size), Color4.White);
         }
         public static Mesh3D CreateCube(float size)
         {
-            return CreateCube(new Vector3(size), Color.White);
+            return CreateCube(new Vector3(size), Color4.White);
         }
     }
 }

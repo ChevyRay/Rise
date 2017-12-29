@@ -41,7 +41,7 @@ namespace Rise.Imaging
             
         }
 
-        public override void Decode(byte[] source, out int w, out int h, ref Color[] pixels)
+        public override void Decode(byte[] source, out int w, out int h, ref Color4[] pixels)
         {
             //Parse the PNG file to get all our compressed bytes
             ParsePng(source);
@@ -207,7 +207,7 @@ namespace Rise.Imaging
             return c;
         }
 
-        unsafe void Unfilter(ref Color[] pixels)
+        unsafe void Unfilter(ref Color4[] pixels)
         {
             int bpp = colorType == 2 ? 3 : 4;
             const int rgba = 4;
@@ -215,14 +215,14 @@ namespace Rise.Imaging
             int pixelCount = width * height;
 
             if (pixels == null)
-                pixels = new Color[pixelCount];
+                pixels = new Color4[pixelCount];
             else if (pixels.Length < pixelCount)
                 Array.Resize(ref pixels, pixelCount);
 
             //If we're loading a RGB image with no alpha channel, load with full opacity
             if (bpp < rgba)
                 for (int i = 0; i < pixelCount; ++i)
-                    pixels[i] = Color.White;
+                    pixels[i] = Color4.White;
 
             fixed (byte* cur = &pixels[0].R)
             {

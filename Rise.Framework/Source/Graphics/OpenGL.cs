@@ -573,11 +573,37 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        delegate void _glReadBuffer(DrawBuffer buffer);
+        static _glReadBuffer glReadBuffer;
+        public static void ReadBuffer(DrawBuffer buffer)
+        {
+            glReadBuffer(buffer);
+            CheckError();
+        }
+
+        unsafe delegate void _glReadPixels(int x, int y, GLSizei w, GLSizei h, PixelFormat format, PixelType type, byte* data);
+        static _glReadPixels glReadPixels;
+        unsafe public static void ReadPixels(RectangleI rect, byte[] data)
+        {
+            if (data.Length < rect.Area)
+                throw new Exception("Data array is not large enough.");
+            fixed (byte* ptr = data) { glReadPixels(rect.X, rect.Y, rect.W, rect.H, PixelFormat.RGBA, PixelType.UnsignedByte, ptr); }
+            CheckError();
+        }
+
         delegate void _glDrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices);
         static _glDrawElements glDrawElements;
         public static void DrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices)
         {
             glDrawElements(mode, count, type, indices);
+            CheckError();
+        }
+
+        delegate void _glBlitFramebuffer(int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, BufferBit mask, BlitFilter filter);
+        static _glBlitFramebuffer glBlitFramebuffer;
+        public static void BlitFramebuffer(RectangleI src, RectangleI dst, BufferBit mask, BlitFilter filter)
+        {
+            glBlitFramebuffer(src.X, src.Y, src.MaxX, src.MaxY, dst.X, dst.Y, dst.MaxX, dst.MaxY, mask, filter);
             CheckError();
         }
 
@@ -904,110 +930,6 @@ namespace Rise.OpenGL
         WrapR = 0x8072
     }
 
-    public enum TextureFormat
-    {
-        RGB = 0x1907,
-        RGBA = 0x1908,
-
-        R8 = 0x8229,
-        RG8 = 0x822B,
-        RGB8 = 0x8051,
-        RGBA8 = 0x8058,
-
-        R8SNorm = 0x8F94,
-        RG8SNorm = 0x8F95,
-        RGB8SNorm = 0x8F96,
-        RGBA8SNorm = 0x8F97,
-
-        R16F = 0x822D,
-        RG16F = 0x822F,
-        RGB16F = 0x881B,
-        RGBA16F = 0x881A,
-
-        R32F = 0x822E,
-        RG32F = 0x8230,
-        RGB32F = 0x8815,
-        RGBA32F = 0x8814,
-
-        R8I = 0x8231,
-        RG8I = 0x8237,
-        RGB8I = 0x8D8F,
-        RGBA8I = 0x8D8E,
-
-        R8UI = 0x8232,
-        RG8UI = 0x8238,
-        RGB8UI = 0x8D7D,
-        RGBA8UI = 0x8D7C,
-
-        R16I = 0x8233,
-        RG16I = 0x8239,
-        RGB16I = 0x8D89,
-        RGBA16I = 0x8D88,
-
-        R16UI = 0x8234,
-        RG16UI = 0x823A,
-        RGB16UI = 0x8D77,
-        RGBA16UI = 0x8D76,
-
-        R32I = 0x8235,
-        RG32I = 0x823B,
-        RGB32I = 0x8D83,
-        RGBA32I = 0x8D82,
-
-        R32UI = 0x8236,
-        RG32UI = 0x823C,
-        RGB32UI = 0x8D71,
-        RGBA32UI = 0x8D70,
-
-        SRGB8 = 0x8C41,
-        R5G6B5 = 0x8D62,
-        R11G11B10F = 0x8C3A,
-
-        RGBA4 = 0x8056,
-        RGB5A1 = 0x8057,
-        RGB10A2 = 0x8059,
-        RGB10A2UI = 0x906F,
-
-        /*
-        LuminanceAlpha = 0x190A,
-        Luminance = 0x1909,
-        Alpha = 0x1906,
-
-        SRGB8_Alpha8 = 0x8C43,
-
-        RGB9_E5 = 0x8C3D,
-
-        DepthComponent16 = 0x81A5,
-        DepthComponent24 = 0x81A6,
-        DepthComponent32F = 0x81A7,
-        Depth24Stencil8 = 0x88F0,
-        Depth32FStencil8 = 0x8CAD*/
-    }
-
-    public static class PixelFormatExt
-    {
-        public static int Size(this PixelFormat format)
-        {
-            switch (format)
-            {
-                case PixelFormat.Red:
-                case PixelFormat.DepthComponent:
-                case PixelFormat.Luminance:
-                case PixelFormat.Alpha:
-                    return 1;
-                case PixelFormat.RG:
-                case PixelFormat.DepthStencil:
-                case PixelFormat.LuminanceAlpha:
-                    return 2;
-                case PixelFormat.RGB:
-                    return 3;
-                case PixelFormat.RGBA:
-                    return 4;
-            }
-            throw new Exception("Unexpected pixel format.");
-        }
-    }
-
     public enum ShaderType : GLEnum
     {
         Vertex = 0x8B31,
@@ -1164,6 +1086,12 @@ namespace Rise
         MirroredRepeat = 0x8370
     }
 
+    public enum BlitFilter : GLEnum
+    {
+        Nearest = 0x2600,
+        Linear = 0x2601
+    }
+
     public enum MinFilter : GLEnum
     {
         Nearest = 0x2600,
@@ -1208,17 +1136,157 @@ namespace Rise
         OneMinusConstantAlpha
     }
 
+    public enum TextureFormat
+    {
+        //Depth textures
+        Depth = 0x1902,
+        Depth16 = 0x81A5,
+        Depth24 = 0x81A6,
+        Depth32 = 0x81A7,
+        Depth32F = 0x81A8,
+
+        //Red textures
+        R = 0x1903,
+        R8 = 0x8229,
+        R8SNorm = 0x8F94,
+        R16F = 0x822D,
+        R32F = 0x822E,
+        R8I = 0x8231,
+        R8UI = 0x8232,
+        R16I = 0x8233,
+        R16UI = 0x8234,
+        R32I = 0x8235,
+        R32UI = 0x8236,
+
+        //RG textures
+        RG = 0x8227,
+        RG8 = 0x822B,
+        RG8SNorm = 0x8F95,
+        RG16F = 0x822F,
+        RG32F = 0x8230,
+        RG8I = 0x8237,
+        RG8UI = 0x8238,
+        RG16I = 0x8239,
+        RG16UI = 0x823A,
+        RG32I = 0x823B,
+        RG32UI = 0x823C,
+
+        //RGB textures
+        RGB = 0x1907,
+        RGB8 = 0x8051,
+        RGB8SNorm = 0x8F96,
+        RGB16F = 0x881B,
+        RGB32F = 0x8815,
+        RGB8I = 0x8D8F,
+        RGB8UI = 0x8D7D,
+        RGB16I = 0x8D89,
+        RGB16UI = 0x8D77,
+        RGB32I = 0x8D83,
+        RGB32UI = 0x8D71,
+        R3G3B2 = 0x2A10,
+        R5G6B5 = 0x8D62,
+        R11G11B10F = 0x8C3A,
+
+        //RGBA textures
+        RGBA = 0x1908,
+        RGBA8 = 0x8058,
+        RGBA8SNorm = 0x8F97,
+        RGBA16F = 0x881A,
+        RGBA32F = 0x8814,
+        RGBA8I = 0x8D8E,
+        RGBA8UI = 0x8D7C,
+        RGBA16I = 0x8D88,
+        RGBA16UI = 0x8D76,
+        RGBA32I = 0x8D82,
+        RGBA32UI = 0x8D70,
+        RGBA2 = 0x8055,
+        RGBA4 = 0x8056,
+        RGB5A1 = 0x8057,
+        RGB10A2 = 0x8059,
+        RGB10A2UI = 0x906F,
+    }
+
     public enum PixelFormat : GLEnum
     {
-        Red = 0x1903,
+        R = 0x1903,
         RG = 0x8227,
         RGB = 0x1907,
         RGBA = 0x1908,
-        DepthComponent = 0x1902,
-        DepthStencil = 0x84F9,
-        LuminanceAlpha = 0x190A,
-        Luminance = 0x1909,
-        Alpha = 0x1906
+        Depth = 0x1902
+    }
+
+    public static class TextureFormatExt
+    {
+        public static PixelFormat PixelFormat(this TextureFormat format)
+        {
+            switch (format)
+            {
+                case TextureFormat.Depth:
+                case TextureFormat.Depth16:
+                case TextureFormat.Depth24:
+                case TextureFormat.Depth32:
+                case TextureFormat.Depth32F:
+                    return Rise.PixelFormat.Depth;
+                case TextureFormat.R:
+                case TextureFormat.R8:
+                case TextureFormat.R8SNorm:
+                case TextureFormat.R8I:
+                case TextureFormat.R8UI:
+                case TextureFormat.R16I:
+                case TextureFormat.R16UI:
+                case TextureFormat.R16F:
+                case TextureFormat.R32I:
+                case TextureFormat.R32UI:
+                case TextureFormat.R32F:
+                    return Rise.PixelFormat.R;
+                case TextureFormat.RG:
+                case TextureFormat.RG8:
+                case TextureFormat.RG8SNorm:
+                case TextureFormat.RG8I:
+                case TextureFormat.RG8UI:
+                case TextureFormat.RG16I:
+                case TextureFormat.RG16UI:
+                case TextureFormat.RG16F:
+                case TextureFormat.RG32I:
+                case TextureFormat.RG32UI:
+                case TextureFormat.RG32F:
+                    return Rise.PixelFormat.RG;
+                case TextureFormat.RGB:
+                case TextureFormat.RGB8:
+                case TextureFormat.RGB8SNorm:
+                case TextureFormat.RGB8I:
+                case TextureFormat.RGB8UI:
+                case TextureFormat.RGB16I:
+                case TextureFormat.RGB16UI:
+                case TextureFormat.RGB16F:
+                case TextureFormat.RGB32I:
+                case TextureFormat.RGB32UI:
+                case TextureFormat.RGB32F:
+                case TextureFormat.R3G3B2:
+                case TextureFormat.R5G6B5:
+                case TextureFormat.R11G11B10F:
+                    return Rise.PixelFormat.RGB;
+                case TextureFormat.RGBA:
+                case TextureFormat.RGBA8:
+                case TextureFormat.RGBA8SNorm:
+                case TextureFormat.RGBA16F:
+                case TextureFormat.RGBA32F:
+                case TextureFormat.RGBA8I:
+                case TextureFormat.RGBA8UI:
+                case TextureFormat.RGBA16I:
+                case TextureFormat.RGBA16UI:
+                case TextureFormat.RGBA32I:
+                case TextureFormat.RGBA32UI:
+                case TextureFormat.RGBA2:
+                case TextureFormat.RGBA4:
+                case TextureFormat.RGB5A1:
+                case TextureFormat.RGB10A2:
+                case TextureFormat.RGB10A2UI:
+                    return Rise.PixelFormat.RGBA;
+                default:
+                    throw new Exception("Unexpected pixel format.");
+            }
+        }
     }
 
     public enum PixelType : GLEnum
@@ -1229,16 +1297,7 @@ namespace Rise
         UnsignedShort = 0x1403,
         Int = 0x1404,
         UnsignedInt = 0x1405,
-        Float = 0x1406,
-
-        UnsignedShort565 = 0x8363,
-        UnsignedShort4444 = 0x8033,
-        UnsignedShort5551 = 0x8034,
-
-
-        //GL_UNSIGNED_SHORT_5_6_5
-        //GL_UNSIGNED_SHORT_4_4_4_4
-        //GL_UNSIGNED_SHORT_5_5_5_1
+        Float = 0x1406
     }
 
     public enum VertexType : GLEnum

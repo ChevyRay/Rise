@@ -6,28 +6,28 @@ namespace Rise
     {
         public Vector2 Pos;
         public Vector2 Tex;
-        public Color Mul;
-        public Color Add;
+        public Color4 Mul;
+        public Color4 Add;
 
-        public Vertex2D(Vector2 pos, Vector2 tex, Color mul, Color add)
+        public Vertex2D(Vector2 pos, Vector2 tex, Color4 mul, Color4 add)
         {
             Pos = pos;
             Tex = tex;
             Mul = mul;
             Add = add;
         }
-        public Vertex2D(Vector2 pos, Vector2 tex, Color mul)
-            : this(pos, tex, mul, Color.Transparent)
+        public Vertex2D(Vector2 pos, Vector2 tex, Color4 mul)
+            : this(pos, tex, mul, Color4.Transparent)
         {
             
         }
         public Vertex2D(Vector2 pos, Vector2 tex)
-            : this(pos, tex, Color.White, Color.Transparent)
+            : this(pos, tex, Color4.White, Color4.Transparent)
         {
 
         }
-        public Vertex2D(Vector2 pos, Color add)
-            : this(pos, Vector2.Zero, Color.Transparent, add)
+        public Vertex2D(Vector2 pos, Color4 add)
+            : this(pos, Vector2.Zero, Color4.Transparent, add)
         {
 
         }

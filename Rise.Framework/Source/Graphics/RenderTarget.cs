@@ -34,7 +34,7 @@ namespace Rise
             GL.DeleteFramebuffer(id);
         }
 
-        public void Clear(Color color)
+        public void Clear(Color4 color)
         {
             Bind(this);
             GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);

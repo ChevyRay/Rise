@@ -7,25 +7,25 @@ namespace Rise.Imaging
         public int Height { get; private set; }
         public int PixelCount { get; private set; }
 
-        internal Color[] pixels;
+        internal Color4[] pixels;
 
         public Bitmap(int width, int height)
         {
             Width = width;
             Height = height;
             PixelCount = width * height;
-            pixels = new Color[PixelCount];
+            pixels = new Color4[PixelCount];
         }
-        public Bitmap(int width, int height, Color color) : this(width, height)
+        public Bitmap(int width, int height, Color4 color) : this(width, height)
         {
             Clear(color);
         }
-        internal Bitmap(Color[] pixels, int width, int height)
+        internal Bitmap(Color4[] pixels, int width, int height)
         {
             SetPixels(pixels, width, height);
         }
 
-        public Color[] Pixels
+        public Color4[] Pixels
         {
             get { return pixels; }
         }
@@ -48,17 +48,17 @@ namespace Rise.Imaging
             return bitmap;
         }
 
-        public Color GetPixel(int x, int y)
+        public Color4 GetPixel(int x, int y)
         {
             return pixels[y * Width + x];
         }
 
-        public void SetPixel(int x, int y, Color color)
+        public void SetPixel(int x, int y, Color4 color)
         {
             pixels[y * Width + x] = color;
         }
 
-        internal void SetPixels(Color[] pixels, int width, int height)
+        internal void SetPixels(Color4[] pixels, int width, int height)
         {
             if (width * height != pixels.Length)
                 throw new Exception("Pixel array length does not match bitmap size.");
@@ -68,7 +68,7 @@ namespace Rise.Imaging
             PixelCount = width * height;
         }
 
-        public void SetRect(int x, int y, int w, int h, Color color)
+        public void SetRect(int x, int y, int w, int h, Color4 color)
         {
             int ii = x + w;
             int jj = y + h;
@@ -109,14 +109,14 @@ namespace Rise.Imaging
             CopyPixels(source, dest.X, dest.Y);
         }
 
-        public void Clear(Color color)
+        public void Clear(Color4 color)
         {
             for (int i = 0; i < PixelCount; ++i)
                 pixels[i] = color;
         }
         public void Clear()
         {
-            Clear(Color.Transparent);
+            Clear(Color4.Transparent);
         }
 
         public void Premultiply()
