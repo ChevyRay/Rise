@@ -30,7 +30,7 @@ namespace Rise
             MagFilter = DefaultMagFilter;
             Format = format;
         }
-        public Texture(TextureFormat format, Bitmap bitmap) : this(TextureFormat.RGBA)
+        public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
         {
             SetPixels(bitmap);
         }
