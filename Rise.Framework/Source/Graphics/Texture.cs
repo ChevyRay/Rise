@@ -30,7 +30,7 @@ namespace Rise
             MagFilter = DefaultMagFilter;
             Format = format;
         }
-        public Texture(Bitmap bitmap) : this(TextureFormat.RGBA)
+        public Texture(TextureFormat format, Bitmap bitmap) : this(TextureFormat.RGBA)
         {
             SetPixels(bitmap);
         }
@@ -41,7 +41,7 @@ namespace Rise
                 bitmap.Premultiply();
             SetPixels(bitmap);
         }
-        public Texture(int width, int height, Color[] pixels) : this(TextureFormat.RGBA)
+        public Texture(int width, int height, Color4[] pixels) : this(TextureFormat.RGBA)
         {
             SetPixels(width, height, pixels);
         }
@@ -99,7 +99,7 @@ namespace Rise
                 throw new Exception("Bitmap height does not match.");
 
             GL.BindTexture(TextureTarget.Texture2D, id);
-            fixed (Color* ptr = bitmap.Pixels)
+            fixed (Color4* ptr = bitmap.Pixels)
             {
                 GL.GetTexImage(TextureTarget.Texture2D, 0, TextureFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
             }
@@ -116,7 +116,7 @@ namespace Rise
         {
             SetPixels(bitmap.Width, bitmap.Height, bitmap.Pixels);
         }
-        public unsafe void SetPixels(int width, int height, Color[] pixels)
+        public unsafe void SetPixels(int width, int height, Color4[] pixels)
         {
             Format = TextureFormat.RGBA;
 
@@ -129,7 +129,7 @@ namespace Rise
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
 
-            fixed (Color* ptr = pixels)
+            fixed (Color4* ptr = pixels)
                 SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
         }
         void SetPixels(int w, int h, PixelFormat format, PixelType type, IntPtr data)

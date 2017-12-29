@@ -7,7 +7,7 @@ namespace Rise.Imaging
         public int Height { get; private set; }
         public int PixelCount { get; private set; }
 
-        internal Color4[] pixels;
+        Color4[] pixels;
 
         public Bitmap(int width, int height)
         {

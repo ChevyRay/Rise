@@ -71,7 +71,7 @@ namespace Rise
 
         public static implicit operator UInt32(Color3 val)
         {
-            return ((UInt32)val.R << 16) | ((UInt32)val.G << 8) | val.B);
+            return ((UInt32)val.R << 16) | ((UInt32)val.G << 8) | val.B;
         }
         public static implicit operator Color3(UInt32 val)
         {

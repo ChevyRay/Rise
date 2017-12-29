@@ -31,8 +31,9 @@ namespace Rise.Imaging
             if (bitmap != null)
             {
                 int w, h;
-                Decode(source, out w, out h, ref bitmap.pixels);
-                bitmap.SetPixels(bitmap.pixels, w, h);
+                var pixels = bitmap.Pixels;
+                Decode(source, out w, out h, ref pixels);
+                bitmap.SetPixels(bitmap.Pixels, w, h);
             }
             else
                 bitmap = Decode(source);

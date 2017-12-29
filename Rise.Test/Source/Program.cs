@@ -51,9 +51,9 @@ namespace Rise.Test
             var directionalLightShader = Shader.FromFile("Assets/basic_directional_light.glsl");
             var pinkSquare = new Texture("Assets/pink_square.png", true);
 
-            gDiffuse = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB);
-            gNormal = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB16F);
-            gPosition = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB32F);
+            gDiffuse = new Texture(screenW, screenH, TextureFormat.RGB);
+            gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
+            gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
             gBuffer = new RenderTarget(screenW, screenH, gDiffuse, gNormal, gPosition);
 
             model = Matrix4x4.Identity;
@@ -66,20 +66,20 @@ namespace Rise.Test
             draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
             draw.Material.SetMatrix4x4("g_Model", ref model);
             draw.Material.SetTexture("g_Texture", pinkSquare);
-            draw.Mesh = Mesh3D.CreateCube(new Vector3(1f, 1f, 1f), Color.White);
+            draw.Mesh = Mesh3D.CreateCube(new Vector3(1f, 1f, 1f), Color4.White);
 
             //Directional light
-            var lightTexture = new Texture(screenW, screenH, OpenGL.TextureFormat.RGB);
+            var lightTexture = new Texture(screenW, screenH, TextureFormat.RGB);
             lighting.Target = new RenderTarget(screenW, screenH, lightTexture);
             lighting.Material = new Material(directionalLightShader);
             lighting.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
             lighting.Material.SetTexture("g_Normal", gNormal);
             lighting.Material.SetTexture("g_Position", gPosition);
             lighting.Material.SetVector3("g_CameraPosition", cameraPos);
-            lighting.Material.SetColor("g_AmbientColor", Color.Black);
+            lighting.Material.SetColor4("g_AmbientColor", Color4.Black);
             lighting.Material.SetVector3("g_LightDirection", Vector3.Down);
-            lighting.Material.SetColor("g_DiffuseColor", Color.White);
-            lighting.Material.SetColor("g_SpecularColor", Color.White);
+            lighting.Material.SetColor4("g_DiffuseColor", Color4.White);
+            lighting.Material.SetColor4("g_SpecularColor", Color4.White);
             lighting.Material.SetFloat("g_Shininess", shininess);
             lighting.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
 
@@ -125,8 +125,8 @@ namespace Rise.Test
         static void Render()
         {
             draw.Perform(0x242029ff);
-            lighting.Perform(Color.Black);
-            toScreen.Perform(Color.Black);
+            lighting.Perform(Color4.Black);
+            toScreen.Perform(Color4.Black);
         }
     }
 }
