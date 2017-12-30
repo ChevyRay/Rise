@@ -9,6 +9,7 @@ namespace Rise
 
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public Texture DepthTexture { get; private set; }
 
         internal uint id;
         Texture[] textures = new Texture[16];
@@ -23,8 +24,9 @@ namespace Rise
         {
             SetTexture(0, texture);
         }
-        public RenderTarget(int width, int height, params Texture[] textures) : this(width, height)
+        public RenderTarget(int width, int height, Texture depthTexture, params Texture[] textures) : this(width, height)
         {
+            SetDepthTexture(depthTexture);
             for (int i = 0; i < textures.Length; ++i)
                 SetTexture(i, textures[i]);
         }
@@ -53,8 +55,8 @@ namespace Rise
         {
             if (n < 0 || n >= textures.Length)
                 throw new ArgumentOutOfRangeException(nameof(n));
-            if (texture.Width != Width || texture.Height != Height)
-                throw new Exception("Texture size must be the same as RenderTarget.");
+            //if (texture.Width != Width || texture.Height != Height)
+            //    throw new Exception("Texture size must be the same as RenderTarget.");
 
             Bind(this);
             textures[n] = texture;
@@ -63,6 +65,27 @@ namespace Rise
 
             //TODO: probably don't need to do this for every one!?
             UpdateDrawBuffers();
+        }
+
+        public void SetDepthTexture(Texture texture)
+        {
+            //if (texture.Width != Width || texture.Height != Height)
+            //    throw new Exception("Texture size must be the same as RenderTarget.");
+
+            if (texture != null)
+            {
+                if (texture.Format.PixelFormat() != PixelFormat.Depth)
+                    throw new Exception("Texture is not a depth texture.");
+                Bind(this);
+                DepthTexture = texture;
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, TextureTarget.Texture2D, texture.id, 0);
+            }
+            else if (DepthTexture != null)
+            {
+                Bind(this);
+                DepthTexture = null;
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, TextureTarget.Texture2D, 0, 0);
+            }
         }
 
         void UpdateDrawBuffers()

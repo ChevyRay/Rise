@@ -28,6 +28,7 @@ namespace Rise.Test
         static Vector3 cameraPos = new Vector3(0f, 1f, -2f);
 
         static RenderTarget gBuffer;
+        static Texture gDepth;
         static Texture gDiffuse;
         static Texture gNormal;
         static Texture gPosition;
@@ -51,10 +52,11 @@ namespace Rise.Test
             var directionalLightShader = Shader.FromFile("Assets/basic_directional_light.glsl");
             var pinkSquare = new Texture("Assets/pink_square.png", true);
 
+            gDepth = new Texture(screenW, screenH, TextureFormat.Depth);
             gDiffuse = new Texture(screenW, screenH, TextureFormat.RGB);
             gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
             gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
-            gBuffer = new RenderTarget(screenW, screenH, gDiffuse, gNormal, gPosition);
+            gBuffer = new RenderTarget(screenW, screenH, gDepth, gDiffuse, gNormal, gPosition);
 
             model = Matrix4x4.Identity;
             view = Matrix4x4.CreateLookAt(cameraPos, Vector2.Zero, Vector3.Up);
@@ -70,7 +72,7 @@ namespace Rise.Test
 
             //Directional light
             var lightTexture = new Texture(screenW, screenH, TextureFormat.RGB);
-            lighting.Target = new RenderTarget(screenW, screenH, lightTexture);
+            lighting.Target = new RenderTarget(screenW, screenH, null, lightTexture);
             lighting.Material = new Material(directionalLightShader);
             lighting.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
             lighting.Material.SetTexture("g_Normal", gNormal);

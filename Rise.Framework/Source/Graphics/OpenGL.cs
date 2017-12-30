@@ -552,10 +552,12 @@ namespace Rise.OpenGL
         static _glFramebufferTexture2D glFramebufferTexture2D;
         public static void FramebufferTexture2D(FramebufferTarget target, TextureAttachment attachment, TextureTarget textarget, uint texture, int level)
         {
-            uint texn = (uint)attachment - (uint)TextureAttachment.Color0;
-            if (texn >= maxColorAttachments)
-                throw new Exception("Exceeding max color attachments: " + maxColorAttachments);
-
+            if (attachment != TextureAttachment.Depth)
+            {
+                uint texn = (uint)attachment - (uint)TextureAttachment.Color0;
+                if (texn >= maxColorAttachments)
+                    throw new Exception("Exceeding max color attachments: " + maxColorAttachments);
+            }
             glFramebufferTexture2D(target, attachment, textarget, texture, level);
             CheckError();
         }
@@ -1035,8 +1037,6 @@ namespace Rise.OpenGL
     public enum TextureAttachment : GLEnum
     {
         Depth = 0x8D00,
-        Stencil = 0x8D20,
-        DepthStencil = 0x821A,
         Color0 = 0x8CE0,
         Color1,
         Color2,
