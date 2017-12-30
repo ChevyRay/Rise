@@ -34,6 +34,16 @@ namespace Rise
             Clip = false;
             ClipRect = default(RectangleI);
         }
+        public DrawCall(RenderTarget target, Material material)
+        {
+            Target = target;
+            Material = material;
+            Mesh = null;
+            Blend = false;
+            BlendMode = default(BlendMode);
+            Clip = false;
+            ClipRect = default(RectangleI);
+        }
         public DrawCall(RenderTarget target, Material material, Mesh mesh)
         {
             Target = target;
@@ -96,17 +106,10 @@ namespace Rise
             GL.BindVertexArray(0);
 
             //TODO: temp, this should be 2d/3d specific
-            //GL.Disable(EnableCap.DepthTest);
-            //GL.Enable(EnableCap.CullFace);
-
-            GL.Disable(EnableCap.StencilTest);
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFace.Back);
-            GL.DepthFunc(DepthFunc.Less);
-            GL.ClearDepth(1f);
-            GL.DepthRange(0f, 1f);
-            GL.DepthMask(true);
             GL.Enable(EnableCap.DepthTest);
+            GL.DepthFunc(DepthFunc.LessEqual);
 
             //Clear the screen
             GL.ClearColor(Screen.ClearColor.R / 255f, Screen.ClearColor.G / 255f, Screen.ClearColor.B / 255f, Screen.ClearColor.A / 255f);
@@ -123,6 +126,9 @@ namespace Rise
         {
             RenderTarget.Bind(Target);
 
+            //GL.ClearDepth(0f);
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
             GL.ClearColor(clearColor.R / 255f, clearColor.G / 255f, clearColor.B / 255f, clearColor.A / 255f);
             GL.Clear(BufferBit.Color | BufferBit.Depth);
             Perform();
@@ -131,6 +137,10 @@ namespace Rise
         {
             //Make sure the render target is binded
             RenderTarget.Bind(Target);
+
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (status != FramebufferStatus.Complete)
+                Console.WriteLine(status);
 
             //Set render target
             if (state.Target != Target)

@@ -14,7 +14,7 @@ namespace Rise.Test
         {
             App.Init<PlatformSDL2>();
             App.OnInit += Init;
-            App.Run("Rise.Test", 640, 360, null);
+            App.Run("Rise.Test", 1024, 576, null);
         }
 
         static void Init()
@@ -28,16 +28,21 @@ namespace Rise.Test
             var shader2D = Shader.FromFile("Assets/basic_2d.glsl");
             var shader3D = Shader.FromFile("Assets/basic_3d_nobuffer.glsl");
             var shaderG = Shader.FromFile("Assets/basic_3d_gbuffer.glsl");
+            var shaderDepth = Shader.FromFile("Assets/basic_3d_depth.glsl");
             var pinkSquare = new Texture("Assets/pink_square.png", true);
             var cubeMesh = Mesh3D.CreateCube(Vector3.One, Color4.White);
 
+            //Create the g-buffer
+            var gColor = new Texture(screenW, screenH, TextureFormat.RGB);
+            var gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
+            var gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
+            var gDepth = new Texture(screenW, screenH, TextureFormat.R);
+            var gBuffer = new RenderTarget(screenW, screenH, null, gColor, gNormal, gPosition, gDepth);
+
             //View
             var scene = new Scene(screenW, screenH);
-            var viewDrag = false;
-            var viewDragPos = Vector2.Zero;
-
-            //Draw to screen
-            var draw = new DrawCall(new Material(shader3D));
+            var viewRot = false;
+            var viewRotPos = Vector2.Zero;
 
             //Create a model
             var cube = new Model(cubeMesh, pinkSquare);
@@ -46,31 +51,40 @@ namespace Rise.Test
 
             //Create a model
             cube = new Model(cubeMesh, pinkSquare);
+            cube.Scale = new Vector3(0.75f);
             cube.Position = new Vector3(0f, 0.5f, -2f);
             scene.Add(cube);
+
+            //Draw to buffer
+            var draw = new DrawCall(gBuffer, new Material(shaderG));
+
+            //Draw to screen
+            var toScreen = new DrawCall(new Material(shader2D));
+            toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
+            toScreen.Material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
+            toScreen.Material.SetTexture("Texture", gColor);
 
             App.OnUpdate += Update;
             App.OnRender += Render;
             Update();
             void Update()
             {
-                //Panning
-                if (viewDrag)
+                //Pivoting
+                if (viewRot)
                 {
-                    var move = Mouse.Position - viewDragPos;
+                    var move = Mouse.Position - viewRotPos;
                     if (move != Vector2.Zero)
                     {
-                        move *= 5f * Time.Delta;
-                        scene.ViewRot = Quaternion.Euler(move.Y, move.X, 0f) * scene.ViewRot;
-                        viewDragPos = Mouse.Position;
+                        scene.ViewAngle += move * 6f * Time.Delta;
+                        viewRotPos = Mouse.Position;
                     }
                     if (!Mouse.LeftDown)
-                        viewDrag = false;
+                        viewRot = false;
                 }
                 else if (Mouse.LeftPressed)
                 {
-                    viewDrag = true;
-                    viewDragPos = Mouse.Position;
+                    viewRot = true;
+                    viewRotPos = Mouse.Position;
                 }
 
                 //Zooming
@@ -81,16 +95,24 @@ namespace Rise.Test
             }
             void Render()
             {
-                //draw.Perform(Color3.Black);
 
-                draw.Clear(Color3.Black);
+                draw.Clear(0x1f171fff);
                 foreach (var model in scene.Models)
                 {
+                    draw.Material.SetMatrix4x4("ModelMatrix", model.Matrix);
                     draw.Material.SetMatrix4x4("ModelViewProjectionMatrix", model.MvpMatrix);
                     draw.Material.SetTexture("Texture", model.Texture);
                     draw.Mesh = model.Mesh;
                     draw.Perform();
                 }
+
+                //toScreen.Perform(Color3.Black);
+                int w = screenW / 2;
+                int h = screenH / 2;
+                gBuffer.BlitTextureTo(null, 0, BlitFilter.Linear, new RectangleI(0, h, w, h));
+                gBuffer.BlitTextureTo(null, 1, BlitFilter.Linear, new RectangleI(w, h, w, h));
+                gBuffer.BlitTextureTo(null, 2, BlitFilter.Linear, new RectangleI(0, 0, w, h));
+                gBuffer.BlitTextureTo(null, 3, BlitFilter.Linear, new RectangleI(w, 0, w, h));
             }
         }
     }
@@ -99,7 +121,7 @@ namespace Rise.Test
     {
         Matrix4x4 projMatrix;
         Matrix4x4 viewMatrix;
-        Quaternion viewRot = Quaternion.Identity;
+        Vector2 viewAngle;
         float viewDist = 4f;
         bool dirty = true;
         public List<Model> Models = new List<Model>();
@@ -131,18 +153,19 @@ namespace Rise.Test
             if (dirty)
             {
                 dirty = false;
-                viewMatrix = Matrix4x4.CreateRotation(viewRot) * Matrix4x4.CreateTranslation(0f, 0f, -viewDist);
+                var rot = Quaternion.Euler(viewAngle.Y, 0f, 0f) * Quaternion.Euler(0f, viewAngle.X, 0f);
+                viewMatrix = Matrix4x4.CreateRotation(rot) * Matrix4x4.CreateTranslation(0f, 0f, -viewDist);
                 foreach (var model in Models)
                     model.SetDirty();
             }
         }
 
-        public Quaternion ViewRot
+        public Vector2 ViewAngle
         {
-            get { return viewRot; }
+            get { return viewAngle; }
             set
             {
-                viewRot = value;
+                viewAngle = value;
                 SetDirty();
             }
         }

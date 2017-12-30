@@ -15,8 +15,8 @@ namespace Rise
         }
         ~ResourceHandle()
         {
-            resources.Remove(weak);
-            Dispose();
+            //resources.Remove(weak);
+            //Dispose();
         }
 
         protected abstract void Dispose();

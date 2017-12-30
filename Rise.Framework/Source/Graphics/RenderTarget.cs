@@ -20,17 +20,26 @@ namespace Rise
             Width = width;
             Height = height;
 
-            /*uint dep = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, dep);
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.MinFilter, (int)MinFilter.Nearest);
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.MagFilter, (int)MagFilter.Nearest);
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.WrapS, (int)TextureWrap.ClampToEdge);
-            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.WrapT, (int)TextureWrap.ClampToEdge);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, TextureFormat.Depth32, width, height, 0, PixelFormat.Depth, PixelType.Float, IntPtr.Zero);
+            /*var targ = TextureTarget.Texture2D;
+            uint dep = GL.GenTexture();
+            GL.BindTexture(targ, dep);
+            GL.TexParameterI(targ, TextureParam.WrapS, (int)TextureWrap.ClampToEdge);
+            GL.TexParameterI(targ, TextureParam.WrapT, (int)TextureWrap.ClampToEdge);
+            GL.TexParameterI(targ, TextureParam.MinFilter, (int)MinFilter.Nearest);
+            GL.TexParameterI(targ, TextureParam.MagFilter, (int)MagFilter.Nearest);
+            GL.TexParameterI(targ, TextureParam.CompareMode, (int)CompareMode.);*/
+
+            /*GLuint depthrenderbuffer;
+            glGenRenderbuffers(1, &depthrenderbuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);*/
 
             Bind(this);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, TextureTarget.Texture2D, dep, 0);
-            */
+            uint dep = GL.GenRenderbuffer();
+            GL.BindRenderbuffer(dep);
+            GL.RenderbufferStorage(TextureFormat.Depth, width, height);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, TextureAttachment.Depth, dep);
         }
         public RenderTarget(Texture texture) : this(texture.Width, texture.Height)
         {
@@ -38,9 +47,9 @@ namespace Rise
         }
         public RenderTarget(int width, int height, Texture depthTexture, params Texture[] textures) : this(width, height)
         {
+            //SetDepthTexture(depthTexture);
             for (int i = 0; i < textures.Length; ++i)
                 SetTexture(i, textures[i]);
-            SetDepthTexture(depthTexture);
         }
 
         protected override void Dispose()

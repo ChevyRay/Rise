@@ -19,5 +19,5 @@ in vec4 fragColor;
 layout(location = 0) out vec4 outColor;
 void main(void)
 {
-    outColor = texture(Texture, fragUV) * fragColor;
+	outColor = texture(Texture, fragUV) * fragColor;
 }

@@ -617,6 +617,47 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        unsafe delegate void _glGenRenderbuffers(GLSizei n, uint* renderbuffers);
+        static _glGenRenderbuffers glGenRenderbuffers;
+        unsafe public static void GenRenderbuffers(GLSizei n, uint[] renderbuffers)
+        {
+            fixed (uint* ptr = renderbuffers) { glGenFramebuffers(n, ptr); }
+            CheckError();
+        }
+        unsafe public static uint GenRenderbuffer()
+        {
+            uint rbo = 0;
+            glGenRenderbuffers(1, &rbo);
+            CheckError();
+            return rbo;
+        }
+
+        const uint GL_RENDERBUFFER = 0x8D41;
+
+        unsafe delegate void _glBindRenderbuffer(GLEnum target, uint buffer);
+        static _glBindRenderbuffer glBindRenderbuffer;
+        unsafe public static void BindRenderbuffer(uint buffer)
+        {
+            glBindRenderbuffer(GL_RENDERBUFFER, buffer);
+            CheckError();
+        }
+
+        unsafe delegate void _glRenderbufferStorage(GLEnum target, TextureFormat format, int width, int height);
+        static _glRenderbufferStorage glRenderbufferStorage;
+        unsafe public static void RenderbufferStorage(TextureFormat format, int width, int height)
+        {
+            glRenderbufferStorage(GL_RENDERBUFFER, format, width, height);
+            CheckError();
+        }
+
+        unsafe delegate void _glFramebufferRenderbuffer(FramebufferTarget target, TextureAttachment attachment, GLEnum renderbufferTarget, uint renderbuffer);
+        static _glFramebufferRenderbuffer glFramebufferRenderbuffer;
+        unsafe public static void FramebufferRenderbuffer(FramebufferTarget target, TextureAttachment attachment, uint renderbuffer)
+        {
+            glFramebufferRenderbuffer(target, attachment, GL_RENDERBUFFER, renderbuffer);
+            CheckError();
+        }
+
         delegate void _glDrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices);
         static _glDrawElements glDrawElements;
         public static void DrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices)
@@ -631,6 +672,15 @@ namespace Rise.OpenGL
         {
             glBlitFramebuffer(src.X, src.Y, src.MaxX, src.MaxY, dst.X, dst.Y, dst.MaxX, dst.MaxY, mask, filter);
             CheckError();
+        }
+
+        delegate FramebufferStatus _glCheckFramebufferStatus(FramebufferTarget target);
+        static _glCheckFramebufferStatus glCheckFramebufferStatus;
+        public static FramebufferStatus CheckFramebufferStatus(FramebufferTarget target)
+        {
+            var status = glCheckFramebufferStatus(target);
+            CheckError();
+            return status;
         }
 
         delegate void _glUniform1f(int location, float v0);
@@ -905,6 +955,19 @@ namespace Rise.OpenGL
         #pragma warning restore 0649
     }
 
+    public enum FramebufferStatus
+    {
+        Complete = 0x8CD5, 
+        Undefined = 0x8219,
+        IncompleteAttachment = 0x8CD6,
+        IncompleteMissingAttachment = 0x8CD7,
+        IncompleteDrawBuffer = 0x8CDB,
+        IncompleteReadBuffer = 0x8CDC,
+        Unsupported = 0x8CDD,
+        IncompleteMultisample = 0x8D56,
+        IncompleteLayerTargets = 0x8DA8
+    }
+
     public enum DepthFunc
     {
         Never = 0x0200,
@@ -972,7 +1035,15 @@ namespace Rise.OpenGL
         SwizzleA = 0x8E45,
         WrapS = 0x2802,
         WrapT = 0x2803,
-        WrapR = 0x8072
+        WrapR = 0x8072,
+        DepthTextureMode = 0x884B
+    }
+
+    public enum DepthTextureMode
+    {
+        Intensity = 0x8049,
+        Alpha = 0x1906,
+        Luminance = 0x1909
     }
 
     public enum ShaderType : GLEnum
@@ -1101,7 +1172,8 @@ namespace Rise.OpenGL
     public enum TextureAttachment : GLEnum
     {
         //Depth = 0x8D00,
-        Depth = 0x821A,
+        Depth = 0x8D00,
+        DepthStencil = 0x821A,
         Color0 = 0x8CE0,
         Color1,
         Color2,
@@ -1210,6 +1282,10 @@ namespace Rise
         Depth32 = 0x81A7,
         Depth32F = 0x81A8,
 
+        DepthStencil = 0x84F9,
+        Depth24Stencil8 = 0x88F0,
+
+
         //Red textures
         R = 0x1903,
         R8 = 0x8229,
@@ -1277,7 +1353,8 @@ namespace Rise
         RG = 0x8227,
         RGB = 0x1907,
         RGBA = 0x1908,
-        Depth = 0x1902
+        Depth = 0x1902,
+        DepthStencil = 0x84F9,
     }
 
     public static class TextureFormatExt
