@@ -19,27 +19,6 @@ namespace Rise
             id = GL.GenFramebuffer();
             Width = width;
             Height = height;
-
-            /*var targ = TextureTarget.Texture2D;
-            uint dep = GL.GenTexture();
-            GL.BindTexture(targ, dep);
-            GL.TexParameterI(targ, TextureParam.WrapS, (int)TextureWrap.ClampToEdge);
-            GL.TexParameterI(targ, TextureParam.WrapT, (int)TextureWrap.ClampToEdge);
-            GL.TexParameterI(targ, TextureParam.MinFilter, (int)MinFilter.Nearest);
-            GL.TexParameterI(targ, TextureParam.MagFilter, (int)MagFilter.Nearest);
-            GL.TexParameterI(targ, TextureParam.CompareMode, (int)CompareMode.);*/
-
-            /*GLuint depthrenderbuffer;
-            glGenRenderbuffers(1, &depthrenderbuffer);
-            glBindRenderbuffer(GL_RENDERBUFFER, depthrenderbuffer);
-            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
-            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);*/
-
-            /*Bind(this);
-            uint dep = GL.GenRenderbuffer();
-            GL.BindRenderbuffer(dep);
-            GL.RenderbufferStorage(TextureFormat.Depth, width, height);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, TextureAttachment.Depth, dep);*/
         }
         public RenderTarget(Texture texture) : this(texture.Width, texture.Height)
         {
