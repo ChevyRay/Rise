@@ -45,6 +45,10 @@ namespace Rise
         {
             SetPixels(width, height, pixels);
         }
+        public Texture(int width, int height, Color3[] pixels) : this(TextureFormat.RGB)
+        {
+            SetPixels(width, height, pixels);
+        }
         public Texture(int width, int height, TextureFormat format) : this(format)
         {
             SetSize(width, height);
@@ -91,7 +95,7 @@ namespace Rise
             MagFilter = filter;
         }
 
-        public unsafe void GetPixels(Bitmap bitmap)
+        /*public unsafe void GetPixels(Bitmap bitmap)
         {
             if (Width != bitmap.Width)
                 throw new Exception("Bitmap width does not match.");
@@ -110,6 +114,115 @@ namespace Rise
             var bitmap = new Bitmap(Width, Height);
             GetPixels(bitmap);
             return bitmap;
+        }*/
+
+        public unsafe void GetBitmap(Bitmap bitmap)
+        {
+            if (Width != bitmap.Width)
+                throw new Exception("Bitmap width does not match.");
+            if (Height != bitmap.Height)
+                throw new Exception("Bitmap height does not match.");
+            MakeCurrent();
+            fixed (Color4* ptr = bitmap.Pixels)
+                GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        public Bitmap GetBitmap()
+        {
+            var bitmap = new Bitmap(Width, Height);
+            GetBitmap(bitmap);
+            return bitmap;
+        }
+
+        public unsafe void GetPixelsColor4(Color4[] pixels)
+        {
+            if (pixels.Length < Width * Height)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (Color4* ptr = pixels)
+                GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        public Color4[] GetPixelsColor4()
+        {
+            var pixels = new Color4[Width * Height];
+            GetPixelsColor4(pixels);
+            return pixels;
+        }
+
+        public unsafe void GetPixelsColor3(Color3[] pixels)
+        {
+            if (pixels.Length < Width * Height)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (Color3* ptr = pixels)
+                GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        public Color3[] GetPixelsColor3()
+        {
+            var pixels = new Color3[Width * Height];
+            GetPixelsColor3(pixels);
+            return pixels;
+        }
+
+        unsafe void GetPixels(ref byte[] pixels, int comp, PixelFormat format)
+        {
+            if (pixels == null)
+                pixels = new byte[Width * Height * comp];
+            else if (pixels.Length < Width * Height * comp)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (byte* ptr = pixels)
+                GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        unsafe void GetPixels(ref float[] pixels, int comp, PixelFormat format)
+        {
+            if (pixels == null)
+                pixels = new float[Width * Height * comp];
+            else if (pixels.Length < Width * Height * comp)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (float* ptr = pixels)
+                GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.Float, new IntPtr(ptr));
+        }
+
+        public void GetPixelsRGBA(ref byte[] pixels)
+        {
+            GetPixels(ref pixels, 4, PixelFormat.RGBA);
+        }
+        public void GetPixelsRGBA(ref float[] pixels)
+        {
+            GetPixels(ref pixels, 4, PixelFormat.RGBA);
+        }
+
+        public void GetPixelsRGB(ref byte[] pixels)
+        {
+            GetPixels(ref pixels, 3, PixelFormat.RGB);
+        }
+        public void GetPixelsRGB(ref float[] pixels)
+        {
+            GetPixels(ref pixels, 3, PixelFormat.RGB);
+        }
+
+        public void GetPixelsRG(ref byte[] pixels)
+        {
+            GetPixels(ref pixels, 2, PixelFormat.RG);
+        }
+        public void GetPixelsRG(ref float[] pixels)
+        {
+            GetPixels(ref pixels, 2, PixelFormat.RG);
+        }
+
+        public void GetPixelsR(ref byte[] pixels)
+        {
+            GetPixels(ref pixels, 1, PixelFormat.R);
+        }
+        public void GetPixelsR(ref float[] pixels)
+        {
+            GetPixels(ref pixels, 1, PixelFormat.R);
+        }
+
+        public void SetSizeAndFormat(int width, int height, TextureFormat format)
+        {
+            SetPixels(width, height, format, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         public void SetPixels(Bitmap bitmap)
@@ -118,26 +231,35 @@ namespace Rise
         }
         public unsafe void SetPixels(int width, int height, Color4[] pixels)
         {
-            Format = TextureFormat.RGBA;
-
             if (pixels == null)
             {
-                SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
+                SetPixels(width, height, TextureFormat.RGBA, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
                 return;
             }
-
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
-
             fixed (Color4* ptr = pixels)
-                SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+                SetPixels(width, height, TextureFormat.RGBA, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
         }
-        void SetPixels(int w, int h, PixelFormat format, PixelType type, IntPtr data)
+        public unsafe void SetPixels(int width, int height, Color3[] pixels)
         {
+            if (pixels == null)
+            {
+                SetPixels(width, height, TextureFormat.RGB, PixelFormat.RGB, PixelType.UnsignedByte, IntPtr.Zero);
+                return;
+            }
+            if (pixels.Length < (width * height))
+                throw new ArgumentException("Pixels array is too small.", nameof(pixels));
+            fixed (Color3* ptr = pixels)
+                SetPixels(width, height, TextureFormat.RGB, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        void SetPixels(int w, int h, TextureFormat textureFormat, PixelFormat pixelFormat, PixelType type, IntPtr data)
+        {
+            Format = textureFormat;
             Width = w;
             Height = h;
             MakeCurrent();
-            GL.TexImage2D(TextureTarget.Texture2D, 0, Format, w, h, 0, format, type, data);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, Format, w, h, 0, pixelFormat, type, data);
         }
 
         public void SetSize(int width, int height)

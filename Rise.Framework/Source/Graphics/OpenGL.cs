@@ -226,11 +226,11 @@ namespace Rise.OpenGL
             CheckError();
         }
 
-        delegate void _glGetTexImage(TextureTarget target, int level, TextureFormat internalFormat, PixelType type, IntPtr data);
+        delegate void _glGetTexImage(TextureTarget target, int level, PixelFormat format, PixelType type, IntPtr data);
         static _glGetTexImage glGetTexImage;
-        public static void GetTexImage(TextureTarget target, int level, TextureFormat internalFormat, PixelType type, IntPtr data)
+        public static void GetTexImage(TextureTarget target, int level, PixelFormat format, PixelType type, IntPtr data)
         {
-            glGetTexImage(target, level, internalFormat, type, data);
+            glGetTexImage(target, level, format, type, data);
             CheckError();
         }
 
