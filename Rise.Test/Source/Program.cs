@@ -65,7 +65,7 @@ namespace Rise.Test
             var toScreen = new DrawCall(new Material(shaderPos));
             toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(0, 0, w, h));
             toScreen.Material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0, screenH, -1f, 1f));
-            toScreen.Material.SetTexture("ZBuffer", gZ);
+            toScreen.Material.SetTexture("ZBuffer", gDepth);
 
             App.OnUpdate += Update;
             App.OnRender += Render;

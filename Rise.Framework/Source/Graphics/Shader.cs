@@ -145,7 +145,6 @@ namespace Rise
                         uniforms.Add(uniform);
                         uniformLookup.Add(name, uniform);
                     }
-
                 }
             }
         }
