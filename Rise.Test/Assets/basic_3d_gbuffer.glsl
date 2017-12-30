@@ -28,12 +28,10 @@ in vec2 fragUV;
 in vec4 fragColor;
 layout(location = 0) out vec4 outColor;
 layout(location = 1) out vec3 outNormal;
-layout(location = 2) out vec3 outPosition;
-layout(location = 3) out float outDepth;
+layout(location = 2) out float outZ;
 void main(void)
 {
 	outColor = texture(Texture, fragUV) * fragColor;
 	outNormal = normalize(fragNormal);
-	outPosition = fragPosition;
-	outDepth = gl_FragCoord.z;
+	outZ = gl_FragCoord.z;
 }

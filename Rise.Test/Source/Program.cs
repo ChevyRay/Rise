@@ -29,6 +29,7 @@ namespace Rise.Test
             var shader3D = Shader.FromFile("Assets/basic_3d_nobuffer.glsl");
             var shaderG = Shader.FromFile("Assets/basic_3d_gbuffer.glsl");
             var shaderDepth = Shader.FromFile("Assets/basic_3d_depth.glsl");
+            var shaderPos = Shader.FromFile("Assets/basic_3d_position.glsl");
             var pinkSquare = new Texture("Assets/pink_square.png", true);
             var cubeMesh = Mesh3D.CreateCube(Vector3.One, Color4.White);
 
@@ -36,9 +37,8 @@ namespace Rise.Test
             var gDepth = new Texture(screenW, screenH, TextureFormat.Depth);
             var gColor = new Texture(screenW, screenH, TextureFormat.RGB);
             var gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
-            var gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
             var gZ = new Texture(screenW, screenH, TextureFormat.R);
-            var gBuffer = new RenderTarget(screenW, screenH, gDepth, gColor, gNormal, gPosition, gZ);
+            var gBuffer = new RenderTarget(screenW, screenH, gDepth, gColor, gNormal, gZ);
 
             //View
             var scene = new Scene(screenW, screenH);
@@ -60,10 +60,12 @@ namespace Rise.Test
             var draw = new DrawCall(gBuffer, new Material(shaderG));
 
             //Draw to screen
-            var toScreen = new DrawCall(new Material(shader2D));
-            toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
-            toScreen.Material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
-            toScreen.Material.SetTexture("Texture", gColor);
+            int w = screenW / 2;
+            int h = screenH / 2;
+            var toScreen = new DrawCall(new Material(shaderPos));
+            toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(0, 0, w, h));
+            toScreen.Material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0, screenH, -1f, 1f));
+            toScreen.Material.SetTexture("ZBuffer", gZ);
 
             App.OnUpdate += Update;
             App.OnRender += Render;
@@ -96,7 +98,6 @@ namespace Rise.Test
             }
             void Render()
             {
-
                 draw.Clear(0x1f171fff);
                 foreach (var model in scene.Models)
                 {
@@ -108,12 +109,13 @@ namespace Rise.Test
                 }
 
                 //toScreen.Perform(Color3.Black);
-                int w = screenW / 2;
-                int h = screenH / 2;
                 gBuffer.BlitTextureTo(null, 0, BlitFilter.Linear, new RectangleI(0, h, w, h));
                 gBuffer.BlitTextureTo(null, 1, BlitFilter.Linear, new RectangleI(w, h, w, h));
-                gBuffer.BlitTextureTo(null, 2, BlitFilter.Linear, new RectangleI(0, 0, w, h));
-                gBuffer.BlitTextureTo(null, 3, BlitFilter.Linear, new RectangleI(w, 0, w, h));
+                gBuffer.BlitTextureTo(null, 2, BlitFilter.Linear, new RectangleI(w, 0, w, h));
+
+                toScreen.Material.SetMatrix4x4("ProjMatrix", scene.ProjMatrix);
+                toScreen.Material.SetMatrix4x4("ViewMatrix", scene.ViewMatrix);
+                toScreen.Perform();
             }
         }
     }
