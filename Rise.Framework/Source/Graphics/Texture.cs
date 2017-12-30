@@ -51,7 +51,7 @@ namespace Rise
         }
         public Texture(int width, int height, TextureFormat format) : this(format)
         {
-            SetSize(width, height);
+            SetPixels(width, height, format, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         protected override void Dispose()
@@ -94,27 +94,6 @@ namespace Rise
             MinFilter = filter;
             MagFilter = filter;
         }
-
-        /*public unsafe void GetPixels(Bitmap bitmap)
-        {
-            if (Width != bitmap.Width)
-                throw new Exception("Bitmap width does not match.");
-            if (Height != bitmap.Height)
-                throw new Exception("Bitmap height does not match.");
-
-            GL.BindTexture(TextureTarget.Texture2D, id);
-            fixed (Color4* ptr = bitmap.Pixels)
-            {
-                GL.GetTexImage(TextureTarget.Texture2D, 0, TextureFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
-            }
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-        }
-        public Bitmap GetPixels()
-        {
-            var bitmap = new Bitmap(Width, Height);
-            GetPixels(bitmap);
-            return bitmap;
-        }*/
 
         public unsafe void GetBitmap(Bitmap bitmap)
         {
@@ -220,11 +199,6 @@ namespace Rise
             GetPixels(ref pixels, 1, PixelFormat.R);
         }
 
-        public void SetSizeAndFormat(int width, int height, TextureFormat format)
-        {
-            SetPixels(width, height, format, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
-        }
-
         public void SetPixels(Bitmap bitmap)
         {
             SetPixels(bitmap.Width, bitmap.Height, bitmap.Pixels);
@@ -260,14 +234,6 @@ namespace Rise
             Height = h;
             MakeCurrent();
             GL.TexImage2D(TextureTarget.Texture2D, 0, Format, w, h, 0, pixelFormat, type, data);
-        }
-
-        public void SetSize(int width, int height)
-        {
-            Width = width;
-            Height = height;
-            MakeCurrent();
-            GL.TexImage2D(TextureTarget.Texture2D, 0, Format, width, height, 0, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         int GetParam(TextureParam p)
