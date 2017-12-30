@@ -14,121 +14,250 @@ namespace Rise.Test
         {
             App.Init<PlatformSDL2>();
             App.OnInit += Init;
-            App.OnUpdate += Update;
-            App.OnRender += Render;
             App.Run("Rise.Test", 640, 360, null);
         }
-
-        static DrawCall draw;
-        static Matrix4x4 model;
-        static Matrix4x4 view;
-        static Matrix4x4 proj;
-        static float angleX;
-        static float angleY;
-        static Vector3 cameraPos = new Vector3(0f, 1f, -2f);
-
-        static RenderTarget gBuffer;
-        static Texture gDepth;
-        static Texture gDiffuse;
-        static Texture gNormal;
-        static Texture gPosition;
-
-        static DrawCall lighting;
-        static float shininess = 16f;
-
-        static DrawCall toScreen;
 
         static void Init()
         {       
             int screenW = Screen.DrawWidth;
             int screenH = Screen.DrawHeight;
-            const float zMin = 0.1f;
-            const float zMax = 10.0f;
-            Texture.DefaultMinFilter = TextureFilter.Linear;
+            Texture.DefaultMinFilter = TextureFilter.Nearest;
             Texture.DefaultMagFilter = TextureFilter.Nearest;
 
-            var shader3D = Shader.FromFile("Assets/basic_3d.glsl");
-            var shader2D = Shader.FromFile("Assets/basic_gbuffer.glsl");
-            var directionalLightShader = Shader.FromFile("Assets/basic_directional_light.glsl");
+            //Load assets
+            var shader2D = Shader.FromFile("Assets/basic_2d.glsl");
+            var shader3D = Shader.FromFile("Assets/basic_3d_nobuffer.glsl");
+            var shaderG = Shader.FromFile("Assets/basic_3d_gbuffer.glsl");
             var pinkSquare = new Texture("Assets/pink_square.png", true);
+            var cubeMesh = Mesh3D.CreateCube(Vector3.One, Color4.White);
 
-            gDepth = new Texture(screenW, screenH, TextureFormat.Depth);
-            gDiffuse = new Texture(screenW, screenH, TextureFormat.RGB);
-            gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
-            gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
-            gBuffer = new RenderTarget(screenW, screenH, gDepth, gDiffuse, gNormal, gPosition);
+            //View
+            var scene = new Scene(screenW, screenH);
+            var viewDrag = false;
+            var viewDragPos = Vector2.Zero;
 
-            model = Matrix4x4.Identity;
-            view = Matrix4x4.CreateLookAt(cameraPos, Vector2.Zero, Vector3.Up);
-            proj = Matrix4x4.CreatePerspectiveFOV(60f * Calc.Rad, (float)screenW / screenH, zMin, zMax);
-            var mvp = model * view * proj;
+            //Draw to screen
+            var draw = new DrawCall(new Material(shader3D));
 
-            draw.Target = gBuffer;
-            draw.Material = new Material(shader3D);
-            draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
-            draw.Material.SetMatrix4x4("g_Model", ref model);
-            draw.Material.SetTexture("g_Texture", pinkSquare);
-            draw.Mesh = Mesh3D.CreateCube(new Vector3(1f, 1f, 1f), Color4.White);
+            //Create a model
+            var cube = new Model(cubeMesh, pinkSquare);
+            cube.Scale = new Vector3(2f, 0.75f, 1f);
+            scene.Add(cube);
 
-            //Directional light
-            var lightTexture = new Texture(screenW, screenH, TextureFormat.RGB);
-            lighting.Target = new RenderTarget(screenW, screenH, null, lightTexture);
-            lighting.Material = new Material(directionalLightShader);
-            lighting.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, screenW, 0f, screenH, -1f, 1f));
-            lighting.Material.SetTexture("g_Normal", gNormal);
-            lighting.Material.SetTexture("g_Position", gPosition);
-            lighting.Material.SetVector3("g_CameraPosition", cameraPos);
-            lighting.Material.SetColor4("g_AmbientColor", Color4.Black);
-            lighting.Material.SetVector3("g_LightDirection", Vector3.Down);
-            lighting.Material.SetColor4("g_DiffuseColor", Color4.White);
-            lighting.Material.SetColor4("g_SpecularColor", Color4.White);
-            lighting.Material.SetFloat("g_Shininess", shininess);
-            lighting.Mesh = Mesh2D.CreateRect(new Rectangle(screenW, screenH));
+            //Create a model
+            cube = new Model(cubeMesh, pinkSquare);
+            cube.Position = new Vector3(0f, 0.5f, -2f);
+            scene.Add(cube);
 
-            toScreen.Material = new Material(shader2D);
-            toScreen.Material.SetMatrix4x4("g_Matrix", Matrix4x4.CreateOrthographic(0f, Screen.DrawWidth, 0f, Screen.DrawHeight, -1f, 1f));
-            toScreen.Material.SetTexture("g_Diffuse", gDiffuse);
-            toScreen.Material.SetTexture("g_Lighting", lightTexture);
-            toScreen.Mesh = Mesh2D.CreateRect(new Rectangle(Screen.DrawWidth, Screen.DrawHeight));
-            toScreen.SetBlendMode(BlendMode.Alpha);
+            App.OnUpdate += Update;
+            App.OnRender += Render;
+            Update();
+            void Update()
+            {
+                //Panning
+                if (viewDrag)
+                {
+                    var move = Mouse.Position - viewDragPos;
+                    if (move != Vector2.Zero)
+                    {
+                        move *= 5f * Time.Delta;
+                        scene.ViewRot = Quaternion.Euler(move.Y, move.X, 0f) * scene.ViewRot;
+                        viewDragPos = Mouse.Position;
+                    }
+                    if (!Mouse.LeftDown)
+                        viewDrag = false;
+                }
+                else if (Mouse.LeftPressed)
+                {
+                    viewDrag = true;
+                    viewDragPos = Mouse.Position;
+                }
+
+                //Zooming
+                if (Mouse.ScrollY != 0)
+                {
+                    scene.ViewDist -= Mouse.ScrollY * 10f * Time.Delta;
+                }
+            }
+            void Render()
+            {
+                //draw.Perform(Color3.Black);
+
+                draw.Clear(Color3.Black);
+                foreach (var model in scene.Models)
+                {
+                    draw.Material.SetMatrix4x4("ModelViewProjectionMatrix", model.MvpMatrix);
+                    draw.Material.SetTexture("Texture", model.Texture);
+                    draw.Mesh = model.Mesh;
+                    draw.Perform();
+                }
+            }
+        }
+    }
+
+    public class Scene
+    {
+        Matrix4x4 projMatrix;
+        Matrix4x4 viewMatrix;
+        Quaternion viewRot = Quaternion.Identity;
+        float viewDist = 4f;
+        bool dirty = true;
+        public List<Model> Models = new List<Model>();
+
+        public Scene(int width, int height)
+        {
+            projMatrix = Matrix4x4.CreatePerspectiveFOV(70f * Calc.Rad, (float)width / height, 1f, 100f);
         }
 
-        static void Update()
+        public void Add(Model model)
         {
-            if (Keyboard.Down(KeyCode.Right))
-                angleY -= Time.Delta;
-            if (Keyboard.Down(KeyCode.Left))
-                angleY += Time.Delta;
-            if (Keyboard.Down(KeyCode.Up))
-                angleX += Time.Delta;
-            if (Keyboard.Down(KeyCode.Down))
-                angleX -= Time.Delta;
-
-            var prev = cameraPos;
-            if (Keyboard.Down(KeyCode.Q))
-                cameraPos.Z += 2f * Time.Delta;
-            if (Keyboard.Down(KeyCode.W))
-                cameraPos.Z -= 2f * Time.Delta;
-
-            if (Keyboard.Down(KeyCode.LeftBracket))
-                shininess = Math.Max(0f, shininess - 2f * Time.Delta);
-            if (Keyboard.Down(KeyCode.RightBracket))
-                shininess = Math.Min(100f, shininess + 2f * Time.Delta);
-
-            model = Matrix4x4.CreateRotationX(angleX) * Matrix4x4.CreateRotationY(angleY);
-            view = Matrix4x4.CreateLookAt(cameraPos, Vector2.Zero, Vector3.Up);
-            var mvp = model * view * proj;
-            draw.Material.SetMatrix4x4("g_ModelViewProjection", ref mvp);
-            draw.Material.SetMatrix4x4("g_Model", ref model);
-            lighting.Material.SetVector3("g_CameraPosition", cameraPos);
-            lighting.Material.SetFloat("g_Shininess", shininess);
+            model.scene = this;
+            model.SetDirty();
+            Models.Add(model);
         }
 
-        static void Render()
+        void SetDirty()
         {
-            draw.Perform(0x242029ff);
-            lighting.Perform(Color4.Black);
-            toScreen.Perform(Color4.Black);
+            if (!dirty)
+            {
+                dirty = true;
+                foreach (var model in Models)
+                    model.SetDirty();
+            }
+        }
+
+        void UpdateMatrix()
+        {
+            if (dirty)
+            {
+                dirty = false;
+                viewMatrix = Matrix4x4.CreateRotation(viewRot) * Matrix4x4.CreateTranslation(0f, 0f, -viewDist);
+                foreach (var model in Models)
+                    model.SetDirty();
+            }
+        }
+
+        public Quaternion ViewRot
+        {
+            get { return viewRot; }
+            set
+            {
+                viewRot = value;
+                SetDirty();
+            }
+        }
+
+        public float ViewDist
+        {
+            get { return viewDist; }
+            set
+            {
+                viewDist = value;
+                SetDirty();
+            }
+        }
+
+        public Matrix4x4 ProjMatrix
+        {
+            get
+            {
+                UpdateMatrix();
+                return projMatrix;
+            }
+        }
+
+        public Matrix4x4 ViewMatrix
+        {
+            get
+            {
+                UpdateMatrix();
+                return viewMatrix;
+            }
+        }
+    }
+
+    public class Model
+    {
+        internal Scene scene;
+        public Mesh Mesh { get; private set; }
+        public Texture Texture { get; private set; }
+        Vector3 position;
+        Vector3 scale = Vector3.One;
+        Quaternion rotation = Quaternion.Identity;
+        Matrix4x4 matrix;
+        Matrix4x4 mvpMatrix;
+        bool dirty = true;
+
+        public Model(Mesh mesh, Texture texture)
+        {
+            Mesh = mesh;
+            Texture = texture;
+        }
+
+        public void SetDirty()
+        {
+            if (!dirty)
+            {
+                dirty = true;
+            }
+        }
+
+        public Vector3 Position
+        {
+            get { return position; }
+            set
+            {
+                position = value;
+                SetDirty();
+            }
+        }
+
+        public Vector3 Scale
+        {
+            get { return scale; }
+            set
+            {
+                scale = value;
+                SetDirty();
+            }
+        }
+
+        public Quaternion Rotation
+        {
+            get { return rotation; }
+            set
+            {
+                rotation = value;
+                SetDirty();
+            }
+        }
+
+        void UpdateMatrix()
+        {
+            if (dirty)
+            {
+                dirty = false;
+                Matrix4x4.CreateTransform(ref position, ref rotation, ref scale, out matrix);
+                mvpMatrix = matrix * scene.ViewMatrix * scene.ProjMatrix;
+            }
+        }
+
+        public Matrix4x4 Matrix
+        {
+            get
+            {
+                UpdateMatrix();
+                return matrix;
+            }
+        }
+
+        public Matrix4x4 MvpMatrix
+        {
+            get
+            {
+                UpdateMatrix();
+                return mvpMatrix;
+            }
         }
     }
 }

@@ -1,22 +1,21 @@
 #version 330
-uniform mat4 g_Matrix;
-layout(location = 0) in vec2 v_Pos;
-layout(location = 1) in vec2 v_Tex;
-out vec2 f_Tex;
+uniform mat4 Matrix;
+layout(location = 0) in vec2 vertPos;
+layout(location = 1) in vec2 vertUV;
+out vec2 fragUV;
 void main(void)
 {
-    gl_Position = g_Matrix * vec4(v_Pos, 0.0, 1.0);
-    f_Tex = v_Tex;
+    gl_Position = Matrix * vec4(vertPos, 0.0, 1.0);
+    fragUV = vertUV;
 }
 ...
 #version 330
-uniform sampler2D g_Diffuse;
-uniform sampler2D g_Normal;
-uniform sampler2D g_Position;
-uniform sampler2D g_Lighting;
+uniform sampler2D ColorMap;
+uniform sampler2D NormalMap;
+uniform sampler2D PositionMap;
 in vec2 f_Tex;
 layout(location = 0) out vec4 o_Col;
 void main(void)
 {
-    o_Col = texture(g_Diffuse, f_Tex) * texture(g_Lighting, f_Tex);
+    o_Col = texture(g_Diffuse, f_Tex);
 }

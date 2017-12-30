@@ -669,7 +669,7 @@ namespace Rise
 
         public static void CreatePerspectiveFOV(float fov, float aspect, float near, float far, out Matrix4x4 result)
         {
-            float num = 1f / ((float)Math.Tan((double)(fov * 0.5f)));
+            float num = 1f / (float)Math.Tan(fov * 0.5f);
             float num9 = num / aspect;
             result.M11 = num9;
             result.M12 = 0f;

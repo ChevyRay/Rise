@@ -108,6 +108,30 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        delegate void _glClearDepth(double value);
+        static _glClearDepth glClearDepth;
+        public static void ClearDepth(float value)
+        {
+            glClearDepth(value);
+            CheckError();
+        }
+
+        delegate void _glDepthRange(double min, double max);
+        static _glDepthRange glDepthRange;
+        public static void DepthRange(float min, float max)
+        {
+            glDepthRange(min, max);
+            CheckError();
+        }
+
+        delegate void _glDepthMask(bool flag);
+        static _glDepthMask glDepthMask;
+        public static void DepthMask(bool flag)
+        {
+            glDepthMask(flag);
+            CheckError();
+        }
+
         delegate void _glViewport(int x, int y, GLSizei width, GLSizei height);
         static _glViewport glViewport;
         public static void Viewport(int x, int y, GLSizei width, GLSizei height)
@@ -575,9 +599,9 @@ namespace Rise.OpenGL
             CheckError();
         }
 
-        delegate void _glReadBuffer(DrawBuffer buffer);
+        delegate void _glReadBuffer(ReadBuffer buffer);
         static _glReadBuffer glReadBuffer;
-        public static void ReadBuffer(DrawBuffer buffer)
+        public static void ReadBuffer(ReadBuffer buffer)
         {
             glReadBuffer(buffer);
             CheckError();
@@ -870,7 +894,27 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        delegate void _glDepthFunc(DepthFunc func);
+        static _glDepthFunc glDepthFunc;
+        public static void DepthFunc(DepthFunc func)
+        {
+            glDepthFunc(func);
+            CheckError();
+        }
+
         #pragma warning restore 0649
+    }
+
+    public enum DepthFunc
+    {
+        Never = 0x0200,
+        Less,
+        Equal,
+        LessEqual,
+        Greater,
+        NotEqual,
+        GreaterEqual,
+        Always
     }
 
     public enum ErrorCode
@@ -901,7 +945,6 @@ namespace Rise.OpenGL
     public enum BufferBit : GLEnum
     {
         Depth = 0x00000100,
-        Stencil = 0x00000400,
         Color = 0x00004000
     }
 
@@ -1034,9 +1077,31 @@ namespace Rise.OpenGL
         Color15,
     }
 
-    public enum TextureAttachment : GLEnum
+    public enum ReadBuffer : GLEnum
     {
         Depth = 0x8D00,
+        Color0 = 0x8CE0,
+        Color1,
+        Color2,
+        Color3,
+        Color4,
+        Color5,
+        Color6,
+        Color7,
+        Color8,
+        Color9,
+        Color10,
+        Color11,
+        Color12,
+        Color13,
+        Color14,
+        Color15,
+    }
+
+    public enum TextureAttachment : GLEnum
+    {
+        //Depth = 0x8D00,
+        Depth = 0x821A,
         Color0 = 0x8CE0,
         Color1,
         Color2,
@@ -1287,6 +1352,77 @@ namespace Rise
                     throw new Exception("Unexpected pixel format.");
             }
         }
+
+        /*public static PixelType PixelType(this TextureFormat format)
+        {
+            switch (format)
+            {
+                case TextureFormat.Depth:
+                case TextureFormat.Depth16:
+                case TextureFormat.Depth24:
+                case TextureFormat.Depth32:
+                case TextureFormat.Depth32F:
+                    return Rise.PixelType.Float;
+                case TextureFormat.R:
+                case TextureFormat.R8:
+                case TextureFormat.R8SNorm:
+                case TextureFormat.R8I:
+                case TextureFormat.R8UI:
+                case TextureFormat.R16I:
+                case TextureFormat.R16UI:
+                case TextureFormat.R16F:
+                case TextureFormat.R32I:
+                case TextureFormat.R32UI:
+                case TextureFormat.R32F:
+                    return Rise.PixelFormat.R;
+                case TextureFormat.RG:
+                case TextureFormat.RG8:
+                case TextureFormat.RG8SNorm:
+                case TextureFormat.RG8I:
+                case TextureFormat.RG8UI:
+                case TextureFormat.RG16I:
+                case TextureFormat.RG16UI:
+                case TextureFormat.RG16F:
+                case TextureFormat.RG32I:
+                case TextureFormat.RG32UI:
+                case TextureFormat.RG32F:
+                    return Rise.PixelFormat.RG;
+                case TextureFormat.RGB:
+                case TextureFormat.RGB8:
+                case TextureFormat.RGB8SNorm:
+                case TextureFormat.RGB8I:
+                case TextureFormat.RGB8UI:
+                case TextureFormat.RGB16I:
+                case TextureFormat.RGB16UI:
+                case TextureFormat.RGB16F:
+                case TextureFormat.RGB32I:
+                case TextureFormat.RGB32UI:
+                case TextureFormat.RGB32F:
+                case TextureFormat.R3G3B2:
+                case TextureFormat.R5G6B5:
+                case TextureFormat.R11G11B10F:
+                    return Rise.PixelFormat.RGB;
+                case TextureFormat.RGBA:
+                case TextureFormat.RGBA8:
+                case TextureFormat.RGBA8SNorm:
+                case TextureFormat.RGBA16F:
+                case TextureFormat.RGBA32F:
+                case TextureFormat.RGBA8I:
+                case TextureFormat.RGBA8UI:
+                case TextureFormat.RGBA16I:
+                case TextureFormat.RGBA16UI:
+                case TextureFormat.RGBA32I:
+                case TextureFormat.RGBA32UI:
+                case TextureFormat.RGBA2:
+                case TextureFormat.RGBA4:
+                case TextureFormat.RGB5A1:
+                case TextureFormat.RGB10A2:
+                case TextureFormat.RGB10A2UI:
+                    return Rise.PixelFormat.RGBA;
+                default:
+                    throw new Exception("Unexpected pixel format.");
+            }
+        }*/
     }
 
     public enum PixelType : GLEnum

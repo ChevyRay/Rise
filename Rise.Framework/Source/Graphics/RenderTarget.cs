@@ -19,6 +19,18 @@ namespace Rise
             id = GL.GenFramebuffer();
             Width = width;
             Height = height;
+
+            /*uint dep = GL.GenTexture();
+            GL.BindTexture(TextureTarget.Texture2D, dep);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.MinFilter, (int)MinFilter.Nearest);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.MagFilter, (int)MagFilter.Nearest);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.WrapS, (int)TextureWrap.ClampToEdge);
+            GL.TexParameterI(TextureTarget.Texture2D, TextureParam.WrapT, (int)TextureWrap.ClampToEdge);
+            GL.TexImage2D(TextureTarget.Texture2D, 0, TextureFormat.Depth32, width, height, 0, PixelFormat.Depth, PixelType.Float, IntPtr.Zero);
+
+            Bind(this);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, TextureTarget.Texture2D, dep, 0);
+            */
         }
         public RenderTarget(Texture texture) : this(texture.Width, texture.Height)
         {
@@ -26,14 +38,30 @@ namespace Rise
         }
         public RenderTarget(int width, int height, Texture depthTexture, params Texture[] textures) : this(width, height)
         {
-            SetDepthTexture(depthTexture);
             for (int i = 0; i < textures.Length; ++i)
                 SetTexture(i, textures[i]);
+            SetDepthTexture(depthTexture);
         }
 
         protected override void Dispose()
         {
             GL.DeleteFramebuffer(id);
+        }
+
+        public void BlitTextureTo(RenderTarget target, int textureNum, BlitFilter filter, RectangleI rect)
+        {
+            if (textures[textureNum] == null)
+                throw new Exception("RenderTarget does not have a texture in slot: " + textureNum);
+
+            Bind(null);
+            GL.BindFramebuffer(FramebufferTarget.Read, id);
+            GL.BindFramebuffer(FramebufferTarget.Draw, target != null ? target.id : 0);
+            GL.ReadBuffer((ReadBuffer)((uint)ReadBuffer.Color0 + textureNum));
+            GL.BlitFramebuffer(new RectangleI(Width, Height), rect, BufferBit.Color, filter);
+        }
+        public void BlitTextureTo(RenderTarget target, int textureNum, BlitFilter filter, int x, int y)
+        {
+            BlitTextureTo(target, textureNum, filter, new RectangleI(x, y, Width, Height));
         }
 
         public void Clear(Color4 color)
@@ -55,8 +83,10 @@ namespace Rise
         {
             if (n < 0 || n >= textures.Length)
                 throw new ArgumentOutOfRangeException(nameof(n));
-            //if (texture.Width != Width || texture.Height != Height)
-            //    throw new Exception("Texture size must be the same as RenderTarget.");
+            if (texture.Width != Width || texture.Height != Height)
+                throw new Exception("Texture size must be the same as RenderTarget.");
+            if (texture.Format.PixelFormat() == PixelFormat.Depth)
+                throw new Exception("Texture attachment cannot be a depth texture.");
 
             Bind(this);
             textures[n] = texture;
@@ -69,11 +99,10 @@ namespace Rise
 
         public void SetDepthTexture(Texture texture)
         {
-            //if (texture.Width != Width || texture.Height != Height)
-            //    throw new Exception("Texture size must be the same as RenderTarget.");
-
             if (texture != null)
             {
+                if (texture.Width != Width || texture.Height != Height)
+                    throw new Exception("Texture size must be the same as RenderTarget.");
                 if (texture.Format.PixelFormat() != PixelFormat.Depth)
                     throw new Exception("Texture is not a depth texture.");
                 Bind(this);

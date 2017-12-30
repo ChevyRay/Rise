@@ -37,6 +37,9 @@ namespace Rise.PlatformSDL.SDL2
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GetPerformanceCounter")]
         public static extern UInt64 GetPerformanceCounter();
 
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GL_GetAttribute")]
+        public static extern int GLGetAttribute(GLAttr attr, out int value);
+
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GL_SetAttribute")]
         public static extern int GLSetAttribute(GLAttr attr, int value);
 

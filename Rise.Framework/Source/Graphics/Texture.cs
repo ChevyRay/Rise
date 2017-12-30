@@ -232,6 +232,10 @@ namespace Rise
             Format = textureFormat;
             Width = w;
             Height = h;
+
+            if (pixelFormat == PixelFormat.Depth)
+                type = PixelType.Float;
+
             MakeCurrent();
             GL.TexImage2D(TextureTarget.Texture2D, 0, Format, w, h, 0, pixelFormat, type, data);
         }
