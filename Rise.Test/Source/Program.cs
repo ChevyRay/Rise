@@ -33,11 +33,12 @@ namespace Rise.Test
             var cubeMesh = Mesh3D.CreateCube(Vector3.One, Color4.White);
 
             //Create the g-buffer
+            var gDepth = new Texture(screenW, screenH, TextureFormat.Depth);
             var gColor = new Texture(screenW, screenH, TextureFormat.RGB);
             var gNormal = new Texture(screenW, screenH, TextureFormat.RGB16F);
             var gPosition = new Texture(screenW, screenH, TextureFormat.RGB32F);
-            var gDepth = new Texture(screenW, screenH, TextureFormat.R);
-            var gBuffer = new RenderTarget(screenW, screenH, null, gColor, gNormal, gPosition, gDepth);
+            var gZ = new Texture(screenW, screenH, TextureFormat.R);
+            var gBuffer = new RenderTarget(screenW, screenH, gDepth, gColor, gNormal, gPosition, gZ);
 
             //View
             var scene = new Scene(screenW, screenH);

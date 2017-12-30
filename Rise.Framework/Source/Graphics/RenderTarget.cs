@@ -35,11 +35,11 @@ namespace Rise
             glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1024, 768);
             glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthrenderbuffer);*/
 
-            Bind(this);
+            /*Bind(this);
             uint dep = GL.GenRenderbuffer();
             GL.BindRenderbuffer(dep);
             GL.RenderbufferStorage(TextureFormat.Depth, width, height);
-            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, TextureAttachment.Depth, dep);
+            GL.FramebufferRenderbuffer(FramebufferTarget.Framebuffer, TextureAttachment.Depth, dep);*/
         }
         public RenderTarget(Texture texture) : this(texture.Width, texture.Height)
         {
@@ -47,7 +47,7 @@ namespace Rise
         }
         public RenderTarget(int width, int height, Texture depthTexture, params Texture[] textures) : this(width, height)
         {
-            //SetDepthTexture(depthTexture);
+            SetDepthTexture(depthTexture);
             for (int i = 0; i < textures.Length; ++i)
                 SetTexture(i, textures[i]);
         }
