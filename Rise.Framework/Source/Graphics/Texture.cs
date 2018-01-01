@@ -256,71 +256,7 @@ namespace Rise
 
         void MakeCurrent()
         {
-            if (binded[0] != this)
-            {
-                binded[0] = this;
-                GL.ActiveTexture(0);
-                GL.BindTexture(TextureTarget.Texture2D, id);
-            }
-        }
-
-        internal int Bind()
-        {
-            //If we're marked for unbinding, unmark us
-            unbind.Remove(this);
-
-            //If we're already binded, return our slot
-            int i = Array.IndexOf(binded, this);
-            if (i >= 0)
-                return i;
-
-            //If we're not already binded, bind us and return the slot
-            for (i = 0; i < binded.Length; ++i)
-            {
-                if (binded[i] == null)
-                {
-                    binded[i] = this;
-                    GL.ActiveTexture((uint)i);
-                    GL.BindTexture(TextureTarget.Texture2D, id);
-                    return i;
-                }
-            }
-
-            throw new Exception("You have exceeded the maximum amount of texture bindings: " + GL.MaxTextureUnits);
-        }
-
-        internal static void MarkAllForUnbinding()
-        {
-            for (int i = 0; i < binded.Length; ++i)
-                if (binded[i] != null)
-                    unbind.Add(binded[i]);
-        }
-
-        internal static void UnbindMarked()
-        {
-            for (int i = 0; i < binded.Length; ++i)
-            {
-                if (binded[i] != null && unbind.Contains(binded[i]))
-                {
-                    binded[i] = null;
-                    GL.ActiveTexture((uint)i);
-                    GL.BindTexture(TextureTarget.Texture2D, 0);
-                }
-            }
-        }
-
-        internal static void UnbindAll()
-        {
-            unbind.Clear();
-            for (int i = 0; i < binded.Length; ++i)
-            {
-                if (binded[i] != null)
-                {
-                    binded[i] = null;
-                    GL.ActiveTexture((uint)i);
-                    GL.BindTexture(TextureTarget.Texture2D, 0);
-                }
-            }
+            TextureBindings.MakeCurrent(id, TextureTarget.Texture2D);
         }
     }
 }

@@ -1016,7 +1016,18 @@ namespace Rise.OpenGL
         Texture2D = 0x0DE1,
         Texture3D = 0x806F,
         Texture2DArray = 0x8C1A,
-        TextureCubeMap = 0x8513
+        TextureCubeMap = 0x8513,
+        TextureCubeMapPosX = 0x8515,
+        TextureCubeMapNegX = 0x8516,
+        TextureCubeMapPosY = 0x8517,
+        TextureCubeMapNegY = 0x8518,
+        TextureCubeMapPosZ = 0x8519,
+        TextureCubeMapNegZ = 0x851A,
+    }
+
+    public enum TextureSide : GLEnum
+    {
+        
     }
 
     public enum TextureParam : GLEnum
@@ -1123,7 +1134,8 @@ namespace Rise.OpenGL
         Vec4 = 0x8B52,
         Mat3x2 = 0x8B67,
         Mat4 = 0x8B5C,
-        Sampler2D = 0x8B5E
+        Sampler2D = 0x8B5E,
+        SamplerCube = 0x8B60,
     }
 
     public enum DrawBuffer : GLEnum

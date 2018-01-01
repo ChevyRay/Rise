@@ -56,6 +56,8 @@
     <Compile Include="Source\Graphics\Mesh.cs" />
     <Compile Include="Source\Graphics\Vertex3D.cs" />
     <Compile Include="Source\Graphics\Mesh3D.cs" />
+    <Compile Include="Source\Graphics\CubeMap.cs" />
+    <Compile Include="Source\Graphics\TextureBindings.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
