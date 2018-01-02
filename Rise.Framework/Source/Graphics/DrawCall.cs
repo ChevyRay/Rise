@@ -136,10 +136,6 @@ namespace Rise
             //Make sure the render target is binded
             RenderTarget.Bind(Target);
 
-            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-            if (status != FramebufferStatus.Complete)
-                Console.WriteLine(status);
-
             //Set render target
             if (state.Target != Target)
             {

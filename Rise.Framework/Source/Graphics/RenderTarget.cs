@@ -4,12 +4,6 @@ namespace Rise
 {
     public class RenderTarget : ResourceHandle
     {
-        struct RenderTexture
-        {
-            public uint ID;
-            public TextureTarget Target;
-        }
-
         static RenderTarget binded;
         static DrawBuffer[] drawBuffers = new DrawBuffer[16];
 
@@ -18,7 +12,7 @@ namespace Rise
         public Texture DepthTexture { get; private set; }
 
         internal uint id;
-        RenderTexture[] textures = new RenderTexture[16];
+        Texture[] textures = new Texture[16];
 
         public RenderTarget(int width, int height)
         {
@@ -65,36 +59,30 @@ namespace Rise
             GL.Clear(BufferBit.Color | BufferBit.Depth);
         }
 
-        /*public Texture GetTexture(int n)
+        void CheckStatus()
         {
-            if (n < 0 || n >= textures.Length)
-                throw new ArgumentOutOfRangeException(nameof(n));
-
-            return textures[n];
-        }*/
-
-        void SetTexture(int n, uint texID, TextureTarget texTarget)
-        {
-            if (n < 0 || n >= textures.Length)
-                throw new ArgumentOutOfRangeException(nameof(n));
-            Bind(this);
-            textures[n].ID = texID;
-            textures[n].Target = texTarget;
-            var col = (TextureAttachment)((uint)TextureAttachment.Color0 + n);
-            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, col, texTarget, texID, 0);
-
-            //TODO: probably don't need to do this for every one!?
-            UpdateDrawBuffers();
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (status != FramebufferStatus.Complete)
+                throw new Exception("Invalid RenderTarget: " + status);
         }
 
         public void SetTexture(int n, Texture texture)
         {
+            if (n < 0 || n >= textures.Length)
+                throw new ArgumentOutOfRangeException(nameof(n));
             if (texture.Width != Width || texture.Height != Height)
                 throw new Exception("Texture size must be the same as RenderTarget.");
             if (texture.Format.PixelFormat() == PixelFormat.Depth)
                 throw new Exception("Texture attachment cannot be a depth texture.");
 
-            SetTexture(n, texture.ID, texture.BindTarget);
+            Bind(this);
+            textures[n] = texture;
+            var col = (TextureAttachment)((uint)TextureAttachment.Color0 + n);
+            GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, col, texture.DataTarget, texture.ID, 0);
+
+            //TODO: probably don't need to do this for every one!?
+            UpdateDrawBuffers();
+            CheckStatus();
         }
 
         public void SetDepthTexture(Texture texture)
@@ -113,6 +101,10 @@ namespace Rise
 
                 DepthTexture = texture;
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, texture.BindTarget, texture.ID, 0);
+            
+            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
+            if (status != FramebufferStatus.Complete)
+                throw new Exception("Invalid RenderTarget: " + status);
             }
             else if (DepthTexture != null)
             {
@@ -127,7 +119,7 @@ namespace Rise
             //Pipe each color output into its corresponding texture
             int num = 0;
             for (uint i = 0; i < drawBuffers.Length; ++i)
-                if (textures[i].ID != 0)
+                if (textures[i] != null)
                     drawBuffers[num++] = (DrawBuffer)((uint)DrawBuffer.Color0 + i);
             GL.DrawBuffers(num, drawBuffers);
         }
