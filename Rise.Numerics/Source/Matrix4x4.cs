@@ -672,15 +672,9 @@ namespace Rise
             float num = 1f / (float)Math.Tan(fov * 0.5f);
             float num9 = num / aspect;
             result.M11 = num9;
-            result.M12 = 0f;
-            result.M13 = 0f;
-            result.M14 = 0f;
+            result.M12 = result.M13 = result.M14 = 0f;
             result.M22 = num;
-            result.M21 = 0f;
-            result.M23 = 0f;
-            result.M24 = 0f;
-            result.M31 = 0f;
-            result.M32 = 0f;
+            result.M21 = result.M23 = result.M24 = result.M31 = result.M32 = 0f;
             result.M33 = far / (near - far);
             result.M34 = -1;
             result.M41 = result.M42 = result.M44 = 0;

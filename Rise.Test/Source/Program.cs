@@ -98,12 +98,16 @@ namespace Rise.Test
             }
             void Render()
             {
+                int modelID = draw.Material.GetIndex("ModelMatrix");
+                int mvpID = draw.Material.GetIndex("ModelViewProjectionMatrix");
+                int textureID = draw.Material.GetIndex("Texture");
+
                 draw.Clear(0x1f171fff);
                 foreach (var model in scene.Models)
                 {
-                    draw.Material.SetMatrix4x4("ModelMatrix", model.Matrix);
-                    draw.Material.SetMatrix4x4("ModelViewProjectionMatrix", model.MvpMatrix);
-                    draw.Material.SetTexture("Texture", model.Texture);
+                    draw.Material.SetMatrix4x4(modelID, model.Matrix);
+                    draw.Material.SetMatrix4x4(mvpID, model.MvpMatrix);
+                    draw.Material.SetTexture(textureID, model.Texture);
                     draw.Mesh = model.Mesh;
                     draw.Perform();
                 }
@@ -132,6 +136,7 @@ namespace Rise.Test
         public Scene(int width, int height)
         {
             projMatrix = Matrix4x4.CreatePerspectiveFOV(70f * Calc.Rad, (float)width / height, 1f, 100f);
+            //projMatrix = Matrix4x4.CreatePerspective(width, height, 1f, 100f);
         }
 
         public void Add(Model model)
