@@ -83,7 +83,7 @@ namespace Rise
         public Texture Val;
         public override void Upload()
         {
-            int slot = TextureBindings.Bind(Val.id, TextureTarget.Texture2D);
+            int slot = Texture.Bind(Val.ID, Val.Target);
             GL.Uniform1I(Def.Loc, slot);
         }
     }
@@ -92,7 +92,7 @@ namespace Rise
         public CubeMap Val;
         public override void Upload()
         {
-            int slot = TextureBindings.Bind(Val.id, TextureTarget.TextureCubeMap);
+            int slot = Texture.Bind(Val.id, TextureTarget.TextureCubeMap);
             GL.Uniform1I(Def.Loc, slot);
         }
     }
@@ -111,7 +111,7 @@ namespace Rise
         internal void Upload(bool uploadAll)
         {
             //Mark all currently binded textures to be unbinded
-            TextureBindings.MarkAllForUnbinding();
+            Texture.MarkAllForUnbinding();
 
             //Upload all the uniform values
             for (int i = 0; i < uniforms.Length; ++i)
@@ -126,7 +126,7 @@ namespace Rise
 
             //All textures not used by this material will be unbinded
             //But all textures that were already binded will remain so
-            TextureBindings.UnbindMarked();
+            Texture.UnbindMarked();
         }
 
         T GetUniform<T>(ref string name, UniformType type) where T : UniformValue, new()

@@ -2,6 +2,16 @@
 using Rise.OpenGL;
 namespace Rise
 {
+    public enum CubeMapSide : uint
+    {
+        PosX = TextureTarget.TextureCubeMapPosX,
+        NegX = TextureTarget.TextureCubeMapNegX,
+        PosY = TextureTarget.TextureCubeMapPosY,
+        NegY = TextureTarget.TextureCubeMapNegY,
+        PosZ = TextureTarget.TextureCubeMapPosZ,
+        NegZ = TextureTarget.TextureCubeMapNegZ,
+    }
+
     public class CubeMap : ResourceHandle
     {
         internal uint id;
@@ -86,7 +96,7 @@ namespace Rise
 
         void MakeCurrent()
         {
-            TextureBindings.MakeCurrent(id, TextureTarget.TextureCubeMap);
+            Texture.MakeCurrent(id, TextureTarget.TextureCubeMap);
         }
     }
 }

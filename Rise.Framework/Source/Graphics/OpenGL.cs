@@ -1025,11 +1025,6 @@ namespace Rise.OpenGL
         TextureCubeMapNegZ = 0x851A,
     }
 
-    public enum TextureSide : GLEnum
-    {
-        
-    }
-
     public enum TextureParam : GLEnum
     {
         BaseLevel = 0x813C,

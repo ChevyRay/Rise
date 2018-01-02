@@ -46,7 +46,7 @@
     <Compile Include="Source\Graphics\RenderTarget.cs" />
     <Compile Include="Source\Graphics\Renderer.cs" />
     <Compile Include="Source\Graphics\Shader.cs" />
-    <Compile Include="Source\Graphics\Texture.cs" />
+    <Compile Include="Source\Graphics\Texture2D.cs" />
     <Compile Include="Source\Graphics\Vertex2D.cs" />
     <Compile Include="Source\Input\Joystick.cs" />
     <Compile Include="Source\Input\KeyCode.cs" />
@@ -57,7 +57,7 @@
     <Compile Include="Source\Graphics\Vertex3D.cs" />
     <Compile Include="Source\Graphics\Mesh3D.cs" />
     <Compile Include="Source\Graphics\CubeMap.cs" />
-    <Compile Include="Source\Graphics\TextureBindings.cs" />
+    <Compile Include="Source\Graphics\Texture.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

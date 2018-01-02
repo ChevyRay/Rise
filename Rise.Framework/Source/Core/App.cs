@@ -133,7 +133,7 @@ namespace Rise
                             Mouse.PostUpdate();
                             Keyboard.PostUpdate();
 
-                            TextureBindings.UnbindAll();
+                            Texture.UnbindAll();
 
                             DrawCall.Begin();
                             OnRender?.Invoke();
