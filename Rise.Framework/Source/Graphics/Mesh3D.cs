@@ -370,5 +370,65 @@ namespace Rise
         {
             return CreateSphere(radius, segments, segments, Color4.White);
         }
+
+        public static Mesh3D CreateCylinder(float radius, float height, int numSegments, bool capped)
+        {
+            float lastx = 0f;
+            float lastz = 0f;
+            float lastv = 0f;
+            ++numSegments;
+
+            var mesh = new Mesh3D();
+
+            if (capped)
+            {
+                mesh.AddVertex(new Vertex3D(new Vector3(0, 0 - (height / 2.0f), 0), new Vector3(0f, -1f, 0f), new Vector2(0.5f, 0.5f)));
+                mesh.AddVertex(new Vertex3D(new Vector3(0, height - (height / 2.0f), 0), new Vector3(0f, 1f, 0f), new Vector2(0.5f, 0.5f)));
+            }
+
+            for (int i = 0; i < numSegments; i++)
+            {
+                float v = i / (float)(numSegments - 1);
+                float pos = (Calc.Tau / (numSegments-1)) * i;
+                float x = Calc.Sin(pos);
+                float z = Calc.Cos(pos);
+                mesh.AddVertex(new Vertex3D(new Vector3(x*radius, 0 - (height / 2.0f), z*radius), new Vector3(x, 0f, z), new Vector2(v, 0f)));
+                mesh.AddVertex(new Vertex3D(new Vector3(x*radius, height - (height / 2.0f), z*radius), new Vector3(x, 0f, z), new Vector2(v, 1f)));
+                if (capped)
+                {
+                    mesh.AddVertex(new Vertex3D(new Vector3(x*radius, 0 - (height / 2.0f), z*radius), new Vector3(0f, -1f, 0f), new Vector2((0.5f + z * 0.5f), (0.5f + x * 0.5f))));
+                    mesh.AddVertex(new Vertex3D(new Vector3(x*radius, height - (height / 2.0f), z*radius), new Vector3(0f, 1f, 0f), new Vector2((0.5f + z * 0.5f), (0.5f + x * 0.5f))));
+                }
+                lastx = x;
+                lastz = z;          
+                lastv = v;
+            }
+
+
+            int vo = 2;
+            int vi = 1;
+            if (capped)
+            {
+                vi = 3;
+                vo = 6;
+            }
+
+            for (int i = 1 ; i <= numSegments - 1; i++)
+            {
+                mesh.AddIndices(vo, vo - vi, vo - vi - 1);
+                mesh.AddIndices(vo, vo + 1, vo - vi);
+                vo += 2;
+
+                if (capped)
+                {
+                    mesh.AddIndices(vo, vo - vi - 1, 0);
+                    mesh.AddIndices(1, vo-vi, vo + 1);
+                    vo += 2;
+                }
+            }
+
+            mesh.Update();
+            return mesh;
+        }
     }
 }
