@@ -31,9 +31,10 @@ namespace Rise.Test
             var shaderDepth = Shader.FromFile("Assets/basic_3d_depth.glsl");
             var shaderPos = Shader.FromFile("Assets/basic_3d_position.glsl");
             var pinkSquare = new Texture2D("Assets/pink_square.png", true);
-            //var cubeMesh = Mesh3D.CreateBox(Vector3.One, Color4.White);
-            //var cubeMesh = Mesh3D.CreateSphere(0.5f, 10, Color4.White);
-            var cubeMesh = Mesh3D.CreateCylinder(0.5f, 1f, 10, true);
+            //var mesh = Mesh3D.CreateBox(Vector3.One, Color4.White);
+            //var mesh = Mesh3D.CreateSphere(0.5f, 10, Color4.White);
+            //var mesh = Mesh3D.CreateCylinder(0.5f, 1f, 10, true);
+            var mesh = Mesh3D.CreateCone(0.5f, 2f, 10);
 
             //Create the g-buffer
             var gDepth = new Texture2D(screenW, screenH, TextureFormat.Depth);
@@ -48,12 +49,12 @@ namespace Rise.Test
             var viewRotPos = Vector2.Zero;
 
             //Create a model
-            var cube = new Model(cubeMesh, pinkSquare);
+            var cube = new Model(mesh, pinkSquare);
             cube.Scale = new Vector3(2f, 0.75f, 1f);
             scene.Add(cube);
 
             //Create a model
-            cube = new Model(cubeMesh, pinkSquare);
+            cube = new Model(mesh, pinkSquare);
             cube.Scale = new Vector3(0.75f);
             cube.Position = new Vector3(0f, 0.5f, -2f);
             scene.Add(cube);

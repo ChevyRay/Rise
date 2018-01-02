@@ -371,12 +371,12 @@ namespace Rise
             return CreateSphere(radius, segments, segments, Color4.White);
         }
 
-        public static Mesh3D CreateCylinder(float radius, float height, int numSegments, bool capped)
+        public static Mesh3D CreateCylinder(float radius, float height, int segments, bool capped)
         {
             float lastx = 0f;
             float lastz = 0f;
             float lastv = 0f;
-            ++numSegments;
+            ++segments;
 
             var mesh = new Mesh3D();
 
@@ -386,10 +386,10 @@ namespace Rise
                 mesh.AddVertex(new Vertex3D(new Vector3(0, height - (height / 2.0f), 0), new Vector3(0f, 1f, 0f), new Vector2(0.5f, 0.5f)));
             }
 
-            for (int i = 0; i < numSegments; i++)
+            for (int i = 0; i < segments; i++)
             {
-                float v = i / (float)(numSegments - 1);
-                float pos = (Calc.Tau / (numSegments-1)) * i;
+                float v = i / (float)(segments - 1);
+                float pos = (Calc.Tau / (segments-1)) * i;
                 float x = Calc.Sin(pos);
                 float z = Calc.Cos(pos);
                 mesh.AddVertex(new Vertex3D(new Vector3(x*radius, 0 - (height / 2.0f), z*radius), new Vector3(x, 0f, z), new Vector2(v, 0f)));
@@ -413,7 +413,7 @@ namespace Rise
                 vo = 6;
             }
 
-            for (int i = 1 ; i <= numSegments - 1; i++)
+            for (int i = 1; i <= segments - 1; i++)
             {
                 mesh.AddIndices(vo, vo - vi, vo - vi - 1);
                 mesh.AddIndices(vo, vo + 1, vo - vi);
@@ -425,6 +425,48 @@ namespace Rise
                     mesh.AddIndices(1, vo-vi, vo + 1);
                     vo += 2;
                 }
+            }
+
+            mesh.Update();
+            return mesh;
+        }
+
+        public static Mesh3D CreateCone(float radius, float height, int numSegments)
+        {
+            float lastx = 0;
+            float lastz = 0;
+
+            numSegments *= 2;
+            if ((numSegments % 2) == 0)
+                numSegments++;
+
+            var mesh = new Mesh3D();
+            mesh.AddVertex(new Vertex3D(new Vector3(0f, height / -2f, 0f), new Vector3(0f, -1f, 0f), new Vector2(0.5f, 0.5f)));
+
+            for (int i = 0 ; i < numSegments; i++)
+            {
+                float pos = (Calc.Tau / (numSegments - 1)) * i;
+                float x = Calc.Sin(pos);
+                float z = Calc.Cos(pos);
+
+                if ((i % 2) == 0)
+                {
+                    mesh.AddVertex(new Vertex3D(new Vector3(x * radius, height / -2f, z * radius), new Vector3(x, 0f, z), new Vector2(0.5f + z * 0.5f, 0.5f + x *0.5f)));
+                    mesh.AddVertex(new Vertex3D(new Vector3(x * radius, height / -2f, z * radius), new Vector3(0f, -1f, 0f), new Vector2(0.5f + z * 0.5f, 0.5f + x * 0.5f)));
+                }
+                else
+                    mesh.AddVertex(new Vertex3D(new Vector3(0f, height - height / 2f, 0f), new Vector3(0f, 1f, 0f), new Vector2(0.5f, 0.5f)));
+
+                lastx = x;
+                lastz = z;
+            }
+
+            int vo = 4;
+            for (int i = 1; i <= (numSegments - 1) / 2; i++)
+            {
+                mesh.AddIndices(vo, vo - 1, vo - 3);
+                mesh.AddIndices(vo + 1, vo - 2, 0);
+                vo += 3;
             }
 
             mesh.Update();
