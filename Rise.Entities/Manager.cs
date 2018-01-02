@@ -14,12 +14,12 @@ namespace Rise.Entities
         bool cleanup;
         bool changeLock;
 
-        void ComponentAdded(Component component)
+        internal void ComponentAdded(Component component)
         {
             OnComponentAdded?.Invoke(component);
         }
 
-        void ComponentRemoved(Component component)
+        internal void ComponentRemoved(Component component)
         {
             OnComponentRemoved?.Invoke(component);
         }
@@ -32,8 +32,6 @@ namespace Rise.Entities
             changeLock = true;
 
             Scene = scene;
-            scene.OnComponentAdded += ComponentAdded;
-            scene.OnComponentRemoved += ComponentRemoved;
             OnAdded?.Invoke();
 
             changeLock = false;
@@ -48,8 +46,6 @@ namespace Rise.Entities
 
             var scene = Scene;
             Scene = null;
-            scene.OnComponentAdded -= ComponentAdded;
-            scene.OnComponentRemoved -= ComponentRemoved;
             OnRemoved?.Invoke(scene);
 
             changeLock = false;

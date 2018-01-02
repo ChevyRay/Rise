@@ -4,9 +4,6 @@ namespace Rise.Entities
 {
     public class Scene
     {
-        internal event Action<Component> OnComponentAdded;
-        internal event Action<Component> OnComponentRemoved;
-
         List<Manager> managers = new List<Manager>();
         List<Entity> entities = new List<Entity>();
         bool cleanupEntities;
@@ -20,12 +17,14 @@ namespace Rise.Entities
 
         internal void ComponentAdded(Component component)
         {
-            OnComponentAdded?.Invoke(component);
+            for (int i = 0; i < managers.Count; ++i)
+                managers[i]?.ComponentAdded(component);
         }
 
         internal void ComponentRemoved(Component component)
         {
-            OnComponentRemoved?.Invoke(component);
+            for (int i = managers.Count - 1; i > 0; --i)
+                managers[i]?.ComponentRemoved(component);
         }
 
         internal void TriggerCleanupManagers()
