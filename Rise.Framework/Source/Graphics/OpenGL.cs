@@ -1292,7 +1292,6 @@ namespace Rise
         DepthStencil = 0x84F9,
         Depth24Stencil8 = 0x88F0,
 
-
         //Red textures
         R = 0x1903,
         R8 = 0x8229,

@@ -37,7 +37,7 @@ namespace Rise.Test
             var gDepth = new Texture2D(screenW, screenH, TextureFormat.Depth);
             var gColor = new Texture2D(screenW, screenH, TextureFormat.RGB);
             var gNormal = new Texture2D(screenW, screenH, TextureFormat.RGB16F);
-            var gZ = new Texture2D(screenW, screenH, TextureFormat.R);
+            var gZ = new Texture2D(screenW, screenH, TextureFormat.R32F);
             var gBuffer = new RenderTarget(screenW, screenH, gDepth, gColor, gNormal, gZ);
 
             //View

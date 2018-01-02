@@ -15,6 +15,8 @@ namespace Rise
         }
         public Texture2D(Bitmap bitmap) : this(TextureFormat.RGBA)
         {
+            Width = bitmap.Width;
+            Height = bitmap.Height;
             SetPixels(bitmap);
         }
         public Texture2D(string file, bool premultiply) : this(TextureFormat.RGBA)
@@ -22,19 +24,27 @@ namespace Rise
             var bitmap = App.ImageLoader.LoadFile(file);
             if (premultiply)
                 bitmap.Premultiply();
+            Width = bitmap.Width;
+            Height = bitmap.Height;
             SetPixels(bitmap);
         }
         public Texture2D(int width, int height, Color4[] pixels) : this(TextureFormat.RGBA)
         {
-            SetPixels(width, height, pixels);
+            Width = width;
+            Height = height;
+            SetPixels(pixels);
         }
         public Texture2D(int width, int height, Color3[] pixels) : this(TextureFormat.RGB)
         {
-            SetPixels(width, height, pixels);
+            Width = width;
+            Height = height;
+            SetPixels(pixels);
         }
         public Texture2D(int width, int height, TextureFormat format) : this(format)
         {
-            SetPixels(width, height, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
+            Width = width;
+            Height = height;
+            SetPixels(null as byte[], 1, format.PixelFormat());
         }
 
         protected override void Dispose()
@@ -182,7 +192,7 @@ namespace Rise
             GetPixels(ref pixels, 1, PixelFormat.R);
         }*/
 
-        public void SetPixels(Bitmap bitmap)
+        /*public void SetPixels(Bitmap bitmap)
         {
             SetPixels(bitmap.Width, bitmap.Height, bitmap.Pixels);
         }
@@ -220,7 +230,7 @@ namespace Rise
 
             MakeCurrent();
             GL.TexImage2D(BindTarget, 0, Format, w, h, 0, pixelFormat, type, data);
-        }
+        }*/
 
         int GetParam(TextureParam p)
         {

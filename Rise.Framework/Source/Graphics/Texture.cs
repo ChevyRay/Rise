@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Rise.Imaging;
 using Rise.OpenGL;
 namespace Rise
 {
@@ -37,6 +38,81 @@ namespace Rise
         protected override void Dispose()
         {
             
+        }
+
+        public void SetPixels(Bitmap bitmap)
+        {
+            if (Width != bitmap.Width || Height != bitmap.Height)
+                throw new Exception("Bitmap size does not match texture.");
+            SetPixels(bitmap.Pixels);
+        }
+        public unsafe void SetPixels(Color4[] pixels)
+        {
+            if (pixels.Length < Width * Height)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (Color4* ptr = pixels)
+            GL.TexImage2D(DataTarget, 0, Format, Width, Height, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        public unsafe void SetPixels(Color3[] pixels)
+        {
+            if (pixels.Length < Width * Height)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (Color3* ptr = pixels)
+            GL.TexImage2D(DataTarget, 0, Format, Width, Height, 0, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        internal unsafe void SetPixels(byte[] pixels, int comp, PixelFormat format)
+        {
+            if (pixels != null && pixels.Length < Width * Height * comp)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (byte* ptr = pixels)
+            GL.TexImage2D(DataTarget, 0, Format, Width, Height, 0, format, PixelType.UnsignedByte, new IntPtr(ptr));
+        }
+        internal unsafe void SetPixels(float[] pixels, int comp, PixelFormat format)
+        {
+            if (pixels != null && pixels.Length < Width * Height * comp)
+                throw new Exception("Pixels array is not large enough.");
+            MakeCurrent();
+            fixed (float* ptr = pixels)
+            GL.TexImage2D(DataTarget, 0, Format, Width, Height, 0, format, PixelType.Float, new IntPtr(ptr));
+        }
+
+        public void SetPixelsRGBA(byte[] pixels)
+        {
+            SetPixels(pixels, 4, PixelFormat.RGBA);
+        }
+        public void SetPixelsRGBA(float[] pixels)
+        {
+            SetPixels(pixels, 4, PixelFormat.RGBA);
+        }
+
+        public void SetPixelsRGB(byte[] pixels)
+        {
+            SetPixels(pixels, 3, PixelFormat.RGB);
+        }
+        public void SetPixelsRGB(float[] pixels)
+        {
+            SetPixels(pixels, 3, PixelFormat.RGB);
+        }
+
+        public void SetPixelsRG(byte[] pixels)
+        {
+            SetPixels(pixels, 2, PixelFormat.RG);
+        }
+        public void SetPixelsRG(float[] pixels)
+        {
+            SetPixels(pixels, 2, PixelFormat.RG);
+        }
+
+        public void SetPixelsR(byte[] pixels)
+        {
+            SetPixels(pixels, 1, PixelFormat.R);
+        }
+        public void SetPixelsR(float[] pixels)
+        {
+            SetPixels(pixels, 1, PixelFormat.R);
         }
 
         internal void MakeCurrent()
