@@ -5,7 +5,7 @@ namespace Rise
 	{
 		#region Intersects
 
-		public static bool Intersects(ref Box a, ref Box b)
+		public static bool Intersects(ref BoundingBox a, ref BoundingBox b)
 		{
 			if (a.Min.X > b.Max.X || b.Min.X > a.Max.X)
 				return false;
@@ -15,17 +15,17 @@ namespace Rise
 				return false;
 			return true;
 		}
-		public static bool Intersects(ref Box box, ref Sphere sphere)
+		public static bool Intersects(ref BoundingBox box, ref BoundingSphere sphere)
 		{
 			Vector3 vector;
 			Vector3.Clamp(ref sphere.Center, ref box.Min, ref box.Max, out vector);
             return Vector3.DistanceSquared(ref sphere.Center, ref vector) <= sphere.Radius * sphere.Radius;
 		}
-		public static bool Intersects(ref Sphere sphere, ref Box box)
+		public static bool Intersects(ref BoundingSphere sphere, ref BoundingBox box)
 		{
 			return Intersects(ref box, ref sphere);
 		}
-		public static bool Intersects(ref Box box, ref Plane plane)
+		public static bool Intersects(ref BoundingBox box, ref Plane plane)
 		{
 			var min = new Vector3(
 				plane.Normal.X >= 0f ? box.Min.X : box.Max.X,
@@ -45,20 +45,20 @@ namespace Rise
 				return false;
 			return true;
 		}
-		public static bool Intersects(ref Plane plane, ref Box box)
+		public static bool Intersects(ref Plane plane, ref BoundingBox box)
 		{
 			return Intersects(ref box, ref plane);
 		}
-		public static bool Intersects(ref Sphere a, ref Sphere b)
+		public static bool Intersects(ref BoundingSphere a, ref BoundingSphere b)
 		{
             return Vector3.DistanceSquared(a.Center, b.Center) < (a.Radius + b.Radius) * (a.Radius + b.Radius);
 		}
-		public static bool Intersects(ref Sphere sphere, ref Plane plane)
+		public static bool Intersects(ref BoundingSphere sphere, ref Plane plane)
 		{
 			float dist = Vector3.Dot(ref plane.Normal, ref sphere.Center) + plane.Distance;
 			return dist < sphere.Radius && dist > -sphere.Radius;
 		}
-		public static bool Intersects(ref Plane plane, ref Sphere sphere)
+		public static bool Intersects(ref Plane plane, ref BoundingSphere sphere)
 		{
 			return Intersects(ref sphere, ref plane);
 		}
@@ -67,16 +67,16 @@ namespace Rise
 
 		#region Contains
 
-		public static bool Contains(ref Box box, ref Vector3 point)
+		public static bool Contains(ref BoundingBox box, ref Vector3 point)
 		{
 			return point.X > box.Min.X && point.X > box.Min.Y && point.X > box.Min.Z && point.X < box.Max.X && point.X < box.Max.Y && point.X < box.Max.Z;
 		}
-		public static bool Contains(ref Box a, ref Box b)
+		public static bool Contains(ref BoundingBox a, ref BoundingBox b)
 		{
 			return b.Min.X >= a.Min.X && b.Min.Y >= a.Min.Y && b.Min.Z >= a.Min.Z
 			    && b.Max.X <= a.Max.X && b.Max.Y <= a.Max.Y && b.Max.Z <= a.Max.Z;
 		}
-		public static bool Contains(ref Box box, ref Sphere sphere)
+		public static bool Contains(ref BoundingBox box, ref BoundingSphere sphere)
 		{
 			Vector3 vector;
 			Vector3.Clamp(ref sphere.Center, ref box.Min, ref box.Max, out vector);
@@ -92,16 +92,16 @@ namespace Rise
 				&& sphere.Center.Z <= box.Max.Z - sphere.Radius
 				&& box.Max.Z - box.Min.Z > sphere.Radius;
 		}
-		public static bool Contains(ref Sphere sphere, ref Vector3 point)
+		public static bool Contains(ref BoundingSphere sphere, ref Vector3 point)
 		{
             return Vector3.DistanceSquared(ref sphere.Center, ref point) < sphere.Radius * sphere.Radius;
 		}
-		public static bool Contains(ref Sphere a, ref Sphere b)
+		public static bool Contains(ref BoundingSphere a, ref BoundingSphere b)
 		{
 			float distance = Vector3.Distance(ref a.Center, ref b.Center);
 			return a.Radius + b.Radius >= distance && a.Radius - b.Radius >= distance;
 		}
-		public static bool Contains(ref Sphere sphere, ref Box box)
+		public static bool Contains(ref BoundingSphere sphere, ref BoundingBox box)
 		{
 			if (!Intersects(ref box, ref sphere))
 				return false;
@@ -154,7 +154,7 @@ namespace Rise
 
 		#region Raycast
 
-		public static bool Raycast(ref Box box, ref Ray3D ray, out float dist)
+		public static bool Raycast(ref BoundingBox box, ref Ray3D ray, out float dist)
 		{
 			const float epsilon = 1e-6f;
 			float? tMin = null;
@@ -234,7 +234,7 @@ namespace Rise
 			}
 			return true;
 		}
-		public static bool Raycast(ref Sphere sphere, ref Ray3D ray, out float dist)
+		public static bool Raycast(ref BoundingSphere sphere, ref Ray3D ray, out float dist)
 		{
 			dist = 0f;
 			var diff = sphere.Center - ray.Point;
@@ -264,7 +264,7 @@ namespace Rise
 
 		#region Project
 
-		public static void Project(ref Box box, ref Vector3 point, out Vector3 result)
+		public static void Project(ref BoundingBox box, ref Vector3 point, out Vector3 result)
 		{
 			Vector3 temp;
 			Vector3.Max(ref point, ref box.Min, out temp);
@@ -276,7 +276,7 @@ namespace Rise
 			Vector3.Multiply(ref plane.Normal, dist, out result);
 			Vector3.Subtract(ref point, ref result, out result);
 		}
-		public static void Project(ref Sphere sphere, ref Vector3 point, out Vector3 result)
+		public static void Project(ref BoundingSphere sphere, ref Vector3 point, out Vector3 result)
 		{
 			Vector3.Subtract(ref point, ref sphere.Center, out result);
 			Vector3.Normalize(ref result, out result);
@@ -292,7 +292,7 @@ namespace Rise
 		{
 			return (float)Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y) + (a.Z - b.Z) * (a.Z - b.Z));
 		}
-		public static float Distance(ref Box box, ref Vector3 point)
+		public static float Distance(ref BoundingBox box, ref Vector3 point)
 		{
 			float dist = 0f;
 			if (point.X < box.Min.X)
@@ -309,11 +309,11 @@ namespace Rise
 				dist += (point.Z - box.Max.Z) * (point.Z - box.Max.Z);
 			return (float)Math.Sqrt(dist);
 		}
-		public static float Distance(ref Vector3 point, ref Box box)
+		public static float Distance(ref Vector3 point, ref BoundingBox box)
 		{
 			return Distance(ref box, ref point);
 		}
-		public static float Distance(ref Box a, ref Box b)
+		public static float Distance(ref BoundingBox a, ref BoundingBox b)
 		{
 			float dist = 0f;
 			if (a.Min.X > b.Max.X)
@@ -348,28 +348,28 @@ namespace Rise
 			}
 			return (float)Math.Sqrt(dist);
 		}
-		public static float Distance(ref Box box, ref Sphere sphere)
+		public static float Distance(ref BoundingBox box, ref BoundingSphere sphere)
 		{
 			var dist = Distance(ref box, ref sphere.Center);
 			if (dist <= sphere.Radius)
 				return 0f;
 			return dist - sphere.Radius;
 		}
-		public static float Distance(ref Sphere sphere, ref Box box)
+		public static float Distance(ref BoundingSphere sphere, ref BoundingBox box)
 		{
 			return Distance(ref box, ref sphere);
 		}
-		public static float Distance(ref Sphere sphere, ref Vector3 point)
+		public static float Distance(ref BoundingSphere sphere, ref Vector3 point)
 		{
 			float dist = Vector3.Distance(ref sphere.Center, ref point);
 			dist -= sphere.Radius;
 			return Math.Max(dist, 0f);
 		}
-		public static float Distance(ref Vector3 point, ref Sphere sphere)
+		public static float Distance(ref Vector3 point, ref BoundingSphere sphere)
 		{
 			return Distance(ref sphere, ref point);
 		}
-		public static float Distance(ref Sphere a, ref Sphere b)
+		public static float Distance(ref BoundingSphere a, ref BoundingSphere b)
 		{
 			float dist = Vector3.Distance(ref a.Center, ref b.Center);
 			dist -= a.Radius + b.Radius;
@@ -384,7 +384,7 @@ namespace Rise
 		{
 			return Distance(ref plane, ref point);
 		}
-		public static float Distance(ref Plane plane, ref Box box)
+		public static float Distance(ref Plane plane, ref BoundingBox box)
 		{
 			var min = new Vector3(
 				plane.Normal.X >= 0f ? box.Min.X : box.Max.X,
@@ -404,7 +404,7 @@ namespace Rise
 				return Math.Abs(distance);
 			return 0f;
 		}
-		public static float Distance(ref Plane plane, ref Sphere sphere)
+		public static float Distance(ref Plane plane, ref BoundingSphere sphere)
 		{
 			float dist = Distance(ref plane, ref sphere.Center);
 			if (dist <= sphere.Radius)

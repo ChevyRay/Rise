@@ -212,6 +212,37 @@ namespace Rise
                 Vector3.Normalize(ref vertices[i].Nor, out vertices[i].Nor);
         }
 
+        public void GetBoundingBox(out BoundingBox box)
+        {
+            box.Min = new Vector3(float.MaxValue);
+            box.Max = new Vector3(float.MinValue);
+            for (int i = 0; i < vertices.Length; ++i)
+            {
+                Vector3.Min(ref box.Min, ref vertices[i].Pos, out box.Min);
+                Vector3.Min(ref box.Min, ref vertices[i].Pos, out box.Min);
+            }
+        }
+        public BoundingBox GetBoundingBox()
+        {
+            BoundingBox box;
+            GetBoundingBox(out box);
+            return box;
+        }
+
+        public void GetBoundingSphere(out BoundingSphere sphere)
+        {
+            BoundingBox box;
+            GetBoundingBox(out box);
+            sphere.Center = box.Center;
+            sphere.Radius = Vector3.Distance(ref box.Min, ref sphere.Center);
+        }
+        public BoundingSphere GetBoundingSphere()
+        {
+            BoundingSphere sphere;
+            GetBoundingSphere(out sphere);
+            return sphere;
+        }
+
         public static Mesh3D CreateQuad(float w, float h, Color4 color)
         {
             var mesh = new Mesh3D(4, 6);

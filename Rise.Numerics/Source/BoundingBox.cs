@@ -1,12 +1,12 @@
 ﻿using System;
 namespace Rise
 {
-	public struct Box : IEquatable<Box>
+	public struct BoundingBox : IEquatable<BoundingBox>
 	{
 		public Vector3 Min;
 		public Vector3 Max;
 
-		public Box(Vector3 min, Vector3 max)
+		public BoundingBox(Vector3 min, Vector3 max)
 		{
 			Min = min;
 			Max = max;
@@ -29,13 +29,13 @@ namespace Rise
 
 		public override bool Equals(object obj)
 		{
-			return obj is Box && Equals((Box)obj);
+			return obj is BoundingBox && Equals((BoundingBox)obj);
 		}
-		public bool Equals(ref Box other)
+		public bool Equals(ref BoundingBox other)
 		{
 			return Min.Equals(ref other.Min) && Max.Equals(ref other.Max);
 		}
-		public bool Equals(Box other)
+		public bool Equals(BoundingBox other)
 		{
 			return Equals(ref other);
 		}
@@ -74,28 +74,28 @@ namespace Rise
 		{
 			return Geom3D.Distance(ref this, ref point);
 		}
-		public float Distance(ref Box box)
+		public float Distance(ref BoundingBox box)
 		{
 			return Geom3D.Distance(ref this, ref box);
 		}
-		public float Distance(Box box)
+		public float Distance(BoundingBox box)
 		{
 			return Geom3D.Distance(ref this, ref box);
 		}
 
-		public bool Intersects(ref Box box)
+		public bool Intersects(ref BoundingBox box)
 		{
 			return Geom3D.Intersects(ref this, ref box);
 		}
-		public bool Intersects(Box box)
+		public bool Intersects(BoundingBox box)
 		{
 			return Geom3D.Intersects(ref this, ref box);
 		}
-		public bool Intersects(ref Sphere sphere)
+		public bool Intersects(ref BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref this, ref sphere);
 		}
-		public bool Intersects(Sphere sphere)
+		public bool Intersects(BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref this, ref sphere);
 		}
@@ -116,19 +116,19 @@ namespace Rise
 		{
 			return Geom3D.Contains(ref this, ref p);
 		}
-		public bool Contains(ref Box box)
+		public bool Contains(ref BoundingBox box)
 		{
 			return Geom3D.Contains(ref this, ref box);
 		}
-		public bool Contains(Box box)
+		public bool Contains(BoundingBox box)
 		{
 			return Geom3D.Contains(ref this, ref box);
 		}
-		public bool Contains(ref Sphere sphere)
+		public bool Contains(ref BoundingSphere sphere)
 		{
 			return Geom3D.Contains(ref this, ref sphere);
 		}
-		public bool Contains(Sphere sphere)
+		public bool Contains(BoundingSphere sphere)
 		{
 			return Geom3D.Contains(ref this, ref sphere);
 		}
@@ -157,56 +157,56 @@ namespace Rise
 			return Raycast(ref ray, out point);
 		}
 
-		public static Box Conflate(ref Box a, ref Box b)
+		public static BoundingBox Conflate(ref BoundingBox a, ref BoundingBox b)
 		{
-			return new Box(new Vector3(Math.Min(a.Min.X, b.Min.X), Math.Min(a.Min.Y, b.Min.Y), Math.Min(a.Min.Z, b.Min.Z)),
+			return new BoundingBox(new Vector3(Math.Min(a.Min.X, b.Min.X), Math.Min(a.Min.Y, b.Min.Y), Math.Min(a.Min.Z, b.Min.Z)),
 			                  new Vector3(Math.Max(a.Max.X, b.Max.X), Math.Max(a.Max.Y, b.Max.Y), Math.Max(a.Max.Z, b.Max.Z)));
 		}
-		public static Box Conflate(Box a, Box b)
+		public static BoundingBox Conflate(BoundingBox a, BoundingBox b)
 		{
 			return Conflate(ref a, ref b);
 		}
 
-		public static Box CreateSize(Vector3 center, Vector3 size)
+		public static BoundingBox CreateSize(Vector3 center, Vector3 size)
 		{
 			size *= 0.5f;
-			return new Box(center - size, center + size);
+			return new BoundingBox(center - size, center + size);
 		}
-		public static Box CreateSize(Vector3 center, float size)
+		public static BoundingBox CreateSize(Vector3 center, float size)
 		{
 			return CreateSize(center, new Vector3(size, size, size));
 		}
-		public static Box CreateSize(Vector3 size)
+		public static BoundingBox CreateSize(Vector3 size)
 		{
 			return CreateSize(Vector3.Zero, size);
 		}
-		public static Box CreateSize(float size)
+		public static BoundingBox CreateSize(float size)
 		{
 			return CreateSize(Vector3.Zero, new Vector3(size, size, size));
 		}
 
-		public static Box Lerp(ref Box a, ref Box b, float t)
+		public static BoundingBox Lerp(ref BoundingBox a, ref BoundingBox b, float t)
 		{
-			return new Box(Vector3.Lerp(a.Min, b.Min, t), Vector3.Lerp(a.Max, b.Max, t));
+			return new BoundingBox(Vector3.Lerp(a.Min, b.Min, t), Vector3.Lerp(a.Max, b.Max, t));
 		}
-		public static Box Lerp(Box a, Box b, float t)
+		public static BoundingBox Lerp(BoundingBox a, BoundingBox b, float t)
 		{
 			return Lerp(ref a, ref b, t);
 		}
 
-		public static Box Bezier(ref Box a, ref Box b, ref Box c, float t)
+		public static BoundingBox Bezier(ref BoundingBox a, ref BoundingBox b, ref BoundingBox c, float t)
 		{
-			return new Box(Vector3.Bezier(a.Min, b.Min, c.Min, t), Vector3.Bezier(a.Max, b.Max, c.Max, t));
+			return new BoundingBox(Vector3.Bezier(a.Min, b.Min, c.Min, t), Vector3.Bezier(a.Max, b.Max, c.Max, t));
 		}
-		public static Box Bezier(Box a, Box b, Box c, float t)
+		public static BoundingBox Bezier(BoundingBox a, BoundingBox b, BoundingBox c, float t)
 		{
 			return Bezier(ref a, ref b, ref c, t);
 		}
-		public static Box Bezier(ref Box a, ref Box b, ref Box c, ref Box d, float t)
+		public static BoundingBox Bezier(ref BoundingBox a, ref BoundingBox b, ref BoundingBox c, ref BoundingBox d, float t)
 		{
-			return new Box(Vector3.Bezier(a.Min, b.Min, c.Min, d.Min, t), Vector3.Bezier(a.Max, b.Max, c.Max, d.Max, t));
+			return new BoundingBox(Vector3.Bezier(a.Min, b.Min, c.Min, d.Min, t), Vector3.Bezier(a.Max, b.Max, c.Max, d.Max, t));
 		}
-		public static Box Bezier(Box a, Box b, Box c, Box d, float t)
+		public static BoundingBox Bezier(BoundingBox a, BoundingBox b, BoundingBox c, BoundingBox d, float t)
 		{
 			return Bezier(ref a, ref b, ref c, ref d, t);
 		}
@@ -244,11 +244,11 @@ namespace Rise
 			p = new Vector3(Max.X, Min.Y, Min.Z);
 		}
 
-		public static bool operator ==(Box a, Box b)
+		public static bool operator ==(BoundingBox a, BoundingBox b)
 		{
 			return a.Equals(ref b);
 		}
-		public static bool operator !=(Box a, Box b)
+		public static bool operator !=(BoundingBox a, BoundingBox b)
 		{
 			return !a.Equals(ref b);
 		}

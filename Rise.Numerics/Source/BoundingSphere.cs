@@ -1,17 +1,17 @@
 ﻿using System;
 namespace Rise
 {
-	public struct Sphere : IEquatable<Sphere>
+	public struct BoundingSphere : IEquatable<BoundingSphere>
 	{
 		public Vector3 Center;
 		public float Radius;
 
-		public Sphere(Vector3 center, float radius)
+		public BoundingSphere(Vector3 center, float radius)
 		{
 			Center = center;
 			Radius = radius;
 		}
-		public Sphere(float radius)
+		public BoundingSphere(float radius)
 		{
 			Center = Vector3.Zero;
 			Radius = radius;
@@ -21,11 +21,11 @@ namespace Rise
 		{
 			return base.Equals(obj);
 		}
-		public bool Equals(ref Sphere other)
+		public bool Equals(ref BoundingSphere other)
 		{
 			return Center.Equals(ref other.Center) && Radius == other.Radius;
 		}
-		public bool Equals(Sphere other)
+		public bool Equals(BoundingSphere other)
 		{
 			return Equals(ref other);
 		}
@@ -54,19 +54,19 @@ namespace Rise
 			return result;
 		}
 
-		public bool Intersects(ref Sphere sphere)
+		public bool Intersects(ref BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref this, ref sphere);
 		}
-		public bool Intersects(Sphere sphere)
+		public bool Intersects(BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref this, ref sphere);
 		}
-		public bool Intersects(ref Box box)
+		public bool Intersects(ref BoundingBox box)
 		{
 			return Geom3D.Intersects(ref box, ref this);
 		}
-		public bool Intersects(Box box)
+		public bool Intersects(BoundingBox box)
 		{
 			return Geom3D.Intersects(ref box, ref this);
 		}
@@ -87,19 +87,19 @@ namespace Rise
 		{
 			return Geom3D.Contains(ref this, ref point);
 		}
-		public bool Contains(ref Sphere sphere)
+		public bool Contains(ref BoundingSphere sphere)
 		{
 			return Geom3D.Contains(ref this, ref sphere);
 		}
-		public bool Contains(Sphere sphere)
+		public bool Contains(BoundingSphere sphere)
 		{
 			return Geom3D.Contains(ref this, ref sphere);
 		}
-		public bool Contains(ref Box box)
+		public bool Contains(ref BoundingBox box)
 		{
 			return Geom3D.Contains(ref this, ref box);
 		}
-		public bool Contains(Box box)
+		public bool Contains(BoundingBox box)
 		{
 			return Geom3D.Contains(ref this, ref box);
 		}
@@ -128,23 +128,23 @@ namespace Rise
 			return Raycast(ref ray, out point);
 		}
 
-		public static Sphere Conflate(ref Sphere a, ref Sphere b)
+		public static BoundingSphere Conflate(ref BoundingSphere a, ref BoundingSphere b)
 		{
 			Vector3 center;
 			Vector3.Lerp(ref a.Center, ref b.Center, 0.5f, out center);
 			var radius = (Vector3.Distance(ref a.Center, ref b.Center) + a.Radius + b.Radius) * 0.5f;
-			return new Sphere(center, radius);
+			return new BoundingSphere(center, radius);
 		}
-		public static Sphere Conflate(Sphere a, Sphere b)
+		public static BoundingSphere Conflate(BoundingSphere a, BoundingSphere b)
 		{
 			return Conflate(ref a, ref b);
 		}
 
-		public static bool operator ==(Sphere a, Sphere b)
+		public static bool operator ==(BoundingSphere a, BoundingSphere b)
 		{
 			return a.Equals(ref b);
 		}
-		public static bool operator !=(Sphere a, Sphere b)
+		public static bool operator !=(BoundingSphere a, BoundingSphere b)
 		{
 			return !a.Equals(ref b);
 		}

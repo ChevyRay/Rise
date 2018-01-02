@@ -257,7 +257,63 @@ namespace Rise
             return result;
         }
 
-        /*public void TransformQuad(ref Quad quad, out Quad result)
+        public void TransformSphere(ref BoundingSphere sphere, out BoundingSphere result)
+        {
+            TransformPoint(ref sphere.Center, out result.Center);
+            var edge = sphere.Center;
+            edge.X += sphere.Radius;
+            TransformPoint(ref edge, out edge);
+            result.Radius = Vector3.Distance(ref result.Center, ref edge);
+        }
+
+        public void TransformBox(ref BoundingBox box, out BoundingBox result)
+        {
+            result.Min = new Vector3(float.MaxValue);
+            result.Max = new Vector3(float.MinValue);
+            Vector3 p;
+
+            box.GetP1(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP1(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP2(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP3(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP4(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP5(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP6(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+
+            box.GetP7(out p);
+            TransformPoint(ref p, out p);
+            Vector3.Min(ref p, ref result.Min, out result.Min);
+            Vector3.Max(ref p, ref result.Max, out result.Max);
+        }
+
+        public void TransformQuad(ref Quad quad, out Quad result)
         {
             TransformPoint(ref quad.A, out result.A);
             TransformPoint(ref quad.B, out result.B);
@@ -282,7 +338,7 @@ namespace Rise
             TransformQuad(ref q, out q);
             q.GetBounds(out r);
             return r;
-        }*/
+        }
 
         public void Invert(out Matrix4x4 result)
         {

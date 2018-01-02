@@ -59,13 +59,14 @@
     <Compile Include="Source\Triangle.cs" />
     <Compile Include="Source\ICopyable.cs" />
     <Compile Include="Source\Hash.cs" />
-    <Compile Include="Source\Box.cs" />
+    <Compile Include="Source\BoundingBox.cs" />
     <Compile Include="Source\Geom3D.cs" />
     <Compile Include="Source\Plane.cs" />
     <Compile Include="Source\Quaternion.cs" />
     <Compile Include="Source\Ray3D.cs" />
-    <Compile Include="Source\Sphere.cs" />
+    <Compile Include="Source\BoundingSphere.cs" />
     <Compile Include="Source\Color3.cs" />
+    <Compile Include="Source\Frustum.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

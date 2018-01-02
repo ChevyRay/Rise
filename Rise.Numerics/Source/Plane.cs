@@ -21,6 +21,11 @@ namespace Rise
         {
             
         }
+        public Plane(float a, float b, float c, float d)
+            : this(new Vector3(a, b, c), d)
+        {
+
+        }
 
 		public override bool Equals(object obj)
 		{
@@ -56,19 +61,19 @@ namespace Rise
 			return result;
 		}
 
-		public bool Intersects(ref Box box)
+		public bool Intersects(ref BoundingBox box)
 		{
 			return Geom3D.Intersects(ref box, ref this);
 		}
-		public bool Intersects(Box box)
+		public bool Intersects(BoundingBox box)
 		{
 			return Geom3D.Intersects(ref box, ref this);
 		}
-		public bool Intersects(ref Sphere sphere)
+		public bool Intersects(ref BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref sphere, ref this);
 		}
-		public bool Intersects(Sphere sphere)
+		public bool Intersects(BoundingSphere sphere)
 		{
 			return Geom3D.Intersects(ref sphere, ref this);
 		}
@@ -118,6 +123,57 @@ namespace Rise
 		{
 			return DistanceToPoint(ref p);
 		}
+
+        //returns >0 if the point is on the front side of the plane
+        public bool InFront(ref Vector3 point)
+        {
+            return point.X * Normal.X + point.Y * Normal.Y + point.Z * Normal.Z + Distance > 0f;
+        }
+        public bool GetSide(Vector3 point)
+        {
+            return InFront(ref point);
+        }
+        public bool InFront(ref BoundingBox box)
+        {
+            Vector3 pos;
+            Vector3 neg;
+            if (Normal.X >= 0)
+            {
+                pos.X = box.Max.X;
+                neg.X = box.Min.X;
+            }
+            else
+            {
+                pos.X = box.Min.X;
+                neg.X = box.Max.X;
+            }
+            if (Normal.Y >= 0)
+            {
+                pos.Y = box.Max.Y;
+                neg.Y = box.Min.Y;
+            }
+            else
+            {
+                pos.Y = box.Min.Y;
+                neg.Y = box.Max.Y;
+            }
+            if (Normal.Z >= 0)
+            {
+                pos.Z = box.Max.Z;
+                neg.Z = box.Min.Z;
+            }
+            else
+            {
+                pos.Z = box.Min.Z;
+                neg.Z = box.Max.Z;
+            }
+            var distance = Normal.X * neg.X + Normal.Y * neg.Y + Normal.Z * neg.Z + Distance;
+            return distance > 0f;
+        }
+        public bool InFront(ref BoundingSphere sphere)
+        {
+            return Vector3.Dot(ref Normal, ref sphere.Center) + Distance > sphere.Radius;
+        }
 
 		public static void Normalize(ref Plane plane, out Plane result)
 		{
