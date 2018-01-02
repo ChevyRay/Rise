@@ -84,6 +84,15 @@ namespace Rise
 			}
 		}
 
+        public void TransformPoint(ref Vector3 point, out Vector3 result)
+        {
+            float x = (Y * point.Z - Z * point.Y) * 2f;
+            float y = (Z * point.X - X * point.Z) * 2f;
+            float z = (X * point.Y - Y * point.X) * 2f;
+            result.X = point.X + x * W + (Y * z - Z * y);
+            result.Y = point.Y + y * W + (Z * x - X * z);
+            result.Z = point.Z + z * W + (X * y - Y * x);
+        }
 		public Vector3 TransformPoint(Vector3 point)
 		{
 			float x = (Y * point.Z - Z * point.Y) * 2f;

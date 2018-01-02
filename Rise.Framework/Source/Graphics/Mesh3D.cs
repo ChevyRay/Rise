@@ -243,6 +243,36 @@ namespace Rise
             return sphere;
         }
 
+        public void CenterVertices()
+        {
+            var center = Vector3.Zero;
+            for (int i = 0; i < vertexCount; ++i)
+                center += vertices[i].Pos;
+            center /= vertexCount;
+            for (int i = 0; i < vertexCount; ++i)
+                vertices[i].Pos -= center;
+        }
+
+        public void Transform(ref Matrix4x4 matrix)
+        {
+            for (int i = 0; i < vertexCount; ++i)
+                matrix.TransformPoint(ref vertices[i].Pos, out vertices[i].Pos);
+        }
+        public void Transform(Matrix4x4 matrix)
+        {
+            Transform(ref matrix);
+        }
+
+        public void Rotate(ref Quaternion rotation)
+        {
+            for (int i = 0; i < vertexCount; ++i)
+                rotation.TransformPoint(ref vertices[i].Pos, out vertices[i].Pos);
+        }
+        public void Rotate(Quaternion rotation)
+        {
+            Rotate(ref rotation);
+        }
+
         public static Mesh3D CreateQuad(float w, float h, Color4 color)
         {
             var mesh = new Mesh3D(4, 6);
