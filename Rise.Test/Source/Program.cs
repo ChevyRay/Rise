@@ -31,7 +31,8 @@ namespace Rise.Test
             var shaderDepth = Shader.FromFile("Assets/basic_3d_depth.glsl");
             var shaderPos = Shader.FromFile("Assets/basic_3d_position.glsl");
             var pinkSquare = new Texture2D("Assets/pink_square.png", true);
-            var cubeMesh = Mesh3D.CreateCube(Vector3.One, Color4.White);
+            //var cubeMesh = Mesh3D.CreateBox(Vector3.One, Color4.White);
+            var cubeMesh = Mesh3D.CreateSphere(0.5f, 10, Color4.White);
 
             //Create the g-buffer
             var gDepth = new Texture2D(screenW, screenH, TextureFormat.Depth);

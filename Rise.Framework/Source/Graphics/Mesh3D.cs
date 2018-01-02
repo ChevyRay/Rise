@@ -256,7 +256,7 @@ namespace Rise
             return mesh;
         }
 
-        public static Mesh3D CreateCube(Vector3 size, Color4 color)
+        public static Mesh3D CreateBox(Vector3 size, Color4 color)
         {
             var mesh = new Mesh3D(24, 36);
             mesh.SetVertexCount(24);
@@ -302,17 +302,73 @@ namespace Rise
             mesh.Update();
             return mesh;
         }
-        public static Mesh3D CreateCube(Vector3 size)
+        public static Mesh3D CreateBox(Vector3 size)
         {
-            return CreateCube(size, Color4.White);
+            return CreateBox(size, Color4.White);
         }
+
         public static Mesh3D CreateCube(float size, Color4 color)
         {
-            return CreateCube(new Vector3(size), Color4.White);
+            return CreateBox(new Vector3(size), Color4.White);
         }
         public static Mesh3D CreateCube(float size)
         {
-            return CreateCube(new Vector3(size), Color4.White);
+            return CreateBox(new Vector3(size), Color4.White);
+        }
+
+        public static Mesh3D CreateSphere(float radius, int segmentsW, int segmentsH, Color4 color)
+        {
+            float tdelta = 360f / segmentsW;
+            float pdelta = 180f / segmentsH;
+            ++segmentsW;
+            ++segmentsH;
+            float phi = -90f;
+            Vector3 v;
+
+            var mesh = new Mesh3D(24, 36);
+            mesh.SetVertexCount(segmentsW * segmentsH);
+            mesh.SetIndexCount((segmentsW - 1) * (segmentsH - 1) * 6);
+
+            int n = 0;
+            for (int i = 0; i < segmentsH; i++)
+            {
+                float theta = 0f;
+                for (int j = 0; j < segmentsW; j++)
+                {
+                    v.X = radius * Calc.Cos(phi * Calc.PI / 180f) * Calc.Cos(theta * Calc.PI / 180f);
+                    v.Y = radius * Calc.Sin(phi * Calc.PI / 180f);
+                    v.Z = radius * Calc.Cos(phi * Calc.PI / 180f) * Calc.Sin(theta * Calc.PI / 180f);
+                    mesh.vertices[n].Pos = v;
+                    mesh.vertices[n].Nor = v.Normalized;
+                    mesh.vertices[n].Tex = new Vector2(theta / 360f, (phi + 90f) / 180f);
+                    mesh.vertices[n].Col = color;
+                    theta += tdelta;
+                    ++n;
+                }
+                phi += pdelta;
+            }
+
+            n = 0;
+            for (int i = 0; i < segmentsH - 1; i++)
+            {
+                for (int j = 0; j < segmentsW - 1; j++)
+                {
+                    mesh.SetTriangle(n++, (i + 1) * segmentsW + j, (i + 1) * segmentsW + j + 1, i * segmentsW + j + 1);
+                    mesh.SetTriangle(n++, i * segmentsW + j + 1, i * segmentsW + j, (i + 1) * segmentsW + j);
+                }
+            }
+
+            mesh.CalculateNormals();
+            mesh.Update();
+            return mesh;
+        }
+        public static Mesh3D CreateSphere(float radius, int segments, Color4 color)
+        {
+            return CreateSphere(radius, segments, segments, color);
+        }
+        public static Mesh3D CreateSphere(float radius, int segments)
+        {
+            return CreateSphere(radius, segments, segments, Color4.White);
         }
     }
 }
