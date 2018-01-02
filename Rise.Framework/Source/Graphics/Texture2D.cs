@@ -6,15 +6,12 @@ namespace Rise
 {
     public class Texture2D : Texture
     {
-        Texture2D(TextureFormat format)
+        Texture2D(TextureFormat format) : base(GL.GenTexture(), format, TextureTarget.Texture2D, TextureTarget.Texture2D)
         {
-            ID = GL.GenTexture();
-            Target = TextureTarget.Texture2D;
             WrapX = DefaultWrapX;
             WrapY = DefaultWrapY;
             MinFilter = DefaultMinFilter;
             MagFilter = DefaultMagFilter;
-            Format = format;
         }
         public Texture2D(Bitmap bitmap) : this(TextureFormat.RGBA)
         {
@@ -37,7 +34,7 @@ namespace Rise
         }
         public Texture2D(int width, int height, TextureFormat format) : this(format)
         {
-            SetPixels(width, height, format, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
+            SetPixels(width, height, format.PixelFormat(), PixelType.UnsignedByte, IntPtr.Zero);
         }
 
         protected override void Dispose()
@@ -81,13 +78,13 @@ namespace Rise
             MagFilter = filter;
         }
 
-        public unsafe void GetBitmap(Bitmap bitmap)
+        /*public unsafe void GetBitmap(Bitmap bitmap)
         {
             if (Width != bitmap.Width)
                 throw new Exception("Bitmap width does not match.");
             if (Height != bitmap.Height)
                 throw new Exception("Bitmap height does not match.");
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             fixed (Color4* ptr = bitmap.Pixels)
                 GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
         }
@@ -102,7 +99,7 @@ namespace Rise
         {
             if (pixels.Length < Width * Height)
                 throw new Exception("Pixels array is not large enough.");
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             fixed (Color4* ptr = pixels)
                 GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
         }
@@ -117,7 +114,7 @@ namespace Rise
         {
             if (pixels.Length < Width * Height)
                 throw new Exception("Pixels array is not large enough.");
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             fixed (Color3* ptr = pixels)
                 GL.GetTexImage(TextureTarget.Texture2D, 0, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
         }
@@ -134,7 +131,7 @@ namespace Rise
                 pixels = new byte[Width * Height * comp];
             else if (pixels.Length < Width * Height * comp)
                 throw new Exception("Pixels array is not large enough.");
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             fixed (byte* ptr = pixels)
                 GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.UnsignedByte, new IntPtr(ptr));
         }
@@ -144,7 +141,7 @@ namespace Rise
                 pixels = new float[Width * Height * comp];
             else if (pixels.Length < Width * Height * comp)
                 throw new Exception("Pixels array is not large enough.");
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             fixed (float* ptr = pixels)
                 GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.Float, new IntPtr(ptr));
         }
@@ -183,7 +180,7 @@ namespace Rise
         public void GetPixelsR(ref float[] pixels)
         {
             GetPixels(ref pixels, 1, PixelFormat.R);
-        }
+        }*/
 
         public void SetPixels(Bitmap bitmap)
         {
@@ -193,51 +190,50 @@ namespace Rise
         {
             if (pixels == null)
             {
-                SetPixels(width, height, TextureFormat.RGBA, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
+                SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
                 return;
             }
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
             fixed (Color4* ptr = pixels)
-                SetPixels(width, height, TextureFormat.RGBA, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+                SetPixels(width, height, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
         }
         public unsafe void SetPixels(int width, int height, Color3[] pixels)
         {
             if (pixels == null)
             {
-                SetPixels(width, height, TextureFormat.RGB, PixelFormat.RGB, PixelType.UnsignedByte, IntPtr.Zero);
+                SetPixels(width, height, PixelFormat.RGB, PixelType.UnsignedByte, IntPtr.Zero);
                 return;
             }
             if (pixels.Length < (width * height))
                 throw new ArgumentException("Pixels array is too small.", nameof(pixels));
             fixed (Color3* ptr = pixels)
-                SetPixels(width, height, TextureFormat.RGB, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
+                SetPixels(width, height, PixelFormat.RGB, PixelType.UnsignedByte, new IntPtr(ptr));
         }
-        void SetPixels(int w, int h, TextureFormat textureFormat, PixelFormat pixelFormat, PixelType type, IntPtr data)
+        void SetPixels(int w, int h, PixelFormat pixelFormat, PixelType type, IntPtr data)
         {
-            Format = textureFormat;
             Width = w;
             Height = h;
 
             if (pixelFormat == PixelFormat.Depth)
                 type = PixelType.Float;
 
-            MakeCurrent(ID, Target);
-            GL.TexImage2D(Target, 0, Format, w, h, 0, pixelFormat, type, data);
+            MakeCurrent();
+            GL.TexImage2D(BindTarget, 0, Format, w, h, 0, pixelFormat, type, data);
         }
 
         int GetParam(TextureParam p)
         {
-            MakeCurrent(ID, Target);
+            MakeCurrent();
             int val;
-            GL.GetTexParameterI(Target, p, out val);
+            GL.GetTexParameterI(BindTarget, p, out val);
             return val;
         }
 
         void SetParam(TextureParam p, int val)
         {
-            MakeCurrent(ID, Target);
-            GL.TexParameterI(Target, p, val);
+            MakeCurrent();
+            GL.TexParameterI(BindTarget, p, val);
         }
     }
 }

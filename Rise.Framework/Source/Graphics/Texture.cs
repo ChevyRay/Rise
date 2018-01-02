@@ -19,17 +19,30 @@ namespace Rise
         public static TextureWrap DefaultWrapX = TextureWrap.ClampToEdge;
         public static TextureWrap DefaultWrapY = TextureWrap.ClampToEdge;
 
-        internal uint ID { get; set; }
-        internal TextureTarget Target { get; set; }
+        internal uint ID { get; private set; }
+        public TextureFormat Format { get; private set; }
+        internal TextureTarget BindTarget { get; private set; }
+        internal TextureTarget DataTarget { get; private set; }
         public int Width { get; internal set; }
         public int Height { get; internal set; }
-        public TextureFormat Format { get; internal set; }
+
+        internal Texture(uint id, TextureFormat format, TextureTarget bindTarget, TextureTarget dataTarget)
+        {
+            ID = id;
+            Format = format;
+            BindTarget = bindTarget;
+            DataTarget = dataTarget;
+        }
 
         protected override void Dispose()
         {
             
         }
 
+        internal void MakeCurrent()
+        {
+            MakeCurrent(ID, BindTarget);
+        }
         internal static void MakeCurrent(uint id, TextureTarget target)
         {
             if (binded[0].ID != id)

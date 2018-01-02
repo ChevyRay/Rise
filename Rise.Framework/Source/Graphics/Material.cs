@@ -83,7 +83,7 @@ namespace Rise
         public Texture Val;
         public override void Upload()
         {
-            int slot = Texture.Bind(Val.ID, Val.Target);
+            int slot = Texture.Bind(Val.ID, Val.BindTarget);
             GL.Uniform1I(Def.Loc, slot);
         }
     }

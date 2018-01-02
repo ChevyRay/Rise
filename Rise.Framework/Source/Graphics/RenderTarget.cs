@@ -94,7 +94,7 @@ namespace Rise
             if (texture.Format.PixelFormat() == PixelFormat.Depth)
                 throw new Exception("Texture attachment cannot be a depth texture.");
 
-            SetTexture(n, texture.ID, texture.Target);
+            SetTexture(n, texture.ID, texture.BindTarget);
         }
 
         public void SetDepthTexture(Texture texture)
@@ -108,16 +108,16 @@ namespace Rise
                 Bind(this);
 
                 //If the target is different than the previous depth texture, clear the old target
-                if (DepthTexture != null && DepthTexture.Target != texture.Target)
-                    GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, DepthTexture.Target, 0, 0);
+                if (DepthTexture != null && DepthTexture.BindTarget != texture.BindTarget)
+                    GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, DepthTexture.BindTarget, 0, 0);
 
                 DepthTexture = texture;
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, texture.Target, texture.ID, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, texture.BindTarget, texture.ID, 0);
             }
             else if (DepthTexture != null)
             {
                 Bind(this);
-                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, DepthTexture.Target, 0, 0);
+                GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, DepthTexture.BindTarget, 0, 0);
                 DepthTexture = null;
             }
         }
