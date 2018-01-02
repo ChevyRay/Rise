@@ -9,15 +9,36 @@ namespace Rise
         PosY = TextureTarget.TextureCubeMapPosY,
         NegY = TextureTarget.TextureCubeMapNegY,
         PosZ = TextureTarget.TextureCubeMapPosZ,
-        NegZ = TextureTarget.TextureCubeMapNegZ,
+        NegZ = TextureTarget.TextureCubeMapNegZ
+    }
+
+    public class CubeMapTexture : Texture
+    {
+        public CubeMap CubeMap { get; private set; }
+        public CubeMapSide Side { get; private set; }
+
+        internal CubeMapTexture(CubeMap cubeMap, CubeMapSide side)
+            : base(cubeMap.id, cubeMap.Format, TextureTarget.TextureCubeMap, (TextureTarget)side)
+        {
+            CubeMap = cubeMap;
+            Side = side;
+        }
     }
 
     public class CubeMap : ResourceHandle
     {
         internal uint id;
+        CubeMapTexture[] sides = new CubeMapTexture[6];
 
         public int Size { get; private set; }
         public TextureFormat Format { get; private set; }
+
+        public CubeMapTexture PosX { get { return sides[0]; } }
+        public CubeMapTexture NegX { get { return sides[1]; } }
+        public CubeMapTexture PosY { get { return sides[2]; } }
+        public CubeMapTexture NegY { get { return sides[3]; } }
+        public CubeMapTexture PosZ { get { return sides[4]; } }
+        public CubeMapTexture NegZ { get { return sides[5]; } }
 
         public CubeMap(int size, TextureFormat format)
         {
@@ -29,19 +50,23 @@ namespace Rise
             MinFilter = Texture.DefaultMinFilter;
             MagFilter = Texture.DefaultMagFilter;
 
-            //Populate the cube map
+            MakeCurrent();
             var pixelFormat = format.PixelFormat();
-            GL.TexImage2D(TextureTarget.TextureCubeMapPosX, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexImage2D(TextureTarget.TextureCubeMapNegX, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexImage2D(TextureTarget.TextureCubeMapPosY, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexImage2D(TextureTarget.TextureCubeMapNegY, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexImage2D(TextureTarget.TextureCubeMapPosZ, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
-            GL.TexImage2D(TextureTarget.TextureCubeMapNegZ, 0, Format, Size, Size, 0, pixelFormat, PixelType.UnsignedByte, IntPtr.Zero);
+            for (int i = 0; i < 6; ++i)
+            {
+                sides[i] = new CubeMapTexture(this, (CubeMapSide)((int)CubeMapSide.PosX + i));
+                sides[i].SetPixels(null as byte[], 1, pixelFormat);
+            }
         }
 
         protected override void Dispose()
         {
             GL.DeleteTexture(id);
+        }
+
+        public CubeMapTexture GetSide(CubeMapSide side)
+        {
+            return sides[side - CubeMapSide.PosX];
         }
 
         public TextureWrap WrapX
