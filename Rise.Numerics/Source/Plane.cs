@@ -16,6 +16,11 @@ namespace Rise
 			Normal = Vector3.Cross(b - a, c - a).Normalized;
 			Distance = -Vector3.Dot(ref Normal, ref a);
 		}
+        public Plane(Vector3 position, Vector3 normal)
+            : this(normal, Vector3.Dot(ref position, ref normal))
+        {
+            
+        }
 
 		public override bool Equals(object obj)
 		{
