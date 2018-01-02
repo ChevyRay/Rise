@@ -126,11 +126,9 @@ namespace Rise
         {
             RenderTarget.Bind(Target);
 
-            //GL.ClearDepth(0f);
-            GL.Enable(EnableCap.DepthTest);
-            GL.DepthMask(true);
             GL.ClearColor(clearColor.R / 255f, clearColor.G / 255f, clearColor.B / 255f, clearColor.A / 255f);
             GL.Clear(BufferBit.Color | BufferBit.Depth);
+
             Perform();
         }
         public void Perform()
