@@ -9,36 +9,21 @@ namespace Rise
 
         internal static void Init()
         {
-            App.platform.OnJoyDeviceAdd += id =>
-            {
-                
-            };
-
-            App.platform.OnJoyDeviceRemove += id =>
-            {
-                
-            };
-
-            App.platform.OnJoyButtonDown += (id, button) =>
-            {
-                
-            };
-
-            App.platform.OnJoyButtonUp += (id, button) =>
-            {
-                
-            };
+            App.platform.OnJoyDeviceAdd += DoAdded;
+            App.platform.OnJoyDeviceRemove += DoRemoved;
+            App.platform.OnJoyButtonDown += DoButtonDown;
+            App.platform.OnJoyButtonUp += DoButtonUp;
         }
 
-        internal static void Update()
+        internal static void PostUpdate()
         {
             for (int i = 0; i < joysticks.Count; ++i)
-                joysticks[i].Update();
+                joysticks[i].PostUpdate();
         }
 
         internal static void DoAdded(int id)
         {
-            DoRemoved(id);
+            //DoRemoved(id);
             var joy = new JoystickState(id);
             joysticks.Add(joy);
             lookup[id] = joy;
@@ -176,12 +161,13 @@ namespace Rise
             ID = id;
         }
 
-        public void Update()
+        public void PostUpdate()
         {
             Pressed = 0;
             Released = 0;
-            for (int i = 0; i < Balls.Count; ++i)
-                Balls[i] = Point2.Zero;
+            if (Balls != null)
+                for (int i = 0; i < Balls.Count; ++i)
+                    Balls[i] = Point2.Zero;
         }
     }
 

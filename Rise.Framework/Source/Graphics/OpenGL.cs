@@ -1360,7 +1360,6 @@ namespace Rise
         RGB = 0x1907,
         RGBA = 0x1908,
         Depth = 0x1902,
-        DepthStencil = 0x84F9,
     }
 
     public static class TextureFormatExt
