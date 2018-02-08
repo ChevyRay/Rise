@@ -146,6 +146,22 @@ namespace Rise
             return result;
         }
 
+        void MultiplyBy(float m0, float m1, float m2, float m3, float m4, float m5)
+        {
+            float r0 = M0 * m0 + M3 * m1;
+            float r1 = M1 * m0 + M4 * m1;
+            float r2 = M2 * m0 + M5 * m1 + m2;
+            float r3 = M0 * m3 + M3 * m4;
+            float r4 = M1 * m3 + M4 * m4;
+            float r5 = M2 * m3 + M5 * m4 + m5;
+            M0 = r0;
+            M1 = r1;
+            M2 = r2;
+            M3 = r3;
+            M4 = r4;
+            M5 = r5;
+        }
+
         public void TransformRectangle(ref Rectangle r, out Rectangle t)
         {
             t = TransformQuad(r).Bounds;
@@ -235,6 +251,42 @@ namespace Rise
             Matrix3x2 m;
             Rotation(angle, out m);
             return m;
+        }
+
+        public static void Transform(Vector2 scale, float rotate, Vector2 translate, out Matrix3x2 m)
+        {
+            //Scale
+            m.M0 = scale.X;
+            m.M4 = scale.Y;
+            m.M1 = m.M2 = m.M3 = m.M5 = 0f;
+
+            //Rotate
+            float c = (float)Math.Cos(rotate);
+            float s = (float)Math.Sin(rotate);
+            m.MultiplyBy(c, -s, 0f, s, c, 0f);
+
+            //Translate
+            m.MultiplyBy(1f, 0f, translate.X, 0f, 1f, translate.Y);
+        }
+
+        public static void Transform(Vector2 pivot, Vector2 scale, float rotate, Vector2 translate, out Matrix3x2 m)
+        {
+            //Origin
+            m.M2 = pivot.X;
+            m.M5 = pivot.Y;
+            m.M0 = m.M4 = 1f;
+            m.M1 = m.M3 = 0f;
+
+            //Scale
+            m.MultiplyBy(scale.X, 0f, 0f, 0f, scale.Y, 0f);
+
+            //Rotate
+            float c = (float)Math.Cos(rotate);
+            float s = (float)Math.Sin(rotate);
+            m.MultiplyBy(c, -s, 0f, s, c, 0f);
+
+            //Translate
+            m.MultiplyBy(1f, 0f, translate.X, 0f, 1f, translate.Y);
         }
 
         public static void Scale(float x, float y, out Matrix3x2 m)

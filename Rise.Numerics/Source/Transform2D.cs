@@ -138,7 +138,8 @@ namespace Rise
             {
                 if (dirty)
                 {
-                    matrix = Matrix3x2.Scale(scale) * Matrix3x2.Rotation(rotation) * Matrix3x2.Translation(position);
+                    //matrix = Matrix3x2.Scale(scale) * Matrix3x2.Rotation(rotation) * Matrix3x2.Translation(position);
+                    Matrix3x2.Transform(scale, rotation, position, out matrix);
                     if (parent != null)
                         matrix = parent.matrix * matrix;
                     dirty = false;
