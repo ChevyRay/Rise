@@ -201,34 +201,6 @@ namespace Rise.PlatformSDL
             }
         }
 
-        /*public event Action OnQuit;
-        public event KeyEvent OnKeyDown;
-        public event KeyEvent OnKeyRepeat;
-        public event KeyEvent OnKeyUp;
-        public event MouseMoveEvent OnMouseMove;
-        public event MouseButtonEvent OnMouseButtonDown;
-        public event MouseButtonEvent OnMouseButtonUp;
-        public event MouseScrollEvent OnMouseScroll;
-        public event JoyDeviceEvent OnJoyDeviceAdd;
-        public event JoyDeviceEvent OnJoyDeviceRemove;
-        public event JoyButtonEvent OnJoyButtonDown;
-        public event JoyButtonEvent OnJoyButtonUp;
-        public event JoyAxisEvent OnJoyAxisMove;
-        public event Action OnWinClose;
-        public event Action OnWinShown;
-        public event Action OnWinHidden;
-        public event Action OnWinExposed;
-        public event Action OnWinMoved;
-        public event Action OnWinResized;
-        public event Action OnWinMinimized;
-        public event Action OnWinMaximized;
-        public event Action OnWinRestored;
-        public event Action OnWinEnter;
-        public event Action OnWinLeave;
-        public event Action OnWinFocusGained;
-        public event Action OnWinFocusLost;
-        public event OtherEvent OnOtherEvent;*/
-
         public override void SwapBuffers()
         {
             SDL.GLSwapWindow(window);
@@ -296,42 +268,6 @@ namespace Rise.PlatformSDL
         {
             return true;
         }
-
-        /*public override string ReadTextFile(string file)
-        {
-            if (!File.Exists(file))
-                return null;
-            return File.ReadAllText(file);
-        }
-
-        public override Color[] ReadImageFile(string file, out int w, out int h)
-        {
-            if (File.Exists(file))
-            {
-                
-            }
-            w = 0;
-            h = 0;
-            return null;
-        }
-
-        public override bool WriteTextFile(string file, ref string text)
-        {
-            if (!Directory.Exists(Path.GetDirectoryName(file)))
-                return false;
-            File.WriteAllText(file, text);
-            return true;
-        }
-
-        public override bool WriteImageFile(string file, int w, int h, Color[] bytes)
-        {
-            if (!Directory.Exists(Path.GetDirectoryName(file)))
-                return false;
-
-
-
-            return true;
-        }*/
 
         public override bool EndIO()
         {

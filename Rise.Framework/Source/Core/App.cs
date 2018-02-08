@@ -82,6 +82,7 @@ namespace Rise
                 Screen.Init();
                 Mouse.Init();
                 Keyboard.Init();
+                Joystick.Init();
 
                 OnInit?.Invoke();
 
@@ -132,6 +133,7 @@ namespace Rise
 
                             Mouse.PostUpdate();
                             Keyboard.PostUpdate();
+                            Joystick.PostUpdate();
 
                             Texture.UnbindAll();
 

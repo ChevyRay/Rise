@@ -172,6 +172,59 @@ namespace Rise.PlatformSDL.SDL2
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_GetKeyFromScancode")]
         public static extern int GetKeyFromScanCode(int code);
 
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickClose")]
+        public static extern void JoystickClose(IntPtr joy);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickCurrentPowerLevel")]
+        public static extern JoystickPowerLevel JoystickCurrentPowerLevel(IntPtr joy);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickEventState")]
+        public static extern int JoystickEventState(JoystickEventState state);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickFromInstanceID")]
+        public static extern IntPtr JoystickFromInstanceID(int id);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickGetAttached")]
+        public static extern bool JoystickGetAttached(IntPtr joystick);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickGetAxis")]
+        public static extern short JoystickGetAxis(IntPtr joystick, int axis);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickGetButton")]
+        public static extern byte JoystickGetButton(IntPtr joystick, int button);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickInstanceID")]
+        public static extern int JoystickInstanceID(IntPtr joystick);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickName")]
+        static extern IntPtr SDL_JoystickName(IntPtr joystick);
+        public static string JoystickName(IntPtr joystick)
+        {
+            return Marshal.PtrToStringAnsi(SDL_JoystickName(joystick));
+        }
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickNameForIndex")]
+        static extern IntPtr SDL_JoystickNameForIndex(IntPtr joystick);
+        public static string JoystickNameForIndex(IntPtr joystick)
+        {
+            return Marshal.PtrToStringAnsi(SDL_JoystickNameForIndex(joystick));
+        }
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickNumAxes")]
+        public static extern int JoystickNumAxes(IntPtr joystick);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickNumButtons")]
+        public static extern int JoystickNumButtons(IntPtr joystick);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickOpen")]
+        public static extern IntPtr JoystickOpen(int id);
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_JoystickUpdate")]
+        public static extern void SDL_JoystickUpdate();
+
+        [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint = "SDL_NumJoysticks")]
+        public static extern int NumJoysticks();
+
         [DllImport(dll, CallingConvention = CallingConvention.Cdecl, EntryPoint =  "SDL_HasClipboardText")]
         public static extern bool HasClipboardText();
 
@@ -191,6 +244,24 @@ namespace Rise.PlatformSDL.SDL2
             Marshal.FreeHGlobal(ptr);
             return result;
         }
+    }
+
+    public enum JoystickPowerLevel
+    {
+        Unknown = -1,
+        Empty,
+        Low,
+        Medium,
+        Full,
+        Wired,
+        Max
+    }
+
+    public enum JoystickEventState
+    {
+        Query = -1,
+        Ignore = 0,
+        Enable = 1,
     }
 
     public enum FullscreenMode : uint

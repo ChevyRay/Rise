@@ -170,7 +170,7 @@ namespace Rise
                 throw new Exception("Pixels array is not large enough.");
             MakeCurrent();
             fixed (byte* ptr = pixels)
-            GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.UnsignedByte, new IntPtr(ptr));
+            GL.GetTexImage(DataTarget, 0, format, PixelType.UnsignedByte, new IntPtr(ptr));
         }
         unsafe void GetPixels(ref float[] pixels, int comp, PixelFormat format)
         {
@@ -180,7 +180,7 @@ namespace Rise
                 throw new Exception("Pixels array is not large enough.");
             MakeCurrent();
             fixed (float* ptr = pixels)
-            GL.GetTexImage(TextureTarget.Texture2D, 0, format, PixelType.Float, new IntPtr(ptr));
+            GL.GetTexImage(DataTarget, 0, format, PixelType.Float, new IntPtr(ptr));
         }
 
         public void GetPixelsRGBA(ref byte[] pixels)
