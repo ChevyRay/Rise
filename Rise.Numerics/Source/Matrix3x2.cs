@@ -132,7 +132,7 @@ namespace Rise
             );
         }
 
-        /*public void TransformQuad(ref Quad q, out Quad result)
+        public void TransformQuad(ref Quad q, out Quad result)
         {
             result.A = TransformPoint(q.A);
             result.B = TransformPoint(q.B);
@@ -161,7 +161,7 @@ namespace Rise
         public Rectangle TransformRectangle(Rectangle r)
         {
             return TransformQuad(r).Bounds;
-        }*/
+        }
 
         public static bool Approx(ref Matrix3x2 a, ref Matrix3x2 b)
         {
