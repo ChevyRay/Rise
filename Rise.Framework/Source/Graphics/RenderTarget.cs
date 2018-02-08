@@ -101,10 +101,8 @@ namespace Rise
 
                 DepthTexture = texture;
                 GL.FramebufferTexture2D(FramebufferTarget.Framebuffer, TextureAttachment.Depth, texture.BindTarget, texture.ID, 0);
-            
-            var status = GL.CheckFramebufferStatus(FramebufferTarget.Framebuffer);
-            if (status != FramebufferStatus.Complete)
-                throw new Exception("Invalid RenderTarget: " + status);
+                
+                CheckStatus();
             }
             else if (DepthTexture != null)
             {
