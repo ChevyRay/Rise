@@ -93,6 +93,32 @@ namespace Leaf
             }
         }
 
+        public float ScaleX
+        {
+            get { return scale.X; }
+            set
+            {
+                if (scale.X != value)
+                {
+                    scale.X = value;
+                    MakeDirty();
+                }
+            }
+        }
+
+        public float ScaleY
+        {
+            get { return scale.Y; }
+            set
+            {
+                if (scale.Y != value)
+                {
+                    scale.Y = value;
+                    MakeDirty();
+                }
+            }
+        }
+
         public float Rotation
         {
             get { return rotation; }
@@ -131,6 +157,5 @@ namespace Leaf
                 return position;
             }
         }
-
     }
 }
