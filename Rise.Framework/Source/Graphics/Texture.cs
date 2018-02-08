@@ -283,6 +283,7 @@ namespace Rise
                     binded[i].ID = 0;
                 }
             }
+            unbind.Clear();
         }
 
         internal static void UnbindAll()
