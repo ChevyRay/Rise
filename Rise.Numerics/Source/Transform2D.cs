@@ -1,7 +1,7 @@
 ﻿using Rise;
 using System;
 
-namespace Leaf
+namespace Rise
 {
     public class Transform2D
     {
