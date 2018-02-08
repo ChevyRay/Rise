@@ -23,16 +23,16 @@ namespace Rise.Serialization
         static CustomSerializer()
         {
             Add<bool, BoolSerializer>();
-            Add<byte, BoolSerializer>();
-            Add<short, BoolSerializer>();
-            Add<ushort, BoolSerializer>();
-            Add<int, BoolSerializer>();
-            Add<uint, BoolSerializer>();
-            Add<long, BoolSerializer>();
-            Add<ulong, BoolSerializer>();
-            Add<float, BoolSerializer>();
-            Add<double, BoolSerializer>();
-            Add<string, BoolSerializer>();
+            Add<byte, ByteSerializer>();
+            Add<short, ShortSerializer>();
+            Add<ushort, UShortSerializer>();
+            Add<int, IntSerializer>();
+            Add<uint, UIntSerializer>();
+            Add<long, LongSerializer>();
+            Add<ulong, ULongSerializer>();
+            Add<float, FloatSerializer>();
+            Add<double, DoubleSerializer>();
+            Add<string, StringSerializer>();
             Add<Color3, Color3Serializer>();
             Add<Color4, Color4Serializer>();
             Add<Vector2, Vector2Serializer>();
@@ -43,6 +43,7 @@ namespace Rise.Serialization
             Add<Rectangle, RectangleSerializer>();
             Add<RectangleI, RectangleISerializer>();
             Add<Circle, CircleSerializer>();
+            Add<Quaternion, QuaternionSerializer>();
         }
 
         public static void Add(Type type, CustomSerializer serializer)
@@ -72,6 +73,10 @@ namespace Rise.Serialization
                 lookup[type] = result;
             }
             return result;
+        }
+        public static CustomSerializer Get<T>()
+        {
+            return Get(typeof(T));
         }
 
         static IntPtr buffer;

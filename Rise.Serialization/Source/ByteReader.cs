@@ -17,6 +17,14 @@ namespace Rise.Serialization
         IntPtr buffer;
         int bufferSize;
 
+        public ByteReader()
+        {
+            
+        }
+        public ByteReader(byte[] bytes)
+        {
+            Init(bytes);
+        }
         ~ByteReader()
         {
             if (bufferSize > 0)
@@ -125,7 +133,7 @@ namespace Rise.Serialization
             return Encoding.UTF8.GetString(bytes, Index, byteCount);
         }
 
-        public T ReadStruct<T>() where T : struct
+        public T ReadStructRaw<T>() where T : struct
         {
             int size = Marshal.SizeOf<T>();
             if (size > bufferSize)

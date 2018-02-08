@@ -54,7 +54,7 @@ namespace Rise.Serialization
             if (count > bytes.Length)
             {
                 int len = bytes.Length;
-                while (count > bytes.Length)
+                while (count > len)
                     len *= 2;
                 Array.Resize(ref bytes, len);
             }
@@ -171,8 +171,9 @@ namespace Rise.Serialization
                 stringBytes = new byte[byteCount];
             else if (byteCount > stringBytes.Length)
                 Array.Resize(ref stringBytes, byteCount);
-
+            
             //Write the bytes
+            Encoding.UTF8.GetBytes(value, 0, value.Length, stringBytes, 0);
             Write(stringBytes, byteCount);
         }
         public void Write(string value)
@@ -180,7 +181,7 @@ namespace Rise.Serialization
             Write(ref value);
         }
 
-        public void WriteStruct(object obj)
+        public void WriteStructRaw(object obj)
         {
             int size = Marshal.SizeOf(obj);
             if (size > bufferSize)
