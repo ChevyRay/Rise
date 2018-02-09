@@ -37,6 +37,7 @@
     <Compile Include="Source\Convert32.cs" />
     <Compile Include="Source\Convert64.cs" />
     <Compile Include="Source\CustomSerializer.cs" />
+    <Compile Include="Source\DataTree.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
