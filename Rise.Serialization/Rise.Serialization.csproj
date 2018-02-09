@@ -38,6 +38,11 @@
     <Compile Include="Source\Convert64.cs" />
     <Compile Include="Source\CustomSerializer.cs" />
     <Compile Include="Source\DataTree.cs" />
+    <Compile Include="Source\SerializedData.cs" />
+    <Compile Include="Source\DataNode.cs" />
+    <Compile Include="Source\Data.cs" />
+    <Compile Include="Source\DataList.cs" />
+    <Compile Include="Source\DataDict.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
