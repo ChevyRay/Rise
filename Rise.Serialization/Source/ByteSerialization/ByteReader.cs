@@ -5,6 +5,7 @@ namespace Rise.Serialization
 {
     public class ByteReader
     {
+        public bool LittleEndian { get; private set; }
         public int Index { get; private set; }
         public int Count { get { return bytes.Length; } }
 
@@ -17,6 +18,8 @@ namespace Rise.Serialization
 
         public ByteReader(bool littleEndian)
         {
+            LittleEndian = littleEndian;
+
             if (BitConverter.IsLittleEndian ? littleEndian : !littleEndian)
             {
                 ReadShort = ReadShort1;

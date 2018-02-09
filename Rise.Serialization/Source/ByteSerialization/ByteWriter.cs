@@ -5,6 +5,7 @@ namespace Rise.Serialization
 {
     public class ByteWriter
     {
+        public bool LittleEndian { get; private set; }
         public int Count { get; private set; }
 
         byte[] bytes;
@@ -17,6 +18,7 @@ namespace Rise.Serialization
 
         public ByteWriter(bool littleEndian, int initCapacity)
         {
+            LittleEndian = littleEndian;
             bytes = new byte[initCapacity];
 
             if (BitConverter.IsLittleEndian ? littleEndian : !littleEndian)
