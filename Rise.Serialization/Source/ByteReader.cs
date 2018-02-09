@@ -130,7 +130,9 @@ namespace Rise.Serialization
         public string ReadString()
         {
             int byteCount = ReadInt();
-            return Encoding.UTF8.GetString(bytes, Index, byteCount);
+            if (byteCount > 0)
+                return Encoding.UTF8.GetString(bytes, Index, byteCount);
+            return string.Empty;
         }
 
         public T ReadStructRaw<T>() where T : struct

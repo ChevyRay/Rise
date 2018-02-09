@@ -162,6 +162,13 @@ namespace Rise.Serialization
         }
         public void Write(ref string value)
         {
+            //If the string is null, write that it's empty
+            if (value == null)
+            {
+                Write(0);
+                return;
+            }
+
             //Write how many bytes are in the string
             int byteCount = Encoding.UTF8.GetByteCount(value);
             Write(byteCount);

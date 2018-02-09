@@ -6,38 +6,41 @@ namespace Rise.SerializationTest
     {
         public static void Main(string[] args)
         {
-            
+            var tree = new DataTree(typeof(AppData));
+            var app = (AppData)tree.Root;
+
+            Console.WriteLine(app.Project.Scene.Entities.PathToNode);
         }
     }
 
-    public class AppData
+    public class AppData : DataNode
     {
         public SettingsData Settings;
         public ProjectData Project;
     }
 
-    public class SettingsData
+    public class SettingsData : DataNode
     {
-        public string[] PreviousProjects;
+        public DataList<Data<string>> PreviousProjects;
     }
 
-    public class ProjectData
+    public class ProjectData : DataNode
     {
-        public string Path;
+        public Data<string> Path;
         public SceneData Scene;
     }
 
-    public class SceneData
+    public class SceneData : DataNode
     {
-        public string Path;
-        public EntityData[] Entities;
+        public Data<string> Path;
+        public DataList<EntityData> Entities;
     }
 
-    public class EntityData
+    public class EntityData : DataNode
     {
-        public int ID;
-        public Vector2 Position;
-        public Vector2 Scale;
-        public float Rotation;
+        public Data<int> ID;
+        public Data<Vector2> Position;
+        public Data<Vector2> Scale;
+        public Data<float> Rotation;
     }
 }

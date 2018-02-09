@@ -14,7 +14,7 @@ namespace Rise.Serialization
             if (Root == null)
                 throw new Exception("Root type is not a DataNode: " + rootType);
 
-            Root.Init(this, null, string.Empty);
+            Root.Init(this, null, "Root");
         }
     }
 
@@ -71,7 +71,7 @@ namespace Rise.Serialization
         }
     }
 
-    public class Data<T> : DataNode where T : struct
+    public class Data<T> : DataNode
     {
         static CustomSerializer serializer;
 
