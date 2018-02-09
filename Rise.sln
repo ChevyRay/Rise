@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Serialization", "Rise.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.SerializationTest", "Rise.SerializationTest\Rise.SerializationTest.csproj", "{6B0C5B89-6F70-4EC0-A541-701CF1D2F5CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Gui", "Rise.Gui\Rise.Gui.csproj", "{84A4D697-C8A4-4D51-9B5D-42897FC3717E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,14 @@ Global
 		{6B0C5B89-6F70-4EC0-A541-701CF1D2F5CF}.Debug|x86.Build.0 = Debug|Any CPU
 		{6B0C5B89-6F70-4EC0-A541-701CF1D2F5CF}.Release|x86.ActiveCfg = Release|Any CPU
 		{6B0C5B89-6F70-4EC0-A541-701CF1D2F5CF}.Release|x86.Build.0 = Release|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Debug|x86.Build.0 = Debug|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|x86.ActiveCfg = Release|Any CPU
+		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
