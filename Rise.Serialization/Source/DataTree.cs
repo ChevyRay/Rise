@@ -7,6 +7,10 @@ namespace Rise.Serialization
     /// 
     /// Some notes:
     /// 
+    ///     -   My naming convention for all this is really bad (DataNode, DataTree,
+    ///         SerializedData, Data<T> wut!??) We should probably find something
+    ///         a bit more clear to understand. But at least it all works.
+    /// 
     ///     -   One slow thing is like... if you add/remove to a list, the entire
     ///         list has to be serialized in order to undo it. I feel like there's
     ///         a better way to accomplish this, but it's a bit tricky. It seems
@@ -24,7 +28,7 @@ namespace Rise.Serialization
     ///     -   Because of how the serializers work, it is entirely possible to
     ///         multi-thread the serialization process if it becomes slow. DataTree
     ///         would need to create a separate ByteWriter/Reader for each thread,
-    ///         but other than that it should be completely thread-safe (lol i hope)
+    ///         but other than that it should be completely thread-safe (lol i hope).
     /// 
 
     public class DataTree
