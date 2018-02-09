@@ -4,6 +4,19 @@ using System.Collections.Generic;
 using System.Reflection;
 namespace Rise.Serialization
 {
+    /// 
+    /// Some notes:
+    /// 
+    ///     -   One slow thing is like... if you add/remove to a list, the entire
+    ///         list has to be serialized in order to undo it. I feel like there's
+    ///         a better way to accomplish this, but it's a bit tricky. It seems
+    ///         like a weak-point of this sort of serialization-based undo system.
+    /// 
+    ///     -   DataNode could hold a reference to its most recent SerializedData,
+    ///         and then flag when it has been modified (or hash, etc.) This way,
+    ///         when large objects change, we'd only have to re-serialize portions.
+    /// 
+
     public class SerializedData
     {
         public Type Type { get; private set; }
