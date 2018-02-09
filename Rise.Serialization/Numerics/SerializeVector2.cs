@@ -6,8 +6,8 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var v = (Vector2)obj;
-            writer.Write(v.X);
-            writer.Write(v.Y);
+            writer.WriteFloat(v.X);
+            writer.WriteFloat(v.Y);
         }
 
         public override object ReadBytes(ByteReader reader)

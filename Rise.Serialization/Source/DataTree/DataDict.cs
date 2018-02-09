@@ -96,7 +96,7 @@ namespace Rise.Serialization
             if (keySerializer == null)
                 keySerializer = CustomSerializer.Get<K>();
 
-            writer.Write(Count);
+            writer.WriteInt(Count);
             foreach (var pair in nodes)
             {
                 keySerializer.WriteBytes(pair.Key, writer);

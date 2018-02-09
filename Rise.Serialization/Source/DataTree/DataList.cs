@@ -74,7 +74,7 @@ namespace Rise.Serialization
 
         internal override void WriteBytes(ByteWriter writer)
         {
-            writer.Write(nodes.Count);
+            writer.WriteInt(nodes.Count);
             for (int i = 0; i < nodes.Count; ++i)
                 nodes[i].WriteBytes(writer);
         }

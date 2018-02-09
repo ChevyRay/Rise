@@ -114,7 +114,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((short)obj);
+            writer.WriteShort((short)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -126,7 +126,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((ushort)obj);
+            writer.WriteUShort((ushort)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -138,7 +138,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((int)obj);
+            writer.WriteInt((int)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -150,7 +150,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((uint)obj);
+            writer.WriteUInt((uint)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -162,7 +162,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((long)obj);
+            writer.WriteLong((long)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -174,7 +174,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((ulong)obj);
+            writer.WriteULong((ulong)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -186,7 +186,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((float)obj);
+            writer.WriteFloat((float)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -198,7 +198,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((double)obj);
+            writer.WriteDouble((double)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -210,7 +210,7 @@ namespace Rise.Serialization
     {
         public override void WriteBytes(object obj, ByteWriter writer)
         {
-            writer.Write((string)obj);
+            writer.WriteString((string)obj);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -263,8 +263,8 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Vector2)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
+            writer.WriteFloat(val.X);
+            writer.WriteFloat(val.Y);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -280,9 +280,9 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Vector3)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.Z);
+            writer.WriteFloat(val.X);
+            writer.WriteFloat(val.Y);
+            writer.WriteFloat(val.Z);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -299,10 +299,10 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Vector4)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.Z);
-            writer.Write(val.W);
+            writer.WriteFloat(val.X);
+            writer.WriteFloat(val.Y);
+            writer.WriteFloat(val.Z);
+            writer.WriteFloat(val.W);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -320,8 +320,8 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Point2)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
+            writer.WriteInt(val.X);
+            writer.WriteInt(val.Y);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -337,9 +337,9 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Point3)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.Z);
+            writer.WriteInt(val.X);
+            writer.WriteInt(val.Y);
+            writer.WriteInt(val.Z);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -356,10 +356,10 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Rectangle)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.W);
-            writer.Write(val.H);
+            writer.WriteFloat(val.X);
+            writer.WriteFloat(val.Y);
+            writer.WriteFloat(val.W);
+            writer.WriteFloat(val.H);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -377,10 +377,10 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (RectangleI)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.W);
-            writer.Write(val.H);
+            writer.WriteInt(val.X);
+            writer.WriteInt(val.Y);
+            writer.WriteInt(val.W);
+            writer.WriteInt(val.H);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -398,9 +398,9 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Circle)obj;
-            writer.Write(val.Center.X);
-            writer.Write(val.Center.Y);
-            writer.Write(val.Radius);
+            writer.WriteFloat(val.Center.X);
+            writer.WriteFloat(val.Center.Y);
+            writer.WriteFloat(val.Radius);
         }
         public override object ReadBytes(ByteReader reader)
         {
@@ -417,10 +417,10 @@ namespace Rise.Serialization
         public override void WriteBytes(object obj, ByteWriter writer)
         {
             var val = (Quaternion)obj;
-            writer.Write(val.X);
-            writer.Write(val.Y);
-            writer.Write(val.Z);
-            writer.Write(val.W);
+            writer.WriteFloat(val.X);
+            writer.WriteFloat(val.Y);
+            writer.WriteFloat(val.Z);
+            writer.WriteFloat(val.W);
         }
         public override object ReadBytes(ByteReader reader)
         {

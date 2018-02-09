@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.SerializationTest", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Gui", "Rise.Gui\Rise.Gui.csproj", "{84A4D697-C8A4-4D51-9B5D-42897FC3717E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.TrueType", "Rise.TrueType\Rise.TrueType.csproj", "{D39300B2-6651-4EED-B928-D8858CFBAB42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.TrueTypeTest", "Rise.TrueTypeTest\Rise.TrueTypeTest.csproj", "{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +113,22 @@ Global
 		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Debug|x86.Build.0 = Debug|Any CPU
 		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|x86.ActiveCfg = Release|Any CPU
 		{84A4D697-C8A4-4D51-9B5D-42897FC3717E}.Release|x86.Build.0 = Release|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Debug|x86.Build.0 = Debug|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Release|x86.ActiveCfg = Release|Any CPU
+		{D39300B2-6651-4EED-B928-D8858CFBAB42}.Release|x86.Build.0 = Release|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Debug|x86.Build.0 = Debug|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Release|x86.ActiveCfg = Release|Any CPU
+		{6D039BD7-8DA2-48EE-B8F5-5FBABB4ED159}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
