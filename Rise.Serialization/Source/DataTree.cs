@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Reflection;
 namespace Rise.Serialization
 {
-    public class SerializedNode
+    public class SerializedData
     {
         public Type Type { get; private set; }
         public string Path { get; private set; }
         public byte[] Bytes { get; private set; }
 
-        internal SerializedNode(Type type, string path, byte[] bytes)
+        internal SerializedData(Type type, string path, byte[] bytes)
         {
             Type = type;
             Path = path;
@@ -25,8 +25,8 @@ namespace Rise.Serialization
         public int PastCount { get { return past.Count; } }
         public int FutureCount { get { return future.Count; } }
 
-        List<SerializedNode> past = new List<SerializedNode>();
-        List<SerializedNode> future = new List<SerializedNode>();
+        List<SerializedData> past = new List<SerializedData>();
+        List<SerializedData> future = new List<SerializedData>();
         internal ByteWriter writer = new ByteWriter();
         ByteReader reader = new ByteReader();
 
@@ -51,15 +51,15 @@ namespace Rise.Serialization
             return null;
         }
 
-        internal SerializedNode SerializeNode(DataNode node)
+        internal SerializedData SerializeNode(DataNode node)
         {
             writer.Clear();
             node.WriteBytes(writer);
             var bytes = writer.GetBytes();
-            return new SerializedNode(node.GetType(), node.PathToNode, bytes);
+            return new SerializedData(node.GetType(), node.PathToNode, bytes);
         }
 
-        internal void DeserializeNode(DataNode node, SerializedNode state)
+        internal void DeserializeNode(DataNode node, SerializedData state)
         {
             if (state.Type != node.GetType())
                 throw new Exception($"Type mismatch on deserialization: expected {state.Type}, got {node.GetType()}.");
@@ -68,7 +68,7 @@ namespace Rise.Serialization
             node.ReadBytes(reader);
         }
 
-        void RecordInto(DataNode node, List<SerializedNode> list)
+        void RecordInto(DataNode node, List<SerializedData> list)
         {
             if (list.Count == MaxUndos)
                 list.RemoveAt(0);
@@ -81,7 +81,7 @@ namespace Rise.Serialization
             RecordInto(node, past);
         }
 
-        void LoadState(List<SerializedNode> fromList, List<SerializedNode> toList)
+        void LoadState(List<SerializedData> fromList, List<SerializedData> toList)
         {
             if (fromList.Count > 0)
             {
@@ -198,12 +198,12 @@ namespace Rise.Serialization
             Tree.RecordUndo(this);
         }
 
-        public SerializedNode Serialize()
+        public SerializedData Serialize()
         {
             return Tree.SerializeNode(this);
         }
 
-        public void Deserialize(SerializedNode state)
+        public void Deserialize(SerializedData state)
         {
             Tree.DeserializeNode(this, state);
         }
