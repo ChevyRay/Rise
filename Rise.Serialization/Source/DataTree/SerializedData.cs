@@ -14,5 +14,16 @@ namespace Rise.Serialization
             Path = path;
             Bytes = bytes;
         }
+
+        //If you serialize before & after some code, you can use this to check if it changed
+        public bool IsEqualTo(SerializedData data)
+        {
+            if (Type != data.Type || Path != data.Path || Bytes.Length != data.Bytes.Length)
+                return false;
+            for (int i = 0; i < Bytes.Length; ++i)
+                if (Bytes[i] != data.Bytes[i])
+                    return false;
+            return true;
+        }
     }
 }
