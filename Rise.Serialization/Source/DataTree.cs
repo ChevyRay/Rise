@@ -4,17 +4,101 @@ using System.Collections.Generic;
 using System.Reflection;
 namespace Rise.Serialization
 {
+    public class DataState
+    {
+        public string Path { get; private set; }
+        public byte[] Bytes { get; private set; }
+
+        internal DataState(string path, byte[] bytes)
+        {
+            Path = path;
+            Bytes = bytes;
+        }
+    }
+
     public class DataTree
     {
         public DataNode Root { get; private set; }
+        public int MaxUndos { get; private set; }
+        public int PastCount { get { return past.Count; } }
+        public int FutureCount { get { return future.Count; } }
 
-        public DataTree(Type rootType)
+        List<DataState> past = new List<DataState>();
+        List<DataState> future = new List<DataState>();
+        ByteWriter writer = new ByteWriter();
+        ByteReader reader = new ByteReader();
+
+        public DataTree(Type rootType, int maxUndos)
         {
             Root = Activator.CreateInstance(rootType) as DataNode;
             if (Root == null)
                 throw new Exception("Root type is not a DataNode: " + rootType);
-
             Root.Init(this, null, "Root");
+
+            MaxUndos = maxUndos;
+        }
+        public DataTree(Type rootType) : this(rootType, 50)
+        {
+            
+        }
+
+        public DataNode FindByPath(string path)
+        {
+            if (path.StartsWith("Root."))
+                return Root.FindByPath(path.Substring(5));
+            return null;
+        }
+
+        void RecordInto(DataNode node, List<DataState> list)
+        {
+            if (list.Count == MaxUndos)
+                list.RemoveAt(0);
+
+            writer.Clear();
+            node.WriteBytes(writer);
+            var bytes = writer.GetBytes();
+            list.Add(new DataState(node.PathToNode, bytes));
+        }
+
+        internal void RecordUndo(DataNode node)
+        {
+            RecordInto(node, past);
+        }
+
+        void LoadState(List<DataState> fromList, List<DataState> toList)
+        {
+            if (fromList.Count > 0)
+            {
+                //Get the state to undo
+                var state = fromList[fromList.Count - 1];
+                fromList.RemoveAt(fromList.Count - 1);
+
+                //Find the node that will be undone
+                var node = FindByPath(state.Path);
+
+                //Store the node in the second list
+                RecordInto(node, toList);
+
+                //Deserialize the node from the recorded bytes
+                reader.Init(state.Bytes);
+                node.ReadBytes(reader);
+            }
+        }
+
+        public void Undo()
+        {
+            LoadState(past, future);
+        }
+
+        public void Redo()
+        {
+            LoadState(future, past);
+        }
+
+        public void ClearUndoState()
+        {
+            past.Clear();
+            future.Clear();
         }
     }
 
@@ -24,7 +108,7 @@ namespace Rise.Serialization
         public DataNode ParentNode { get; private set; }
         public string PathToNode { get; internal set; }
 
-        internal void Init(DataTree tree, DataNode parent, string path)
+        internal virtual void Init(DataTree tree, DataNode parent, string path)
         {
             Tree = tree;
             ParentNode = parent;
@@ -67,7 +151,36 @@ namespace Rise.Serialization
 
         public virtual void ReadBytes(ByteReader reader)
         {
-            
+            foreach (var field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
+            {
+                var type = field.FieldType;
+                if (typeof(DataNode).IsAssignableFrom(type))
+                {
+                    var node = (DataNode)field.GetValue(this);
+                    node.ReadBytes(reader);
+                }
+            }
+        }
+
+        public virtual DataNode FindByPath(string path)
+        {
+            int i = path.IndexOf('.');
+            if (i >= 0)
+            {
+                var field = GetType().GetField(path.Substring(0, i));
+                var node = (DataNode)field.GetValue(this);
+                return node.FindByPath(path.Substring(i + 1));
+            }
+            else
+            {
+                var field = GetType().GetField(path);
+                return (DataNode)field.GetValue(this);
+            }
+        }
+
+        public void Record()
+        {
+            Tree.RecordUndo(this);
         }
     }
 
@@ -76,6 +189,17 @@ namespace Rise.Serialization
         static CustomSerializer serializer;
 
         public T Value;
+
+        internal override void Init(DataTree tree, DataNode parent, string path)
+        {
+            base.Init(tree, parent, path);
+
+            //Hacky, but strings should default to "", not null
+            if (this is Data<string>)
+            {
+                GetType().GetField("Value").SetValue(this, string.Empty);
+            }
+        }
 
         public override void WriteBytes(ByteWriter writer)
         {
@@ -89,6 +213,11 @@ namespace Rise.Serialization
             if (serializer == null)
                 serializer = CustomSerializer.Get<T>();
             Value = (T)serializer.ReadBytes(reader);
+        }
+
+        public override DataNode FindByPath(string path)
+        {
+            throw new Exception("Cannot search Data<T> by path");
         }
     }
 
@@ -114,7 +243,7 @@ namespace Rise.Serialization
         public T Add()
         {
             var node = new T();
-            node.Init(Tree, this, $"{PathToNode}[{nodes.Count}]");
+            node.Init(Tree, this, $"{PathToNode}.{nodes.Count}");
             nodes.Add(node);
             return node;
         }
@@ -135,7 +264,7 @@ namespace Rise.Serialization
 
             //Update the paths of the nodes after the removed item
             for (int i = index; i < nodes.Count; ++i)
-                nodes[i].PathToNode = $"{PathToNode}[{i}]";
+                nodes[i].PathToNode = $"{PathToNode}.{i}";
         }
 
         public void RemoveWhere(Predicate<T> pred)
@@ -159,7 +288,7 @@ namespace Rise.Serialization
         void UpdateAllPaths()
         {
             for (int i = 0; i < nodes.Count; ++i)
-                nodes[i].PathToNode = $"{PathToNode}[{i}]";
+                nodes[i].PathToNode = $"{PathToNode}.{i}";
         }
 
         public override void WriteBytes(ByteWriter writer)
@@ -177,6 +306,21 @@ namespace Rise.Serialization
             {
                 var node = Add();
                 node.ReadBytes(reader);
+            }
+        }
+
+        public override DataNode FindByPath(string path)
+        {
+            int i = path.IndexOf('.');
+            if (i >= 0)
+            {
+                int index = int.Parse(path.Substring(0, i));
+                return nodes[index].FindByPath(path.Substring(i + 1));
+            }
+            else
+            {
+                int index = int.Parse(path);
+                return nodes[index];
             }
         }
     }
@@ -244,7 +388,7 @@ namespace Rise.Serialization
                 throw new Exception("Already contains item with key: " + key);
 
             var node = new T();
-            node.Init(Tree, this, $"{PathToNode}[{key}]");
+            node.Init(Tree, this, $"{PathToNode}.{key}");
             nodes[key] = node;
 
             return node;

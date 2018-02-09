@@ -9,7 +9,32 @@ namespace Rise.SerializationTest
             var tree = new DataTree(typeof(AppData));
             var app = (AppData)tree.Root;
 
-            Console.WriteLine(app.Project.Scene.Entities.PathToNode);
+            app.Project.Path.Value = "First!";
+            app.Project.Path.Record();
+            app.Project.Path.Value = "Second!";
+            app.Project.Path.Record();
+            app.Project.Path.Value = "Third!";
+
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Undo();
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Undo();
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Redo();
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Redo();
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Undo();
+            Console.WriteLine(app.Project.Path.Value);
+            tree.Undo();
+            Console.WriteLine(app.Project.Path.Value);
+
+            //Prints out:
+            //  Third!
+            //  Second!
+            //  First!
+            //  Second!
+            //  Third!
         }
     }
 
