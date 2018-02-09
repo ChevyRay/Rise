@@ -41,8 +41,8 @@ namespace Rise.Serialization
 
         List<SerializedData> past = new List<SerializedData>();
         List<SerializedData> future = new List<SerializedData>();
-        ByteWriter writer = new ByteWriter();
-        ByteReader reader = new ByteReader();
+        ByteWriter writer = new ByteWriter(true);
+        ByteReader reader = new ByteReader(true);
 
         public DataTree(Type rootType, int maxUndos)
         {

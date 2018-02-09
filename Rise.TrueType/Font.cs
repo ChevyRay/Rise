@@ -21,7 +21,7 @@ namespace Rise.TrueType
 
         void LoadFile(string file)
         {
-            var reader = new ByteReader(File.ReadAllBytes(file));
+            var reader = new ByteReader(false, File.ReadAllBytes(file));
 
             //Load the font type (truetype or opentype)
             uint sfntVersion = reader.ReadUInt();
