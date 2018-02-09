@@ -34,6 +34,7 @@
     <Compile Include="Source\GuiState.cs" />
     <Compile Include="Source\Button.cs" />
     <Compile Include="Source\Label.cs" />
+    <Compile Include="Source\Checkbox.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
@@ -46,6 +47,10 @@
     <ProjectReference Include="..\Rise.Framework\Rise.Framework.csproj">
       <Project>{B374B137-D5DE-41F2-AA8A-EDD234D400CA}</Project>
       <Name>Rise.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rise.Serialization\Rise.Serialization.csproj">
+      <Project>{79DADF15-46C3-4E8B-8B4B-727F494FF570}</Project>
+      <Name>Rise.Serialization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
