@@ -26,7 +26,7 @@ namespace Rise.Serialization
             }
         }
 
-        public virtual void WriteBytes(ByteWriter writer)
+        internal virtual void WriteBytes(ByteWriter writer)
         {
             foreach (var field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
             {
@@ -49,7 +49,7 @@ namespace Rise.Serialization
             }
         }
 
-        public virtual void ReadBytes(ByteReader reader)
+        internal virtual void ReadBytes(ByteReader reader)
         {
             foreach (var field in GetType().GetFields(BindingFlags.Public | BindingFlags.Instance))
             {

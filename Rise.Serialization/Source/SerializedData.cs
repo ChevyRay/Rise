@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Rise.Serialization
 {
+    //TODO: allow this to be saved to and loaded from files
     public class SerializedData
     {
         public Type Type { get; private set; }

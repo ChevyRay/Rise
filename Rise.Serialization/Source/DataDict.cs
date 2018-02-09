@@ -91,7 +91,7 @@ namespace Rise.Serialization
             nodes.Remove(key);
         }
 
-        public override void WriteBytes(ByteWriter writer)
+        internal override void WriteBytes(ByteWriter writer)
         {
             if (keySerializer == null)
                 keySerializer = CustomSerializer.Get<K>();
@@ -104,7 +104,7 @@ namespace Rise.Serialization
             }
         }
 
-        public override void ReadBytes(ByteReader reader)
+        internal override void ReadBytes(ByteReader reader)
         {
             if (keySerializer == null)
                 keySerializer = CustomSerializer.Get<K>();

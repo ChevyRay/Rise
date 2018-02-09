@@ -18,14 +18,14 @@ namespace Rise.Serialization
             }
         }
 
-        public override void WriteBytes(ByteWriter writer)
+        internal override void WriteBytes(ByteWriter writer)
         {
             if (serializer == null)
                 serializer = CustomSerializer.Get<T>();
             serializer.WriteBytes(Value, writer);
         }
 
-        public override void ReadBytes(ByteReader reader)
+        internal override void ReadBytes(ByteReader reader)
         {
             if (serializer == null)
                 serializer = CustomSerializer.Get<T>();

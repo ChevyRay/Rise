@@ -9,7 +9,8 @@ namespace Rise.Serialization
     /// 
     ///     -   My naming convention for all this is really bad (DataNode, DataTree,
     ///         SerializedData, Data<T> wut!??) We should probably find something
-    ///         a bit more clear to understand. But at least it all works.
+    ///         a bit more clear to understand. Also, we might want to rename the
+    ///         library/namespace as Rise.Data or Rise.DataModel or something??
     /// 
     ///     -   One slow thing is like... if you add/remove to a list, the entire
     ///         list has to be serialized in order to undo it. I feel like there's

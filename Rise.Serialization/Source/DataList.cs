@@ -72,14 +72,14 @@ namespace Rise.Serialization
                 nodes[i].PathToNode = $"{PathToNode}.{i}";
         }
 
-        public override void WriteBytes(ByteWriter writer)
+        internal override void WriteBytes(ByteWriter writer)
         {
             writer.Write(nodes.Count);
             for (int i = 0; i < nodes.Count; ++i)
                 nodes[i].WriteBytes(writer);
         }
 
-        public override void ReadBytes(ByteReader reader)
+        internal override void ReadBytes(ByteReader reader)
         {
             Clear();
             int count = reader.ReadInt();
