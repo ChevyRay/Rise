@@ -3,15 +3,15 @@ using System;
 
 namespace Rise
 {
-    public class Transform2D
+    public class Transform3D
     {
         public event Action OnChanged;
 
-        private Transform2D parent;
-        private Vector2 position;
-        private Vector2 scale = Vector2.One;
-        private float rotation;
-        private Matrix3x2 matrix;
+        private Transform3D parent;
+        private Vector3 position;
+        private Vector3 scale = Vector3.One;
+        private Quaternion rotation;
+        private Matrix4x4 matrix;
         private bool dirty = true;
 
         private void MakeDirty()
@@ -20,7 +20,7 @@ namespace Rise
             OnChanged?.Invoke();
         }
 
-        public Transform2D Parent
+        public Transform3D Parent
         {
             get { return parent; }
             set
@@ -67,7 +67,20 @@ namespace Rise
             }
         }
 
-        public Vector2 Position
+        public float Z
+        {
+            get { return position.Z; }
+            set
+            {
+                if (position.Z != value)
+                {
+                    position.Z = value;
+                    MakeDirty();
+                }
+            }
+        }
+
+        public Vector3 Position
         {
             get { return position; }
             set
@@ -80,7 +93,7 @@ namespace Rise
             }
         }
 
-        public Vector2 Scale
+        public Vector3 Scale
         {
             get { return scale; }
             set
@@ -119,7 +132,20 @@ namespace Rise
             }
         }
 
-        public float Rotation
+        public float ScaleZ
+        {
+            get { return scale.Z; }
+            set
+            {
+                if (scale.Z != value)
+                {
+                    scale.Z = value;
+                    MakeDirty();
+                }
+            }
+        }
+
+        public Quaternion Rotation
         {
             get { return rotation; }
             set
@@ -132,14 +158,13 @@ namespace Rise
             }
         }
 
-        public Matrix3x2 Matrix
+        public Matrix4x4 Matrix
         {
             get
             {
                 if (dirty)
                 {
-                    //matrix = Matrix3x2.Scale(scale) * Matrix3x2.Rotation(rotation) * Matrix3x2.Translation(position);
-                    Matrix3x2.Transform(scale, rotation, position, out matrix);
+                    Matrix4x4.CreateTransform(ref position, ref rotation, ref scale, out matrix);
                     if (parent != null)
                         matrix = parent.Matrix * matrix;
                     dirty = false;
@@ -149,7 +174,7 @@ namespace Rise
             }
         }
 
-        public Vector2 GlobalPosition
+        public Vector3 GlobalPosition
         {
             get
             {

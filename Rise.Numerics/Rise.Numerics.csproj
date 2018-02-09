@@ -76,6 +76,7 @@
     <Compile Include="Source\Point3.cs" />
     <Compile Include="Source\Rand.cs" />
     <Compile Include="Source\RectangleI.cs" />
+    <Compile Include="Source\Transform3D.cs" />
     <Compile Include="Source\Transform2D.cs" />
     <Compile Include="Source\Vector2.cs" />
     <Compile Include="Source\Vector3.cs" />
