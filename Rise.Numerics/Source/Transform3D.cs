@@ -10,7 +10,7 @@ namespace Rise
         private Transform3D parent;
         private Vector3 position;
         private Vector3 scale = Vector3.One;
-        private Quaternion rotation;
+        private Quaternion rotation = Quaternion.Identity;
         private Matrix4x4 matrix;
         private bool dirty = true;
 
