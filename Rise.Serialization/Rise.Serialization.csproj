@@ -31,18 +31,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\ByteSerialization\ByteReader.cs" />
-    <Compile Include="Source\ByteSerialization\ByteWriter.cs" />
-    <Compile Include="Source\ByteSerialization\Convert16.cs" />
-    <Compile Include="Source\ByteSerialization\Convert32.cs" />
-    <Compile Include="Source\ByteSerialization\Convert64.cs" />
-    <Compile Include="Source\ByteSerialization\CustomSerializer.cs" />
-    <Compile Include="Source\DataTree\Data.cs" />
-    <Compile Include="Source\DataTree\DataDict.cs" />
-    <Compile Include="Source\DataTree\DataList.cs" />
-    <Compile Include="Source\DataTree\DataNode.cs" />
-    <Compile Include="Source\DataTree\DataTree.cs" />
-    <Compile Include="Source\DataTree\SerializedData.cs" />
+    <Compile Include="Source\ByteReader.cs" />
+    <Compile Include="Source\ByteWriter.cs" />
+    <Compile Include="Source\Convert16.cs" />
+    <Compile Include="Source\Convert32.cs" />
+    <Compile Include="Source\Convert64.cs" />
+    <Compile Include="Source\CustomSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
@@ -52,8 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
-    <Folder Include="Source\ByteSerialization\" />
-    <Folder Include="Source\DataTree\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -94,6 +94,10 @@
     <Compile Include="Source\Graphics\Mesh3D.cs" />
     <Compile Include="Source\Graphics\CubeMap.cs" />
     <Compile Include="Source\Graphics\Texture.cs" />
+    <Compile Include="Source\Tools\RectanglePacker.cs" />
+    <Compile Include="Source\Graphics\Bitmap.cs" />
+    <Compile Include="Source\Tools\ImageDecoder.cs" />
+    <Compile Include="Source\Tools\ImageEncoder.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -101,10 +105,9 @@
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rise.Imaging\Rise.Imaging.csproj">
-      <Project>{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}</Project>
-      <Name>Rise.Imaging</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Tools\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

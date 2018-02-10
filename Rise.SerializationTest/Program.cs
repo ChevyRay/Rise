@@ -1,13 +1,13 @@
 ﻿using System;
-using Rise.Serialization;
+using Rise.DataTree;
 namespace Rise.SerializationTest
 {
     class Program
     {
         public static void Main(string[] args)
         {
-            var tree = new DataTree(typeof(AppData));
-            var app = (AppData)tree.Root;
+            var model = new DataModel(typeof(AppData));
+            var app = (AppData)model.Root;
 
             app.Project.Path.Value = "First!";
             app.Project.Path.Record();
@@ -16,17 +16,17 @@ namespace Rise.SerializationTest
             app.Project.Path.Value = "Third!";
 
             Console.WriteLine(app.Project.Path.Value);
-            tree.Undo();
+            model.Undo();
             Console.WriteLine(app.Project.Path.Value);
-            tree.Undo();
+            model.Undo();
             Console.WriteLine(app.Project.Path.Value);
-            tree.Redo();
+            model.Redo();
             Console.WriteLine(app.Project.Path.Value);
-            tree.Redo();
+            model.Redo();
             Console.WriteLine(app.Project.Path.Value);
-            tree.Undo();
+            model.Undo();
             Console.WriteLine(app.Project.Path.Value);
-            tree.Undo();
+            model.Undo();
             Console.WriteLine(app.Project.Path.Value);
 
             //Prints out:

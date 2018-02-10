@@ -32,7 +32,6 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Source\Program.cs" />
-    <Compile Include="Transform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />
@@ -42,10 +41,6 @@
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Rise.Imaging\Rise.Imaging.csproj">
-      <Project>{0C587295-ADFD-4097-AA9D-F51CA9E8D6B9}</Project>
-      <Name>Rise.Imaging</Name>
     </ProjectReference>
     <ProjectReference Include="..\Rise.Framework\Rise.Framework.csproj">
       <Project>{B374B137-D5DE-41F2-AA8A-EDD234D400CA}</Project>

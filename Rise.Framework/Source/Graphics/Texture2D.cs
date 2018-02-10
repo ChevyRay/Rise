@@ -21,9 +21,10 @@ namespace Rise
         }
         public Texture2D(string file, bool premultiply) : this(TextureFormat.RGBA)
         {
-            var bitmap = App.ImageLoader.LoadFile(file);
+            var bitmap = new Bitmap(file);
             if (premultiply)
                 bitmap.Premultiply();
+            
             Width = bitmap.Width;
             Height = bitmap.Height;
             SetPixels(bitmap);

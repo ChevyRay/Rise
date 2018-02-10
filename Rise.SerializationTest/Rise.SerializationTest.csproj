@@ -42,6 +42,10 @@
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Rise.DataTree\Rise.DataTree.csproj">
+      <Project>{0F311D75-F648-4139-B40E-45CF171440DE}</Project>
+      <Name>Rise.DataTree</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

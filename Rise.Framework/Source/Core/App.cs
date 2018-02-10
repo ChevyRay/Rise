@@ -22,8 +22,6 @@ namespace Rise
         static float framerate = 60f;
         static double frameDuration = 1.0 / 60.0;
 
-        public static ImageLoader ImageLoader { get; private set; }
-
         public static int FPS { get; private set; }
 
         public static float Framerate
@@ -46,7 +44,6 @@ namespace Rise
             if (platform != null)
                 throw new Exception("App has already been initialized.");
             platform = new PlatformType();
-            ImageLoader = new ImageLoader();
         }
 
         public static void Run(string title, int width, int height, ErrorHandler errorHandler)

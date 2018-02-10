@@ -183,6 +183,15 @@ namespace Rise
             GL.GetTexImage(DataTarget, 0, format, PixelType.Float, new IntPtr(ptr));
         }
 
+        public unsafe Color4[] GetPixels()
+        {
+            var pixels = new Color4[Width * Height];
+            MakeCurrent();
+            fixed (Color4* ptr = pixels)
+            GL.GetTexImage(DataTarget, 0, PixelFormat.RGBA, PixelType.UnsignedByte, new IntPtr(ptr));
+            return pixels;
+        }
+
         public void GetPixelsRGBA(ref byte[] pixels)
         {
             GetPixels(ref pixels, 4, PixelFormat.RGBA);

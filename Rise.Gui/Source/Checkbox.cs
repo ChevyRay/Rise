@@ -1,5 +1,6 @@
 ﻿using System;
 using Rise.Serialization;
+using Rise.DataTree;
 namespace Rise.Gui
 {
     public partial class GuiState
