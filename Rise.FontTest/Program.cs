@@ -6,42 +6,61 @@ namespace Rise.FontTest
     {
         public static void Main(string[] args)
         {
-            /*var font = new Font("Cousine-Regular.ttf", Font.AsciiChars);
-            var size = new FontSize(font, 128f);
-
-            var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);
-            size.GetPixels('a', bitmap);
-            bitmap.SavePng("letter.png");
-            bitmap.SaveTga("letter.tga");
-            bitmap.SaveBmp("letter.bmp");
-            bitmap.SaveJpg("letter.jpg", 50);*/
-
-            var packer = new RectanglePacker(512, 512);
-            Rand.SetSeed(123);
-            for (int i = 0; i < 860; ++i)
+            App.OnInit += () =>
             {
-                int w = Rand.Int(4, 32);
-                int h = Rand.Int(4, 32);
-                packer.Add(i, w, h, false);
-            }
-            if (packer.Pack())
-            {
-                Console.WriteLine("Packed: " + packer.PackedCount);
+                var packer = new RectanglePacker(512, 256, Font.AsciiChars.Length);
 
-                var bitmap = new Bitmap(packer.Width, packer.Height, Color4.Black);
-                for (int i = 0; i < packer.PackedCount; ++i)
+                var font = new Font("Cousine-Regular.ttf", Font.AsciiChars);
+                var size = new FontSize(font, 64f);
+                FontChar info;
+                foreach (char chr in Font.AsciiChars)
                 {
+                    size.GetCharInfo(chr, out info);
+                    packer.Add(chr, info.Width + 1, info.Height + 1, true);
+                }
+
+                var time = Time.ClockValue;
+
+                if (packer.Pack())
+                {
+                    ulong diff = (Time.ClockValue - time) / (Time.ClockFrequency / 1000);
+                    Console.WriteLine("Packed: " + diff);
+
+                    var atlas = new Bitmap(packer.Width, packer.Height);
+                    var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);
+
+                    int maxSize = Math.Max(size.MaxCharW, size.MaxCharH);
+                    var rotated = new Bitmap(maxSize, maxSize);
+
                     int id;
                     RectangleI rect;
-                    packer.GetPacked(i, out id, out rect);
-                    rect.W--;
-                    rect.H--;
-                    bitmap.SetRect(ref rect, Color4.White);
+                    for (int i = 0; i < packer.PackedCount; ++i)
+                    {
+                        packer.GetPacked(i, out id, out rect);
+                        rect.W--;
+                        rect.H--;
+
+                        size.GetPixels((char)id, bitmap);
+
+                        if (bitmap.Width == rect.W)
+                        {
+                            atlas.CopyPixels(bitmap, rect.X, rect.Y);
+                        }
+                        else
+                        {
+                            bitmap.RotateRight(rotated);
+                            atlas.CopyPixels(rotated, rect.X, rect.Y);
+                        }
+                    }
+
+                    atlas.SavePng("font.png");
                 }
-                bitmap.SavePng("packer.png");
-            }
-            else
-                Console.WriteLine("Fail: " + packer.PackedCount);
+                else
+                    Console.WriteLine("Fail: " + packer.PackedCount);
+            };
+
+            App.Init<PlatformSDL.PlatformSDL2>();
+            App.Run("Font Test", 640, 360, null);
         }
     }
 }

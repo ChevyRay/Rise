@@ -46,6 +46,10 @@
       <Link>librisetools.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Rise.PlatformSDL\Dependencies\libSDL2.dylib">
+      <Link>libSDL2.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Rise.Framework\Rise.Framework.csproj">
@@ -55,6 +59,10 @@
     <ProjectReference Include="..\Rise.Numerics\Rise.Numerics.csproj">
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Rise.PlatformSDL\Rise.PlatformSDL.csproj">
+      <Project>{9930176E-AACB-47FB-A549-84582DBFA9D2}</Project>
+      <Name>Rise.PlatformSDL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

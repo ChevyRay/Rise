@@ -139,6 +139,18 @@ namespace Rise
             SetRect(rect.X, rect.Y, rect.W, rect.H, color);
         }
 
+        public void RotateRight(Bitmap result)
+        {
+            result.Resize(Height, Width);
+            for (int y = 0; y < Height; ++y)
+            {
+                for (int x = 0; x < Width; ++x)
+                {
+                    result.SetPixel(y, x, GetPixel(x, y));
+                }
+            }
+        }
+
         public void CopyPixels(Bitmap source)
         {
             if (PixelCount != source.PixelCount)

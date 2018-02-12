@@ -20,6 +20,11 @@ namespace Rise
             get { return App.platform.GetTime(); }
         }
 
+        public static ulong ClockFrequency
+        {
+            get { return App.platform.GetClockFrequency(); }
+        }
+
         public static ulong ClockValue
         {
             get { return App.platform.GetClockValue(); }

@@ -5,7 +5,7 @@ namespace Rise
     public class RectanglePacker
     {
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
-        static extern IntPtr new_packer();
+        static extern IntPtr new_packer(int capacity);
 
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern void free_packer(IntPtr packer);
@@ -31,10 +31,15 @@ namespace Rise
 
         IntPtr packer;
 
-        public RectanglePacker(int width, int height)
+        public RectanglePacker(int width, int height, int capacity)
         {
-            packer = new_packer();
+            packer = new_packer(capacity);
             Init(width, height);
+        }
+        public RectanglePacker(int width, int height)
+            : this(width, height, 32)
+        {
+            
         }
         ~RectanglePacker()
         {
