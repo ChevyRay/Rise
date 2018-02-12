@@ -5,11 +5,6 @@
 
 extern "C"
 {
-    EXTERN_DECL int font_info_size()
-    {
-        return (int)sizeof(stbtt_fontinfo);
-    }
-    
     EXTERN_DECL stbtt_fontinfo* init_font(const uint8_t* data)
     {
         stbtt_fontinfo* info = new stbtt_fontinfo();
@@ -36,18 +31,43 @@ extern "C"
         stbtt_GetFontVMetrics(info, ascent, descent, line_gap);
     }
     
-    EXTERN_DECL uint8_t* get_char_bitmap(stbtt_fontinfo* info, float scale_x, float scale_y, int codepoint, int* w, int *h, int* xoff, int* yoff)
+    EXTERN_DECL int get_glyph_index(stbtt_fontinfo* info, int codepoint)
     {
-        return stbtt_GetCodepointBitmap(info, scale_x, scale_y, codepoint, w, h, xoff, yoff);
+        return stbtt_FindGlyphIndex(info, codepoint);
     }
     
-    EXTERN_DECL void get_char_hmetrics(stbtt_fontinfo* info, int codepoint, int* advance, int* left)
+    EXTERN_DECL bool is_glyph_empty(stbtt_fontinfo* info, int glyph)
     {
-        stbtt_GetCodepointHMetrics(info, codepoint, advance, left);
+        return stbtt_IsGlyphEmpty(info, glyph) != 0;
     }
     
-    EXTERN_DECL int get_kerning(stbtt_fontinfo* info, int ch1, int ch2)
+    EXTERN_DECL void get_font_bbox(stbtt_fontinfo* info, int* x0, int* y0, int* x1, int* y1)
     {
-        return stbtt_GetCodepointKernAdvance(info, ch1, ch2);
+        stbtt_GetFontBoundingBox(info, x0, y0, x1, y1);
+    }
+    
+    EXTERN_DECL void get_glyph_bitmap_box(stbtt_fontinfo* info, int glyph, float scale_x, float scale_y, int* x0, int* y0, int* x1, int* y1)
+    {
+        stbtt_GetGlyphBitmapBox(info, glyph, scale_x, scale_y, x0, y0, x1, y1);
+    }
+    
+    EXTERN_DECL void get_glyph_box(stbtt_fontinfo* info, int glyph, int* x0, int* y0, int* x1, int* y1)
+    {
+        stbtt_GetGlyphBox(info, glyph, x0, y0, x1, y1);
+    }
+    
+    EXTERN_DECL void get_glyph_bitmap(stbtt_fontinfo* info, uint8_t* output, int w, int h, int stride, float scale_x, float scale_y, int glyph)
+    {
+        stbtt_MakeGlyphBitmap(info, output, w, h, stride, scale_x, scale_y, glyph);
+    }
+    
+    EXTERN_DECL void get_glyph_hmetrics(stbtt_fontinfo* info, int glyph, int* advance, int* left)
+    {
+        stbtt_GetGlyphHMetrics(info, glyph, advance, left);
+    }
+    
+    EXTERN_DECL int get_kerning(stbtt_fontinfo* info, int glyph1, int glyph2)
+    {
+        return stbtt_GetGlyphKernAdvance(info, glyph1, glyph2);
     }
 }

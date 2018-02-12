@@ -1,6 +1,5 @@
 ﻿﻿using System;
 using Rise.OpenGL;
-using Rise.Imaging;
 namespace Rise
 {
     public delegate void ErrorHandler(Exception e);

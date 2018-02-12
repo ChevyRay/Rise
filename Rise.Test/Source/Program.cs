@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using Rise;
-using Rise.Imaging;
 using Rise.PlatformSDL;
 namespace Rise.Test
 {

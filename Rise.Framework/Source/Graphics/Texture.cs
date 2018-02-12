@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rise.Imaging;
 using Rise.OpenGL;
 namespace Rise
 {

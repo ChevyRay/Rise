@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-namespace Rise.Imaging
+using System.Collections.Generic;
+namespace Rise
 {
     public class Bitmap
     {
@@ -33,6 +34,49 @@ namespace Rise.Imaging
         internal Bitmap(Color4[] pixels, int width, int height)
         {
             SetPixels(pixels, width, height);
+        }
+
+        public void SavePng(string file)
+        {
+            var bytes = new List<byte>();
+            ImageEncoder.EncodePng(pixels, Width, Height, bytes);
+            File.WriteAllBytes(file, bytes.ToArray());
+        }
+
+        public void SaveBmp(string file)
+        {
+            var bytes = new List<byte>();
+            ImageEncoder.EncodeBmp(pixels, Width, Height, bytes);
+            File.WriteAllBytes(file, bytes.ToArray());
+        }
+
+        public void SaveTga(string file)
+        {
+            var bytes = new List<byte>();
+            ImageEncoder.EncodeTga(pixels, Width, Height, bytes);
+            File.WriteAllBytes(file, bytes.ToArray());
+        }
+
+        public void SaveJpg(string file, int quality)
+        {
+            var bytes = new List<byte>();
+            ImageEncoder.EncodeJpg(pixels, Width, Height, quality, bytes);
+            File.WriteAllBytes(file, bytes.ToArray());
+        }
+
+        public void Resize(int width, int height)
+        {
+            if (width != Width || height != Height)
+            {
+                Width = width;
+                Height = height;
+                if (PixelCount != width * height)
+                {
+                    PixelCount = width * height;
+                    if (pixels.Length < PixelCount)
+                        Array.Resize(ref pixels, PixelCount);
+                }
+            }
         }
 
         public Color4[] Pixels

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rise.OpenGL;
-using Rise.Imaging;
 namespace Rise
 {
     public class Texture2D : Texture
