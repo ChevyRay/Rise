@@ -24,7 +24,7 @@ namespace Rise.FontTest
                 if (packer.Pack())
                 {
                     ulong diff = (Time.ClockValue - time) / (Time.ClockFrequency / 1000);
-                    Console.WriteLine("Packed: " + diff);
+                    Console.WriteLine("Packed: " + diff + " ms");
 
                     var atlas = new Bitmap(packer.Width, packer.Height);
                     var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);
