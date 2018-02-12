@@ -181,6 +181,43 @@ namespace Rise
             lock (randLock)
                 return rand.NextBool();
         }
+
+        public static T NextChoose<T>(this Random rand, T a, T b)
+        {
+            return rand.NextBool() ? a : b;
+        }
+        public static T NextChoose<T>(this Random rand, T a, T b, T c)
+        {
+            int i = rand.Next(3);
+            switch (i) {
+                case 0: return a;
+                case 1: return b;
+                default: return c;
+            }
+        }
+        public static T NextChoose<T>(this Random rand, T a, T b, T c, T d)
+        {
+            int i = rand.Next(4);
+            switch (i) {
+                case 0: return a;
+                case 1: return b;
+                case 2: return c;
+                default: return d;
+            }
+        }
+
+        public static T Choose<T>(T a, T b)
+        {
+            return rand.NextChoose(a, b);
+        }
+        public static T Choose<T>(T a, T b, T c)
+        {
+            return rand.NextChoose(a, b, c);
+        }
+        public static T Choose<T>(T a, T b, T c, T d)
+        {
+            return rand.NextChoose(a, b, c, d);
+        }
     }
 }
 

@@ -1,6 +1,7 @@
 #ifndef rect_packer_hpp
 #define rect_packer_hpp
 #include <memory>
+#include <cassert>
 
 struct recti
 {
@@ -21,14 +22,6 @@ struct recti
     }
 };
 
-struct vec2i
-{
-    int x;
-    int y;
-    inline vec2i() {}
-    inline vec2i(int x, int y) : x(x), y(y) {}
-};
-
 template<typename T>
 struct list
 {
@@ -36,7 +29,7 @@ struct list
     size_t capacity;
     size_t count;
     
-    list(int initCapacity)
+    list(size_t initCapacity)
     {
         items = (T*)std::malloc(sizeof(T) * initCapacity);
         capacity = initCapacity;
@@ -46,8 +39,16 @@ struct list
     {
         std::free(items);
     }
-    inline const T& operator[](size_t i) const { return items[i]; }
-    inline T& operator[](size_t i) { return items[i]; }
+    inline const T& operator[](size_t i) const
+    {
+        assert(i < count);
+        return items[i];
+    }
+    inline T& operator[](size_t i)
+    {
+        assert(i < count);
+        return items[i];
+    }
     inline void clear() { count = 0; }
     inline void add(const T& item)
     {
@@ -56,27 +57,40 @@ struct list
             capacity *= 2;
             items = (T*)std::realloc(items, sizeof(T) * capacity);
         }
+        items[count++] = item;
     }
     inline void remove_at(size_t index)
     {
-        //for (size_t i = index + 1; i < count; ++i)
-        //    items[i - 1] = items[i];
-        size_t to = index * sizeof(T);
-        size_t from = to + sizeof(T);
-        size_t len = (count - (index + 1)) * sizeof(T);
-        std::memmove(items + to, items + from, len);
+        for (size_t i = index + 1; i < count; ++i)
+            items[i - 1] = items[i];
         --count;
+    }
+    void sort(int (*compare)(const T& a, const T& b))
+    {
+        if (count > 1)
+        {
+            for (int i = 0; i < count - 1; ++i)
+            {
+                int j = i + 1;
+                while (j > 0 && compare(items[j - 1], items[j]) > 0)
+                {
+                    std::swap(items[j - 1], items[j]);
+                    --j;
+                }
+            }
+        }
     }
 };
 
 struct pack_node
 {
-    vec2i size;
+    int w;
+    int h;
     int id;
     bool can_rotate;
     
     inline pack_node() {}
-    inline pack_node(int w, int h, int id, bool can_rotate) : size(w, h), id(id), can_rotate(can_rotate) {}
+    inline pack_node(int w, int h, int id, bool can_rotate) : w(w), h(h), id(id), can_rotate(can_rotate && w != h) {}
 };
 
 struct packed_rect
@@ -85,7 +99,7 @@ struct packed_rect
     int id;
     
     inline packed_rect() {}
-    inline packed_rect(vec2i pos, const pack_node& node) : rect(pos.x, pos.y, node.size.x, node.size.y), id(node.id) {}
+    inline packed_rect(recti rect, int id) : rect(rect), id(id) {}
 };
 
 struct rect_packer
@@ -94,10 +108,10 @@ struct rect_packer
     list<packed_rect> packed;
     list<recti> free;
     list<size_t> indices;
-    bool find_position(const pack_node& node, vec2i* pos, int* best_area, int* best_short);
-    void split_free_rect(const recti& free_rect, const recti& placed_rect);
-    void place_node(vec2i pos, const pack_node& node);
-    rect_packer() : nodes(4), packed(4), free(4), indices(4) {}
+    bool find_position(const pack_node& node, recti* pos, int* best_area, int* best_short);
+    void split_free_rect(recti free_rect, const recti& placed_rect);
+    void place_node(const recti& pos, int id);
+    rect_packer(size_t capacity) : nodes(capacity), packed(capacity), free(capacity), indices(capacity) {}
     ~rect_packer() {}
     void init(int width, int height);
     void add(int id, int w, int h, bool can_rotate);

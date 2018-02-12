@@ -130,6 +130,14 @@ namespace Rise
                 for (int i = x; i < ii; ++i)
                     pixels[j * Width + i] = color;
         }
+        public void SetRect(ref RectangleI rect, Color4 color)
+        {
+            SetRect(rect.X, rect.Y, rect.W, rect.H, color);
+        }
+        public void SetRect(RectangleI rect, Color4 color)
+        {
+            SetRect(rect.X, rect.Y, rect.W, rect.H, color);
+        }
 
         public void CopyPixels(Bitmap source)
         {

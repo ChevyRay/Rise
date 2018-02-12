@@ -60,5 +60,12 @@ namespace Rise
             PackedCount = packer_get_count(packer);
             return result;
         }
+
+        public void GetPacked(int i, out int id, out RectangleI rect)
+        {
+            if (i < 0 || i >= PackedCount)
+                throw new ArgumentOutOfRangeException(nameof(i));
+            packer_get(packer, i, out id, out rect.X, out rect.Y, out rect.W, out rect.H);
+        }
     }
 }
