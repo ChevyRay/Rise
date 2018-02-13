@@ -8,11 +8,11 @@ namespace Rise.FontTest
         {
             App.OnInit += () =>
             {
-                var font = new Font("jackeyfont.ttf", null);
-                var size = new FontSize(font, 12f);
+                var font = new Font("Inconsolata.otf", null);
+                var size = new FontSize(font, 24f);
                 FontChar info;
 
-                var packer = new RectanglePacker(512, 1024, font.CharacterCount);
+                var packer = new RectanglePacker(4096, 4096, font.CharacterCount);
 
                 foreach (char chr in font.Characters)
                 {
@@ -27,9 +27,12 @@ namespace Rise.FontTest
 
                 if (packer.Pack())
                 {
-                    Console.WriteLine("Packed: " + (Time.ClockMilliseconds - time) + " ms");
+                    Console.WriteLine("Pack time: " + (Time.ClockMilliseconds - time) + " ms");
 
-                    var atlas = new Bitmap(packer.Width, packer.Height);
+                    int atlasW, atlasH;
+                    packer.GetBounds(out atlasW, out atlasH);
+
+                    var atlas = new Bitmap(atlasW.ToPowerOf2(), atlasH.ToPowerOf2());
                     var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);
 
                     int maxSize = Math.Max(size.MaxCharW, size.MaxCharH);

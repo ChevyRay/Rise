@@ -25,6 +25,9 @@ namespace Rise
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern int packer_get_count(IntPtr packer);
 
+        [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern void packer_get_bounds(IntPtr packer, out int w, out int h);
+
         public int Width { get; private set; }
         public int Height { get; private set; }
         public int PackedCount { get; private set; }
@@ -71,6 +74,11 @@ namespace Rise
             if (i < 0 || i >= PackedCount)
                 throw new ArgumentOutOfRangeException(nameof(i));
             packer_get(packer, i, out id, out rect.X, out rect.Y, out rect.W, out rect.H);
+        }
+
+        public void GetBounds(out int width, out int height)
+        {
+            packer_get_bounds(packer, out width, out height);
         }
     }
 }

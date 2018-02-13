@@ -43,6 +43,18 @@ extern "C"
     {
         return (int)packer->packed.count;
     }
+    
+    EXTERN_DECL void packer_get_bounds(rect_packer* packer, int* w, int* h)
+    {
+        const list<packed_rect>& packed = packer->packed;
+        *w = 0;
+        *h = 0;
+        for (size_t i = 0; i < packed.count; ++i)
+        {
+            *w = std::max(*w, packed[i].rect.x + packed[i].rect.w);
+            *h = std::max(*h, packed[i].rect.y + packed[i].rect.h);
+        }
+    }
 }
 
 void rect_packer::init(int width, int height)
