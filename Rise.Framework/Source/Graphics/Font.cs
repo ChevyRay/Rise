@@ -278,7 +278,7 @@ namespace Rise
             return (int)(Font.GetKerning(i, j) * scale);
         }
 
-        public void GetPixels(char chr, Bitmap bitmap)
+        public void GetPixels(char chr, Bitmap bitmap, bool premultiply)
         {
             int i = Font.GetIndex(chr);
 
@@ -295,15 +295,32 @@ namespace Rise
 
             var pixels = bitmap.Pixels;
             int p = 0;
-            for (int y = 0; y < h; ++y)
+            if (premultiply)
             {
-                for (int x = 0; x < w; ++x)
+                for (int y = 0; y < h; ++y)
                 {
-                    pixels[p].R = buffer[p];
-                    pixels[p].G = buffer[p];
-                    pixels[p].B = buffer[p];
-                    pixels[p].A = buffer[p];
-                    ++p;
+                    for (int x = 0; x < w; ++x)
+                    {
+                        pixels[p].R = buffer[p];
+                        pixels[p].G = buffer[p];
+                        pixels[p].B = buffer[p];
+                        pixels[p].A = buffer[p];
+                        ++p;
+                    }
+                }
+            }
+            else
+            {
+                for (int y = 0; y < h; ++y)
+                {
+                    for (int x = 0; x < w; ++x)
+                    {
+                        pixels[p].R = 255;
+                        pixels[p].G = 255;
+                        pixels[p].B = 255;
+                        pixels[p].A = buffer[p];
+                        ++p;
+                    }
                 }
             }
         }

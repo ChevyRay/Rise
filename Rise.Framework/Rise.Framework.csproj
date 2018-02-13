@@ -104,7 +104,6 @@
     <Compile Include="Source\Atlas\AtlasImage.cs" />
     <Compile Include="Source\Atlas\AtlasFont.cs" />
     <Compile Include="Source\Atlas\AtlasChar.cs" />
-    <Compile Include="Source\Tools\Hasher.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

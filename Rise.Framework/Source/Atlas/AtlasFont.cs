@@ -41,7 +41,7 @@ namespace Rise
 
             AtlasImage image = null;
             if (width > 0)
-                image = new AtlasImage(Atlas, ref name, width, height, offsetX, offsetY, ref uvRect, rotate90);
+                image = new AtlasImage(Atlas, ref name, width, height, offsetX, offsetY, width, height, ref uvRect, rotate90);
 
             var result = new AtlasChar(chr, advance, image);
             chars.Add(chr, result);

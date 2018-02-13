@@ -13,8 +13,8 @@ namespace Rise.FontTest
 
                 var builder = new AtlasBuilder(1024);
 
-                builder.AddFont("font", new FontSize(font, 32f));
-                builder.AddFont("font2", new FontSize(font, 64f));
+                builder.AddFont("font", new FontSize(font, 32f), false);
+                builder.AddFont("font2", new FontSize(font, 64f), false);
 
                 var face = new Bitmap("assets/face.png");
                 var maritte = new Bitmap("assets/maritte.png");
@@ -27,7 +27,7 @@ namespace Rise.FontTest
                     builder.AddBitmap("star" + i, star, true);
                 }
 
-                builder.AddFont("font3", new FontSize(font2, 32f));
+                builder.AddFont("font3", new FontSize(font2, 32f), false);
                 //builder.AddFont("font4", new FontSize(font2, 32f));
 
                 var atlas = builder.Build(1);

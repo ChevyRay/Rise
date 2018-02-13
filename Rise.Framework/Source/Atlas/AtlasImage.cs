@@ -9,10 +9,13 @@ namespace Rise
         public int Height { get; private set; }
         public int OffsetX { get; private set; }
         public int OffsetY { get; private set; }
+        public int TrimWidth { get; private set; }
+        public int TrimHeight { get; private set; }
 
         Quad uv;
+        RectangleI trim;
 
-        internal AtlasImage(Atlas atlas, ref string name, int w, int h, int ox, int oy, ref Rectangle uvRect, bool rotate90)
+        internal AtlasImage(Atlas atlas, ref string name, int w, int h, int ox, int oy, int tw, int th, ref Rectangle uvRect, bool rotate90)
         {
             Atlas = atlas;
             Name = name;
@@ -20,6 +23,8 @@ namespace Rise
             Height = h;
             OffsetX = ox;
             OffsetY = oy;
+            TrimWidth = tw;
+            TrimHeight = tw;
 
             if (rotate90)
             {

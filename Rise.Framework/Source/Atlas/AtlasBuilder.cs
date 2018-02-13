@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 namespace Rise
 {
+    //TODO: detect duplicates (eg. if 2 different bitmaps, when trimmed, are equal, we should only pack one)
     public class AtlasBuilder
     {
         struct Packed
@@ -13,6 +14,7 @@ namespace Rise
         int maxSize;
         Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>(StringComparer.Ordinal);
         Dictionary<string, FontSize> fonts = new Dictionary<string, FontSize>(StringComparer.Ordinal);
+        List<FontSize> fontsToPremultiply = new List<FontSize>();
         Dictionary<Bitmap, RectangleI> trims = new Dictionary<Bitmap, RectangleI>();
         int packCount = 1;
 
@@ -40,11 +42,13 @@ namespace Rise
             AddBitmap(name, bitmap, trim);
         }
 
-        public void AddFont(string name, FontSize font)
+        public void AddFont(string name, FontSize font, bool premultiply)
         {
             if (fonts.ContainsKey(name))
                 throw new Exception($"AtlasBuilder already has font with name: \"{name}\"");
             fonts.Add(name, font);
+            if (premultiply)
+                fontsToPremultiply.Add(font);
             packCount += font.CharCount;
         }
 
@@ -124,7 +128,7 @@ namespace Rise
                 rect.W -= pad;
                 rect.H -= pad;
 
-                atlas.AddImage(pair.Key, bitmap.Width, bitmap.Height, trim.X, trim.Y, rect, trim.W != rect.W);
+                atlas.AddImage(pair.Key, bitmap.Width, bitmap.Height, trim.X, trim.Y, trim.W, trim.H, rect, trim.W != rect.W);
 
                 //Blit the bitmap onto the atlas, optionally rotating it
                 if (trim.W != rect.W)
@@ -172,7 +176,7 @@ namespace Rise
                         rect.H -= pad;
 
                         //Rasterize the character and optionally rotate it before blitting
-                        size.GetPixels(chr.Char, charBitmap);
+                        size.GetPixels(chr.Char, charBitmap, fontsToPremultiply.Contains(size));
                         if (chr.Width != rect.W)
                         {
                             charBitmap.RotateRight(rotBitmap);
