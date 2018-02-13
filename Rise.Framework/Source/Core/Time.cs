@@ -30,6 +30,11 @@ namespace Rise
             get { return App.platform.GetClockValue(); }
         }
 
+        public static ulong ClockMilliseconds
+        {
+            get { return ClockValue / (ClockFrequency / 1000); }
+        }
+
         internal static void Init(float dt)
         {
             Delta = dt;

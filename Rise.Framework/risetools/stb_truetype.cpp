@@ -21,6 +21,11 @@ extern "C"
         delete info;
     }
     
+    EXTERN_DECL int num_glyphs(stbtt_fontinfo* info)
+    {
+        return info->numGlyphs;
+    }
+    
     EXTERN_DECL float scale_for_pixel_height(stbtt_fontinfo* info, float height)
     {
         return stbtt_ScaleForPixelHeight(info, height);

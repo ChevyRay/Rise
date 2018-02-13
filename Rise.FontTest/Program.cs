@@ -8,23 +8,26 @@ namespace Rise.FontTest
         {
             App.OnInit += () =>
             {
-                var packer = new RectanglePacker(512, 256, Font.AsciiChars.Length);
-
-                var font = new Font("Cousine-Regular.ttf", Font.AsciiChars);
-                var size = new FontSize(font, 64f);
+                var font = new Font("jackeyfont.ttf", null);
+                var size = new FontSize(font, 12f);
                 FontChar info;
-                foreach (char chr in Font.AsciiChars)
+
+                var packer = new RectanglePacker(512, 1024, font.CharacterCount);
+
+                foreach (char chr in font.Characters)
                 {
-                    size.GetCharInfo(chr, out info);
-                    packer.Add(chr, info.Width + 1, info.Height + 1, true);
+                    if (!size.IsEmpty(chr))
+                    {
+                        size.GetCharInfo(chr, out info);
+                        packer.Add(chr, info.Width + 1, info.Height + 1, true);
+                    }
                 }
 
-                var time = Time.ClockValue;
+                var time = Time.ClockMilliseconds;
 
                 if (packer.Pack())
                 {
-                    ulong diff = (Time.ClockValue - time) / (Time.ClockFrequency / 1000);
-                    Console.WriteLine("Packed: " + diff + " ms");
+                    Console.WriteLine("Packed: " + (Time.ClockMilliseconds - time) + " ms");
 
                     var atlas = new Bitmap(packer.Width, packer.Height);
                     var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);

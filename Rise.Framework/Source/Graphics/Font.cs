@@ -15,6 +15,43 @@ namespace Rise
         LatinExtendedAdditional = 32
     }*/
 
+    public static class CharSet
+    {
+        public static readonly string Ascii;
+        public static readonly string BasicLatin;
+        public static readonly string Latin1Supplement;
+        public static readonly string LatinExtendedA;
+        public static readonly string LatinExtendedB;
+
+        static CharSet()
+        {
+            var builder = new StringBuilder();
+            for (char chr = (char)0x20; chr <= 0x7E; ++chr)
+                builder.Append(chr);
+            Ascii = builder.ToString();
+
+            builder.Clear();
+            for (char chr = (char)32; chr <= 126; ++chr)
+                builder.Append(chr);
+            BasicLatin = builder.ToString();
+
+            builder.Clear();
+            for (char chr = (char)160; chr <= 255; ++chr)
+                builder.Append(chr);
+            Latin1Supplement = builder.ToString();
+
+            builder.Clear();
+            for (char chr = (char)256; chr <= 383; ++chr)
+                builder.Append(chr);
+            LatinExtendedA = builder.ToString();
+
+            builder.Clear();
+            for (char chr = (char)256; chr <= 591; ++chr)
+                builder.Append(chr);
+            LatinExtendedB = builder.ToString();
+        }
+    }
+
     struct FontGlyph
     {
         public int Index;
@@ -29,6 +66,9 @@ namespace Rise
 
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern void free_font(IntPtr info);
+
+        [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern int num_glyphs(IntPtr info);
 
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern float scale_for_pixel_height(IntPtr info, float height);
@@ -60,23 +100,15 @@ namespace Rise
         [DllImport("risetools.dll", CallingConvention = CallingConvention.Cdecl)]
         static extern int get_kerning(IntPtr info, int glyph1, int glyph2);
 
-        public static readonly string AsciiChars;
-
-        static Font()
-        {
-            var builder = new StringBuilder();
-            for (char chr = (char)0x20; chr <= 0x7E; ++chr)
-                builder.Append(chr);
-            AsciiChars = builder.ToString();
-        }
-
         internal IntPtr info;
         internal char[] chars;
         internal FontGlyph[] glyphs;
 
+        public string Characters { get; private set; }
         public int Ascent { get; private set; }
         public int Descent { get; private set; }
         public int LineGap { get; private set; }
+        public int CharacterCount { get { return chars.Length; } }
 
         public unsafe Font(string file, string characters)
         {
@@ -91,6 +123,16 @@ namespace Rise
             Descent = d;
             LineGap = l;
 
+            if (characters == null)
+            {
+                var builder = new StringBuilder();
+                for (char chr = (char)0; chr < char.MaxValue; ++chr)
+                    if (get_glyph_index(info, chr) > 0)
+                        builder.Append(chr);
+                characters = builder.ToString();
+                Characters = characters;
+            }
+
             //Put all the characters into a sorted array to allow for binary searching
             chars = characters.ToCharArray();
             Array.Sort(chars);
@@ -100,7 +142,8 @@ namespace Rise
             for (int i = 0; i < glyphs.Length; ++i)
             {
                 glyphs[i].Index = get_glyph_index(info, chars[i]);
-                get_glyph_hmetrics(info, glyphs[i].Index, out glyphs[i].Advance, out glyphs[i].OffsetX);
+                if (glyphs[i].Index > 0)
+                    get_glyph_hmetrics(info, glyphs[i].Index, out glyphs[i].Advance, out glyphs[i].OffsetX);
             }
         }
         ~Font()
@@ -141,6 +184,12 @@ namespace Rise
         {
             fixed (byte* ptr = pixels)
             get_glyph_bitmap(info, ptr, w, h, w, scale, scale, glyphs[i].Index);
+        }
+
+        public bool IsEmpty(char chr)
+        {
+            int index = GetIndex(chr);
+            return glyphs[index].Index == 0 || is_glyph_empty(info, glyphs[index].Index);
         }
     }
 
@@ -190,6 +239,11 @@ namespace Rise
             }
 
             buffer = new byte[MaxCharW * MaxCharH];
+        }
+
+        public bool IsEmpty(char chr)
+        {
+            return Font.IsEmpty(chr);
         }
 
         public void GetCharInfo(char chr, out FontChar info)
