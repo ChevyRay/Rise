@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Collections.Generic;
 namespace Rise.FontTest
 {
     class Program
@@ -8,7 +8,7 @@ namespace Rise.FontTest
         {
             App.OnInit += () =>
             {
-                var font = new Font("Inconsolata.otf", null);
+                /*var font = new Font("Inconsolata.otf", null);
                 var size = new FontSize(font, 24f);
                 FontChar info;
 
@@ -62,7 +62,7 @@ namespace Rise.FontTest
                     atlas.SavePng("font.png");
                 }
                 else
-                    Console.WriteLine("Fail: " + packer.PackedCount);
+                    Console.WriteLine("Fail: " + packer.PackedCount);*/
             };
 
             App.Init<PlatformSDL.PlatformSDL2>();

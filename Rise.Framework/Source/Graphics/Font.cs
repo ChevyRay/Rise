@@ -4,17 +4,6 @@ using System.Text;
 using System.Runtime.InteropServices;
 namespace Rise
 {
-    /*[Flags]
-    public enum CharSet
-    {
-        Ascii = 1,
-        BasicLatin = 2,
-        Latin1Supplement = 4,
-        LatinExtendedA = 8,
-        LatinExtendedB = 16,
-        LatinExtendedAdditional = 32
-    }*/
-
     public static class CharSet
     {
         public static readonly string Ascii;
@@ -108,6 +97,7 @@ namespace Rise
         public int Ascent { get; private set; }
         public int Descent { get; private set; }
         public int LineGap { get; private set; }
+        public int Height { get { return Ascent - Descent; } }
         public int CharacterCount { get { return chars.Length; } }
 
         public unsafe Font(string file, string characters)
@@ -209,6 +199,11 @@ namespace Rise
         public float Size { get; private set; }
         public int MaxCharW { get; private set; }
         public int MaxCharH { get; private set; }
+        public int CharCount { get { return chars.Length; } }
+        public int Ascent { get; private set; }
+        public int Descent { get; private set; }
+        public int LineGap { get; private set; }
+        public int Height { get { return Ascent - Descent; } }
 
         float scale;
         char[] codes;
@@ -221,6 +216,10 @@ namespace Rise
             Size = size;
             scale = font.GetScale(size);
 
+            Ascent = (int)(font.Ascent * scale);
+            Descent = (int)(font.Descent * scale);
+            LineGap = (int)(font.LineGap * scale);
+                
             int x0, y0, x1, y1;
 
             codes = font.chars;
@@ -230,12 +229,18 @@ namespace Rise
                 chars[i].Char = Font.chars[i];
                 chars[i].Advance = (int)(Font.glyphs[i].Advance * scale);
                 chars[i].OffsetX = (int)(Font.glyphs[i].OffsetX * scale);
-                font.GetBitmapBox(i, scale, out x0, out y0, out x1, out y1);
-                chars[i].OffsetY = y0;
-                chars[i].Width = x1 - x0;
-                chars[i].Height = y1 - y0;
-                MaxCharW = Math.Max(chars[i].Width, MaxCharW);
-                MaxCharH = Math.Max(chars[i].Height, MaxCharH);
+
+                //If the glyph is empty it has no size
+                if (!font.IsEmpty(chars[i].Char))
+                {
+                    font.GetBitmapBox(i, scale, out x0, out y0, out x1, out y1);
+                    chars[i].OffsetY = y0;
+                    chars[i].Width = x1 - x0;
+                    chars[i].Height = y1 - y0;
+
+                    MaxCharW = Math.Max(chars[i].Width, MaxCharW);
+                    MaxCharH = Math.Max(chars[i].Height, MaxCharH);
+                }
             }
 
             buffer = new byte[MaxCharW * MaxCharH];
@@ -244,6 +249,11 @@ namespace Rise
         public bool IsEmpty(char chr)
         {
             return Font.IsEmpty(chr);
+        }
+
+        public void GetCharAt(int i, out FontChar info)
+        {
+            info = chars[i];
         }
 
         public void GetCharInfo(char chr, out FontChar info)

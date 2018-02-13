@@ -99,6 +99,11 @@
     <Compile Include="Source\Tools\ImageDecoder.cs" />
     <Compile Include="Source\Tools\ImageEncoder.cs" />
     <Compile Include="Source\Graphics\Font.cs" />
+    <Compile Include="Source\Atlas\Atlas.cs" />
+    <Compile Include="Source\Atlas\AtlasBuilder.cs" />
+    <Compile Include="Source\Atlas\AtlasImage.cs" />
+    <Compile Include="Source\Atlas\AtlasFont.cs" />
+    <Compile Include="Source\Atlas\AtlasChar.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -109,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\Tools\" />
+    <Folder Include="Source\Atlas\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
