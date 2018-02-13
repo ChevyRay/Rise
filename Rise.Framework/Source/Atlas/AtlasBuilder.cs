@@ -13,6 +13,7 @@ namespace Rise
         int maxSize;
         Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>(StringComparer.Ordinal);
         Dictionary<string, FontSize> fonts = new Dictionary<string, FontSize>(StringComparer.Ordinal);
+        Dictionary<Bitmap, RectangleI> trims = new Dictionary<Bitmap, RectangleI>();
         int packCount = 1;
 
         public AtlasBuilder(int maxSize)
@@ -20,19 +21,23 @@ namespace Rise
             this.maxSize = maxSize;
         }
 
-        public void AddBitmap(string name, Bitmap bitmap)
+        public void AddBitmap(string name, Bitmap bitmap, bool trim)
         {
             if (bitmaps.ContainsKey(name))
                 throw new Exception($"AtlasBuilder already has bitmap with name: \"{name}\"");
             bitmaps.Add(name, bitmap);
+
+            if (trim)
+                trims[bitmap] = bitmap.GetPixelBounds(0);
+
             ++packCount;
         }
-        public void AddBitmap(string name, string file, bool premultiply)
+        public void AddBitmap(string name, string file, bool premultiply, bool trim)
         {
             var bitmap = new Bitmap(file);
             if (premultiply)
                 bitmap.Premultiply();
-            AddBitmap(name, bitmap);
+            AddBitmap(name, bitmap, trim);
         }
 
         public void AddFont(string name, FontSize font)
@@ -55,7 +60,12 @@ namespace Rise
 
             //Add all the bitmaps (padding them)
             foreach (var pair in bitmaps)
-                packer.Add(++nextID, pair.Value.Width + pad, pair.Value.Height + pad, true);
+            {
+                RectangleI rect;
+                if (!trims.TryGetValue(pair.Value, out rect))
+                    rect = new RectangleI(pair.Value.Width, pair.Value.Height);
+                packer.Add(++nextID, rect.W + pad, rect.H + pad, true);
+            }
 
             //Add all the font characters (padding them)
             foreach (var pair in fonts)
@@ -71,7 +81,7 @@ namespace Rise
 
             //Pack the rectangles
             if (!packer.Pack())
-                throw new Exception("Failed to pack atlas.");
+                return null;
 
             //Sort the packed rectangles so they're in the same order we added them
             var packed = new Packed[packer.PackedCount];
@@ -89,6 +99,7 @@ namespace Rise
             var atlas = new Atlas(new Texture2D(atlasW, atlasH, TextureFormat.RGBA), Vector2.Zero);
             var atlasBitmap = new Bitmap(atlasW, atlasH);
             var rotBitmap = new Bitmap(1, 1);
+            var trimBitmap = new Bitmap(1, 1);
 
             //Add the white pixel
             var pixRect = packed[0].Rect;
@@ -104,21 +115,33 @@ namespace Rise
             {
                 var bitmap = pair.Value;
 
+                RectangleI trim;
+                if (!trims.TryGetValue(bitmap, out trim))
+                    trim = new RectangleI(bitmap.Width, bitmap.Height);
+
                 //Get the rectangle and unpad it
                 var rect = packed[nextID++].Rect;
                 rect.W -= pad;
                 rect.H -= pad;
 
-                atlas.AddImage(pair.Key, bitmap.Width, bitmap.Height, rect, bitmap.Width != rect.W);
+                atlas.AddImage(pair.Key, bitmap.Width, bitmap.Height, trim.X, trim.Y, rect, trim.W != rect.W);
 
                 //Blit the bitmap onto the atlas, optionally rotating it
-                if (bitmap.Width != rect.W)
+                if (trim.W != rect.W)
                 {
-                    bitmap.RotateRight(rotBitmap);
+                    //Rotate the bitmap, trimming first if the bitmap was trimmed
+                    if (trim.W < bitmap.Width || trim.H < bitmap.Height)
+                    {
+                        bitmap.GetSubRect(trimBitmap, trim);
+                        trimBitmap.RotateRight(rotBitmap);
+                    }
+                    else
+                        bitmap.RotateRight(rotBitmap);
+
                     atlasBitmap.CopyPixels(rotBitmap, rect.X, rect.Y);
                 }
                 else
-                    atlasBitmap.CopyPixels(bitmap, rect.X, rect.Y);
+                    atlasBitmap.CopyPixels(bitmap, trim.X, trim.Y, trim.W, trim.H, rect.X, rect.Y);
             }
 
             //Add the fonts

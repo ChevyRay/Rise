@@ -7,15 +7,20 @@ namespace Rise
         public string Name { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+        public int OffsetX { get; private set; }
+        public int OffsetY { get; private set; }
 
         Quad uv;
 
-        internal AtlasImage(Atlas atlas, ref string name, int w, int h, ref Rectangle uvRect, bool rotate90)
+        internal AtlasImage(Atlas atlas, ref string name, int w, int h, int ox, int oy, ref Rectangle uvRect, bool rotate90)
         {
             Atlas = atlas;
             Name = name;
             Width = w;
             Height = h;
+            OffsetX = ox;
+            OffsetY = oy;
+
             if (rotate90)
             {
                 uv.A = uvRect.TopRight;

@@ -100,6 +100,10 @@ namespace Rise
         public int Height { get { return Ascent - Descent; } }
         public int CharacterCount { get { return chars.Length; } }
 
+        public Font(string file) : this(file, null)
+        {
+            
+        }
         public unsafe Font(string file, string characters)
         {
             var data = File.ReadAllBytes(file);

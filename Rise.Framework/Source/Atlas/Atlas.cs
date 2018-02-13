@@ -18,40 +18,40 @@ namespace Rise
             WhitePixel = whitePixel;
         }
 
-        public AtlasImage AddImage(ref string name, int width, int height, ref Rectangle uvRect, bool rotate90)
+        public AtlasImage AddImage(ref string name, int width, int height, int offsetX, int offsetY, ref Rectangle uvRect, bool rotate90)
         {
             if (images.ContainsKey(name))
                 throw new Exception($"Atlas already has image with name: \"{name}\"");
 
-            var image = new AtlasImage(this, ref name, width, height, ref uvRect, rotate90);
+            var image = new AtlasImage(this, ref name, width, height, offsetX, offsetY, ref uvRect, rotate90);
             images.Add(name, image);
             return image;
         }
-        public AtlasImage AddImage(string name, int width, int height, Rectangle uvRect, bool rotate90)
+        public AtlasImage AddImage(string name, int width, int height, int offsetX, int offsetY, Rectangle uvRect, bool rotate90)
         {
-            return AddImage(ref name, width, height, ref uvRect, rotate90);
+            return AddImage(ref name, width, height, offsetX, offsetY, ref uvRect, rotate90);
         }
-        public AtlasImage AddImage(string name, int width, int height, Rectangle uvRect)
+        public AtlasImage AddImage(string name, int width, int height, int offsetX, int offsetY, Rectangle uvRect)
         {
-            return AddImage(ref name, width, height, ref uvRect, false);
+            return AddImage(ref name, width, height, offsetX, offsetY, ref uvRect, false);
         }
-        public AtlasImage AddImage(string name, int width, int height, RectangleI subRect, bool rotate90)
+        public AtlasImage AddImage(string name, int width, int height, int offsetX, int offsetY, RectangleI subRect, bool rotate90)
         {
             Rectangle uvRect = subRect;
             uvRect.X /= Texture.Width;
             uvRect.Y /= Texture.Height;
             uvRect.W /= Texture.Width;
             uvRect.H /= Texture.Height;
-            return AddImage(ref name, width, height, ref uvRect, rotate90);
+            return AddImage(ref name, width, height, offsetX, offsetY, ref uvRect, rotate90);
         }
-        public AtlasImage AddImage(string name, int width, int height, RectangleI subRect)
+        public AtlasImage AddImage(string name, int width, int height, int offsetX, int offsetY, RectangleI subRect)
         {
             Rectangle uvRect = subRect;
             uvRect.X /= Texture.Width;
             uvRect.Y /= Texture.Height;
             uvRect.W /= Texture.Width;
             uvRect.H /= Texture.Height;
-            return AddImage(ref name, width, height, ref uvRect, false);
+            return AddImage(ref name, width, height, offsetX, offsetY, ref uvRect, false);
         }
 
         public AtlasFont AddFont(string name, int ascent, int descent, int lineGap)

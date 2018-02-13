@@ -8,61 +8,38 @@ namespace Rise.FontTest
         {
             App.OnInit += () =>
             {
-                /*var font = new Font("Inconsolata.otf", null);
-                var size = new FontSize(font, 24f);
-                FontChar info;
+                var font = new Font("assets/Inconsolata.otf");
+                var font2 = new Font("assets/Cousine-Regular.ttf");
 
-                var packer = new RectanglePacker(4096, 4096, font.CharacterCount);
+                var builder = new AtlasBuilder(1024);
 
-                foreach (char chr in font.Characters)
+                builder.AddFont("font", new FontSize(font, 32f));
+                builder.AddFont("font2", new FontSize(font, 64f));
+
+                var face = new Bitmap("assets/face.png");
+                var maritte = new Bitmap("assets/maritte.png");
+                var star = new Bitmap("assets/star.png");
+
+                for (int i = 0; i < 300; ++i)
                 {
-                    if (!size.IsEmpty(chr))
-                    {
-                        size.GetCharInfo(chr, out info);
-                        packer.Add(chr, info.Width + 1, info.Height + 1, true);
-                    }
+                    builder.AddBitmap("face" + i, face, true);
+                    builder.AddBitmap("maritte" + i, maritte, true);
+                    builder.AddBitmap("star" + i, star, true);
                 }
 
-                var time = Time.ClockMilliseconds;
+                builder.AddFont("font3", new FontSize(font2, 32f));
+                //builder.AddFont("font4", new FontSize(font2, 32f));
 
-                if (packer.Pack())
+                var atlas = builder.Build(1);
+                if (atlas != null)
                 {
-                    Console.WriteLine("Pack time: " + (Time.ClockMilliseconds - time) + " ms");
+                    Console.WriteLine("Success!");
 
-                    int atlasW, atlasH;
-                    packer.GetBounds(out atlasW, out atlasH);
-
-                    var atlas = new Bitmap(atlasW.ToPowerOf2(), atlasH.ToPowerOf2());
-                    var bitmap = new Bitmap(size.MaxCharW, size.MaxCharH);
-
-                    int maxSize = Math.Max(size.MaxCharW, size.MaxCharH);
-                    var rotated = new Bitmap(maxSize, maxSize);
-
-                    int id;
-                    RectangleI rect;
-                    for (int i = 0; i < packer.PackedCount; ++i)
-                    {
-                        packer.GetPacked(i, out id, out rect);
-                        rect.W--;
-                        rect.H--;
-
-                        size.GetPixels((char)id, bitmap);
-
-                        if (bitmap.Width == rect.W)
-                        {
-                            atlas.CopyPixels(bitmap, rect.X, rect.Y);
-                        }
-                        else
-                        {
-                            bitmap.RotateRight(rotated);
-                            atlas.CopyPixels(rotated, rect.X, rect.Y);
-                        }
-                    }
-
-                    atlas.SavePng("font.png");
+                    var bitmap = atlas.Texture.GetBitmap();
+                    bitmap.SavePng("atlas.png");
                 }
                 else
-                    Console.WriteLine("Fail: " + packer.PackedCount);*/
+                    Console.WriteLine("Failed!");
             };
 
             App.Init<PlatformSDL.PlatformSDL2>();

@@ -36,6 +36,22 @@ namespace Rise
             SetPixels(pixels, width, height);
         }
 
+        public uint Hash()
+        {
+            unchecked
+            {
+                uint hash = 0x811C9DC5;
+                for (int i = 0; i < PixelCount; ++i)
+                {
+                    hash = (hash * 0x1000193) ^ pixels[i].R;
+                    hash = (hash * 0x1000193) ^ pixels[i].G;
+                    hash = (hash * 0x1000193) ^ pixels[i].B;
+                    hash = (hash * 0x1000193) ^ pixels[i].A;
+                }
+                return hash;
+            }
+        }
+
         public void SavePng(string file)
         {
             var bytes = new List<byte>();
@@ -157,6 +173,12 @@ namespace Rise
             for (int y = 0; y < Height; ++y)
                 for (int x = 0; x < Width; ++x)
                     result.SetPixel(h - y, x, GetPixel(x, y));
+        }
+
+        public void GetSubRect(Bitmap result, RectangleI rect)
+        {
+            result.Resize(rect.W, rect.H);
+            result.CopyPixels(this, rect, Point2.Zero);
         }
 
         public void CopyPixels(Bitmap source)
