@@ -24,7 +24,7 @@ namespace Rise
             OffsetX = ox;
             OffsetY = oy;
             TrimWidth = tw;
-            TrimHeight = tw;
+            TrimHeight = th;
 
             if (rotate90)
             {
