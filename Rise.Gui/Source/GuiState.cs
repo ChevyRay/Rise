@@ -16,8 +16,17 @@ namespace Rise.Gui
         int matrixLoc;
         int textureLoc;
 
+        Texture2D whitePixelTexture;
+
+        Atlas currAtlas;
+        Texture currTexture;
+        Vector2 currWhitePixel;
+
+
         public GuiState(Texture targetTexture, Shader shader)
         {
+            whitePixelTexture = new Texture2D(1, 1, new Color4[] { Color4.White });
+
             TargetTexture = targetTexture;
             Shader = shader;
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 namespace Rise
 {
+    //TODO: should this be in Rise.Framework? It feels a bit too specific
     public class Atlas
     {
         public Texture2D Texture { get; private set; }
