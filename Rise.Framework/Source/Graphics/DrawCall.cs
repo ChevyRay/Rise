@@ -108,6 +108,7 @@ namespace Rise
             //TODO: temp, this should be 2d/3d specific
             GL.Enable(EnableCap.CullFace);
             GL.CullFace(CullFace.Back);
+            GL.FrontFace(FrontFace.Clockwise);
             GL.Enable(EnableCap.DepthTest);
             GL.DepthFunc(DepthFunc.LessEqual);
 

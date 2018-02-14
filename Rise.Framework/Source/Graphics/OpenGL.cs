@@ -148,6 +148,14 @@ namespace Rise.OpenGL
             CheckError();
         }
 
+        delegate void _glFrontFace(FrontFace face);
+        static _glFrontFace glFrontFace;
+        public static void FrontFace(FrontFace face)
+        {
+            glFrontFace(face);
+            CheckError();
+        }
+
         unsafe delegate void _glGetIntegerv(GLEnum name, int* data);
         static _glGetIntegerv glGetIntegerv;
         static unsafe void GetIntegerV(GLEnum name, out int val)
@@ -1534,5 +1542,11 @@ namespace Rise
         Front = 0x0404,
         Back = 0x0405,
         FrontAndBack = 0x0408
+    }
+
+    public enum FrontFace : GLEnum
+    {
+        Clockwise = 0x0900,
+        CounterClockwise = 0x0901
     }
 }
