@@ -470,34 +470,26 @@ namespace Rise
             
         public static void CreateOrthographic(float width, float height, float near, float far, out Matrix4x4 result)
         {
-            result.M11 = 2f / width;
-            result.M12 = result.M13 = result.M14 = 0f;
-            result.M22 = 2f / height;
-            result.M21 = result.M23 = result.M24 = 0f;
-            result.M33 = 1f / (near - far);
-            result.M31 = result.M32 = result.M34 = 0f;
-            result.M41 = result.M42 = 0f;
-            result.M43 = near / (near - far);
-            result.M44 = 1f;
+            CreateOrthographic(0f, width, height, 0f, near, far, out result);
         }
         public static Matrix4x4 CreateOrthographic(float width, float height, float near, float far)
         {
             Matrix4x4 result;
-            CreateOrthographic(width, height, near, far, out result);
+            CreateOrthographic(0f, width, height, 0f, near, far, out result);
             return result;
         }
         public static void CreateOrthographic(float left, float right, float bottom, float top, float near, float far, out Matrix4x4 result)
         {
-            result.M11 = (float)(2.0 / ((double)right - (double)left));
-            result.M12 = result.M13 = result.M14 = result.M21 = 0.0f;
-            result.M22 = (float)(2.0 / ((double)top - (double)bottom));
-            result.M23 = result.M24 = result.M31 = result.M32 = 0.0f;
-            result.M33 = (float)(1.0 / ((double)near - (double)far));
-            result.M34 = 0.0f;
-            result.M41 = (float)(((double)left + (double)right) / ((double)left - (double)right));
-            result.M42 = (float)(((double)top + (double)bottom) / ((double)bottom - (double)top));
-            result.M43 = (float)((double)near / ((double)near - (double)far));
-            result.M44 = 1.0f;
+            result.M11 = (float)(2.0 / (right - left));
+            result.M12 = result.M13 = result.M14 = result.M21 = 0f;
+            result.M22 = (float)(2.0 / (top - bottom));
+            result.M23 = result.M24 = result.M31 = result.M32 = 0f;
+            result.M33 = (float)(1.0 / (near - far));
+            result.M34 = 0f;
+            result.M41 = (float)((left + right) / (left - right));
+            result.M42 = (float)((top + bottom) / (bottom - top));
+            result.M43 = (float)(near / (near - far));
+            result.M44 = 1f;
         }
         public static Matrix4x4 CreateOrthographic(float left, float right, float bottom, float top, float near, float far)
         {

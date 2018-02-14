@@ -208,7 +208,7 @@ namespace Rise.PlatformSDL
 
         public override void GetMousePosition(out int x, out int y)
         {
-            SDL.GetMouseState(out x, out y);
+            SDL.GetGlobalMouseState(out x, out y);
         }
 
         public override void GetPosition(out int x, out int y)

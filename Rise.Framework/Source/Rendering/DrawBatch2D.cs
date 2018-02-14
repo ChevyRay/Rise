@@ -1,6 +1,7 @@
 ﻿using System;
 namespace Rise
 {
+    //TODO: matrix stack? probably... pretty handy to have
     public class DrawBatch2D
     {
         //Vertices for rendering images
@@ -51,27 +52,16 @@ namespace Rise
             
             rendering = true;
             draw.Target = target;
-
-            //Initialize the material state
-            draw.Material = null;
-            SetMaterial(material ?? defaultMaterial);
-
-            //Initialize the matrix state
             viewMatrix = matrix;
-            UpdateMatrix();
-
-            //Initialize the texture state
-            currTexture = defaultTexture;
-            draw.Material.SetTexture(textureLoc, currTexture);
-
-            //Initialize the blend state
             draw.Blend = true;
             draw.BlendMode = blendMode;
+            currTexture = defaultTexture;
+            draw.Material = null;
+            SetMaterial(material ?? defaultMaterial);
         }
         public void Begin()
         {
-            var ortho = Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f);
-            Begin(null, null, ortho, BlendMode.Premultiplied);
+            Begin(null, null, Matrix4x4.Identity, BlendMode.Premultiplied);
         }
 
         public void End()
@@ -97,9 +87,9 @@ namespace Rise
         {
             //The projection matrix is always a full-size orthographic view of the target
             if (draw.Target != null)
-                projMatrix = Matrix4x4.CreateOrthographic(draw.Target.Width, draw.Target.Height, -1f, 1f);
+                Matrix4x4.CreateOrthographic(draw.Target.Width, draw.Target.Height, -1f, 1f, out projMatrix);
             else
-                projMatrix = Matrix4x4.CreateOrthographic(Screen.Width, Screen.Height, -1f, 1f);
+                Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f, out projMatrix);
 
             //Calculate the final matrix and upload it
             Matrix4x4.Multiply(ref viewMatrix, ref projMatrix, out viewProjMatrix);
@@ -239,6 +229,7 @@ namespace Rise
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
 
+        //TODO: more texture functions (sub-rect, etc.)
         public void DrawTexture(Texture texture, Vector2 position, Color4 color)
         {
             SetTexture(texture);
@@ -260,6 +251,7 @@ namespace Rise
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
         }
 
+        //TODO: more image functions (scaling, rotating, etc.)
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
         {
             SetTexture(image.Atlas.Texture);
@@ -277,6 +269,11 @@ namespace Rise
             v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+
+        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
+        {
+            //TODO: implement
         }
     }
 }
