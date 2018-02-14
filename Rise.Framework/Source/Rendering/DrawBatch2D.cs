@@ -16,7 +16,7 @@ namespace Rise
         static Vertex2D c3 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
 
         //The default material and texture used when nothing is assigned
-        static Texture2D whitePixelTexture;
+        static Texture2D defaultTexture;
         static Material defaultMaterial;
         static string matrixName = "Matrix";
         static string textureName = "Texture";
@@ -34,9 +34,9 @@ namespace Rise
 
         public DrawBatch2D()
         {
-            if (whitePixelTexture == null)
+            if (defaultTexture == null)
             {
-                whitePixelTexture = new Texture2D(1, 1, new Color4[] { Color4.White });
+                defaultTexture = new Texture2D(1, 1, new Color4[] { Color4.White });
                 defaultMaterial = new Material(new Shader(Shader.Basic2D));
             }
 
@@ -61,7 +61,7 @@ namespace Rise
             UpdateMatrix();
 
             //Initialize the texture state
-            currTexture = whitePixelTexture;
+            currTexture = defaultTexture;
             draw.Material.SetTexture(textureLoc, currTexture);
 
             //Initialize the blend state
@@ -87,8 +87,8 @@ namespace Rise
         {
             if (mesh.IndexCount > 0)
             {
-                draw.Perform();
                 mesh.Update();
+                draw.Perform();
                 mesh.Clear();
             }
         }
