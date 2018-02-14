@@ -49,11 +49,11 @@ namespace Rise
         internal static void PreUpdate()
         {
             LastPosition = Position;
-            int mx, my, l, r, t, b;
+
+            int mx, my;
             App.platform.GetMousePosition(out mx, out my);
-            App.platform.GetBorderSize(out l, out r, out t, out b);
-            mx = (int)((mx - Screen.X - l) / Screen.PixelW);
-            my = (int)((my - Screen.Y - t) / Screen.PixelH);
+            mx = (int)((mx - Screen.X) / Screen.PixelW);
+            my = (int)((my - Screen.Y) / Screen.PixelH);
             Position = new Point2(mx, my);
 
             if (LastPosition != Position)
