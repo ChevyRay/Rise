@@ -239,6 +239,27 @@ namespace Rise
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
 
+        public void DrawTexture(Texture texture, Vector2 position, Color4 color)
+        {
+            SetTexture(texture);
+
+            v0.Pos.X = position.X;
+            v0.Pos.Y = position.Y;
+            v1.Pos.X = position.X + texture.Width;
+            v1.Pos.Y = position.Y;
+            v2.Pos.X = position.X + texture.Width;
+            v2.Pos.Y = position.Y + texture.Height;
+            v3.Pos.X = position.X;
+            v3.Pos.Y = position.Y + texture.Height;
+
+            v0.Tex.X = v0.Tex.Y =  v1.Tex.Y = v3.Tex.X = 0f;
+            v1.Tex.X = v2.Tex.X = v2.Tex.Y = v3.Tex.Y = 1f;
+
+            v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
+
+            mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
         {
             SetTexture(image.Atlas.Texture);
