@@ -206,12 +206,13 @@ namespace Rise
             Material.Upload(uploadAll);
 
             //Bind the vertex array
-            if (state.Mesh != Mesh)
+            if (state.Mesh != Mesh || Mesh.dirty)
             {
                 GL.BindVertexArray(Mesh.vaoID);
                 GL.BindBuffer(BufferTarget.Array, Mesh.arrayID);
                 GL.BindBuffer(BufferTarget.ElementArray, Mesh.elementID);
                 state.Mesh = Mesh;
+                Mesh.dirty = false;
             }
 
             //Draw the mesh triangles

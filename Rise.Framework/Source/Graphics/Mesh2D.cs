@@ -17,6 +17,19 @@ namespace Rise
         public Mesh2D(int vertexCapacity, int indexCapacity) : base(indexCapacity)
         {
             vertices = new Vertex2D[vertexCapacity];
+
+            GL.EnableVertexAttribArray(0);
+            GL.EnableVertexAttribArray(1);
+            GL.EnableVertexAttribArray(2);
+            GL.EnableVertexAttribArray(3);
+            GL.VertexAttribPointer(0, 2, VertexType.Float, false, vertexSize, new IntPtr(0));
+            GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(8));
+            GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(16));
+            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+
+            GL.BindBuffer(BufferTarget.ElementArray, 0);
+            GL.BindBuffer(BufferTarget.Array, 0);
+            GL.BindVertexArray(0);
         }
         public Mesh2D() : this(4, 6)
         {
@@ -45,24 +58,13 @@ namespace Rise
             return mesh;
         }
 
-        internal override void AssignAttributes()
-        {
-            GL.EnableVertexAttribArray(0);
-            GL.EnableVertexAttribArray(1);
-            GL.EnableVertexAttribArray(2);
-            GL.EnableVertexAttribArray(3);
-            GL.VertexAttribPointer(0, 2, VertexType.Float, false, vertexSize, new IntPtr(0));
-            GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(8));
-            GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(16));
-            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
-        }
-
         public override void UpdateVertices()
         {
             GL.BindBuffer(BufferTarget.Array, arrayID);
             GL.BufferData(BufferTarget.Array, vertexSize * vertexCount, vertices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.Array, 0);
             uploadedVertexCount = vertexCount;
+            dirty = true;
         }
 
         internal override void ClearVertices()

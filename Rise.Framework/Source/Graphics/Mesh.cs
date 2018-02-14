@@ -14,6 +14,7 @@ namespace Rise
         protected int indexCount;
         internal int uploadedVertexCount;
         internal int uploadedIndexCount;
+        internal bool dirty;
 
         public abstract int VertexCount { get; }
         public int IndexCount { get { return indexCount; } }
@@ -29,15 +30,7 @@ namespace Rise
             elementID = GL.GenBuffer();
             GL.BindBuffer(BufferTarget.Array, arrayID);
             GL.BindBuffer(BufferTarget.ElementArray, elementID);
-
-            AssignAttributes();
-
-            GL.BindBuffer(BufferTarget.ElementArray, 0);
-            GL.BindBuffer(BufferTarget.Array, 0);
-            GL.BindVertexArray(0);
         }
-
-        internal abstract void AssignAttributes();
 
         protected override void Dispose()
         {
@@ -54,6 +47,7 @@ namespace Rise
             GL.BufferData(BufferTarget.ElementArray, sizeof(int) * indexCount, indices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.ElementArray, 0);
             uploadedIndexCount = indexCount;
+            dirty = true;
         }
 
         public void Update()

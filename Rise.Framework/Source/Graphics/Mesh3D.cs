@@ -17,14 +17,7 @@ namespace Rise
         public Mesh3D(int vertexCapacity, int indexCapacity) : base(indexCapacity)
         {
             vertices = new Vertex3D[vertexCapacity];
-        }
-        public Mesh3D() : this(4, 6)
-        {
 
-        }
-
-        internal override void AssignAttributes()
-        {
             GL.EnableVertexAttribArray(0);
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
@@ -33,6 +26,14 @@ namespace Rise
             GL.VertexAttribPointer(1, 3, VertexType.Float, false, vertexSize, new IntPtr(12));
             GL.VertexAttribPointer(2, 2, VertexType.Float, false, vertexSize, new IntPtr(24));
             GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(32));
+
+            GL.BindBuffer(BufferTarget.ElementArray, 0);
+            GL.BindBuffer(BufferTarget.Array, 0);
+            GL.BindVertexArray(0);
+        }
+        public Mesh3D() : this(4, 6)
+        {
+
         }
 
         public override void UpdateVertices()
@@ -41,6 +42,7 @@ namespace Rise
             GL.BufferData(BufferTarget.Array, vertexSize * vertexCount, vertices, BufferUsage.DynamicDraw);
             GL.BindBuffer(BufferTarget.Array, 0);
             uploadedVertexCount = vertexCount;
+            dirty = true;
         }
 
         internal override void ClearVertices()
