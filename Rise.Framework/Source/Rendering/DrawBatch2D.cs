@@ -73,7 +73,7 @@ namespace Rise
             rendering = false;
         }
 
-        void Flush()
+        public void Flush()
         {
             if (mesh.IndexCount > 0)
             {
