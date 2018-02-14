@@ -83,5 +83,16 @@ namespace Rise
         {
             return GetWidth(ref text);
         }
+
+        public void GetSize(ref string text, out int w, out int h)
+        {
+            w = GetWidth(ref text);
+            h = Height;
+        }
+        public void GetSize(string text, out int w, out int h)
+        {
+            w = GetWidth(ref text);
+            h = Height;
+        }
     }
 }
