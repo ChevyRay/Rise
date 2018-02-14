@@ -155,7 +155,7 @@ namespace Rise
         {
             while (indexCount + 3 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
-            int i = (int)vertexCount;
+            int i = vertexCount;
             indices[indexCount++] = i;
             indices[indexCount++] = i + 1;
             indices[indexCount++] = i + 2;
@@ -171,7 +171,7 @@ namespace Rise
         {
             while (indexCount + 6 > indices.Length)
                 Array.Resize(ref indices, indexCount * 2);
-            int i = (int)vertexCount;
+            int i = vertexCount;
             indices[indexCount++] = i;
             indices[indexCount++] = i + 1;
             indices[indexCount++] = i + 2;
