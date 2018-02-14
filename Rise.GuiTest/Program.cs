@@ -37,14 +37,9 @@ namespace Rise.GuiTest
             bitmap.SavePng("atlas.png");
         }
 
-        static bool kern = false;
-
         static void Update()
         {
-            if (Keyboard.Pressed(KeyCode.Space))
-            {
-                kern = !kern;
-            }
+            
         }
 
         static void Render()
@@ -54,10 +49,10 @@ namespace Rise.GuiTest
             var font = atlas.GetFont("font");
             int h = font.Height + font.LineGap;
             var p = new Vector2(32, font.Ascent);
-            batch.DrawText(font, "ATAVAWAYAvAwAyFaFeFoKv", p + new Vector2(0f, 0f), Color4.White, kern);
-            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h), Color4.White, kern);
-            batch.DrawText(font, "TeTiToTrTsTuTyUAVAVaVe", p + new Vector2(0f, h * 2f), Color4.White, kern);
-            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White, kern);
+            batch.DrawText(font, "ATAVAWAYAvAwAyFaFeFoKv", p + new Vector2(0f, 0f), Color4.White);
+            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h), Color4.White);
+            batch.DrawText(font, "TeTiToTrTsTuTyUAVAVaVe", p + new Vector2(0f, h * 2f), Color4.White);
+            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White);
             //batch.DrawTexture(face, Mouse.Position, Color4.White);
 
             batch.End();

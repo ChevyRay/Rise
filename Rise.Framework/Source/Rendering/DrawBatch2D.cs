@@ -271,7 +271,7 @@ namespace Rise
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
         }
 
-        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color, bool useKerning)
+        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
         {
             var pos = position;
 
@@ -281,7 +281,7 @@ namespace Rise
             {
                 chr = font.GetChar(text[i]);
 
-                if (useKerning && prev != null)
+                if (prev != null)
                     pos.X += prev.GetKerning(chr.Char);
 
                 if (chr.Image != null)
