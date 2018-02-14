@@ -23,8 +23,7 @@ namespace Rise.GuiTest
             var font = new Font("Assets/Inconsolata.otf");
             var size = new FontSize(font, 32f);
 
-            var builder = new AtlasBuilder(1024);
-
+            var builder = new AtlasBuilder(512);
             builder.AddBitmap("Assets/star.png", true, true);
             builder.AddBitmap("Assets/face.png", true, true);
             builder.AddBitmap("Assets/maritte.png", true, true);
