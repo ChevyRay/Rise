@@ -183,7 +183,7 @@ layout(location = 0) out vec4 outColor;
 void main(void)
 {
     vec4 color = texture(Texture, fragUV);
-    outColor = color * fragMult + fragAdd * color.a;
+    outColor = color * fragMult + fragAdd;// * color.a;
 }";
 
 
