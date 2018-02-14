@@ -185,7 +185,7 @@ namespace Rise
                     else
                         rect = RectangleI.Empty;
                     
-                    font.AddChar(chr.Char, chr.Width, chr.Height, chr.Advance, chr.OffsetX, chr.OffsetY, rect, chr.Width == rect.W);
+                    font.AddChar(chr.Char, chr.Width, chr.Height, chr.Advance, chr.OffsetX, chr.OffsetY, rect, chr.Width != rect.W);
                 }
             }
 
