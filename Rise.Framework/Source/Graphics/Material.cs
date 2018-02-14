@@ -114,7 +114,7 @@ namespace Rise
             Texture.MarkAllForUnbinding();
 
             //Upload all the uniform values
-            for (int i = 0; i < uniforms.Length; ++i)
+            for (int i = 0; i < Shader.UniformCount; ++i)
             {
                 if (uploadAll || uniforms[i].Changed || uniforms[i].Def.Uploader != this)
                 {
@@ -148,7 +148,7 @@ namespace Rise
         }
         T GetUniform<T>(int index, UniformType type) where T : UniformValue, new()
         {
-            if (index < 0 || index >= uniforms.Length)
+            if (index < 0 || index >= Shader.UniformCount)
                 throw new ArgumentOutOfRangeException(nameof(index));
             
             var def = Shader.uniforms[index];
