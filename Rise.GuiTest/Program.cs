@@ -48,18 +48,14 @@ namespace Rise.GuiTest
             var font = atlas.GetFont("font");
             int h = font.Height + font.LineGap;
 
-            int w = font.GetWidth("ATAVAWAYAvAwAyFaFeFoKv");
-            batch.DrawRect(32f, 0f, w, h, Color4.Red * 0.5f);
-
-            batch.Flush();
-
+            int w = font.GetWidth("VoVrVuVyWAWOWaWeWrWvWy");
             batch.DrawRect(32f, h, w, h, Color4.Red * 0.5f);
 
-            /*var p = new Vector2(32, font.Ascent);
+            var p = new Vector2(32, font.Ascent);
             batch.DrawText(font, "ATAVAWAYAvAwAyFaFeFoKv", p + new Vector2(0f, 0f), Color4.White);
             batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h), Color4.White);
             batch.DrawText(font, "TeTiToTrTsTuTyUAVAVaVe", p + new Vector2(0f, h * 2f), Color4.White);
-            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White);*/
+            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White);
             //batch.DrawTexture(face, Mouse.Position, Color4.White);
 
             Console.WriteLine();
