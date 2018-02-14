@@ -6,17 +6,55 @@ namespace Rise
     public class Atlas
     {
         public Texture2D Texture { get; private set; }
-        public Vector2 WhitePixel { get; internal set; }
         Dictionary<string, AtlasImage> images = new Dictionary<string, AtlasImage>(StringComparer.Ordinal);
         Dictionary<string, AtlasFont> fonts = new Dictionary<string, AtlasFont>(StringComparer.Ordinal);
 
         public int Width { get { return Texture.Width; } }
         public int Height { get { return Texture.Height; } }
 
-        public Atlas(Texture2D texture, Vector2 whitePixel)
+        public Atlas(Texture2D texture)
         {
             Texture = texture;
-            WhitePixel = whitePixel;
+        }
+
+        public bool TryGetImage(ref string name, out AtlasImage result)
+        {
+            return images.TryGetValue(name, out result);
+        }
+        public bool TryGetImage(string name, out AtlasImage result)
+        {
+            return images.TryGetValue(name, out result);
+        }
+        public AtlasImage GetImage(ref string name)
+        {
+            AtlasImage result;
+            if (!images.TryGetValue(name, out result))
+                throw new Exception($"Atlas does not have image with name: \"{name}\"");
+            return result;
+        }
+        public AtlasImage GetImage(string name)
+        {
+            return GetImage(ref name);
+        }
+
+        public bool TryGetFont(ref string name, out AtlasFont result)
+        {
+            return fonts.TryGetValue(name, out result);
+        }
+        public bool TryGetFont(string name, out AtlasFont result)
+        {
+            return fonts.TryGetValue(name, out result);
+        }
+        public AtlasFont GetFont(ref string name)
+        {
+            AtlasFont result;
+            if (!fonts.TryGetValue(name, out result))
+                throw new Exception($"Atlas does not have font with name: \"{name}\"");
+            return result;
+        }
+        public AtlasFont GetFont(string name)
+        {
+            return GetFont(ref name);
         }
 
         public AtlasImage AddImage(ref string name, int width, int height, int offsetX, int offsetY, int trimW, int trimH, ref Rectangle uvRect, bool rotate90)

@@ -5,7 +5,7 @@ namespace Rise.GuiTest
     static class Program
     {
         static DrawBatch2D batch;
-        static Texture2D face;
+        static Atlas atlas;
 
         public static void Main(string[] args)
         {
@@ -19,7 +19,23 @@ namespace Rise.GuiTest
         static void Init()
         {
             batch = new DrawBatch2D();
-            face = new Texture2D("Assets/star.png", true);
+
+            var font = new Font("Assets/Inconsolata.otf");
+            var size = new FontSize(font, 32f);
+
+            var builder = new AtlasBuilder(1024);
+
+            builder.AddBitmap("Assets/star.png", true, true);
+            builder.AddBitmap("Assets/face.png", true, true);
+            builder.AddBitmap("Assets/maritte.png", true, true);
+            builder.AddFont("font", size, true);
+
+            atlas = builder.Build(1);
+            if (atlas == null)
+                throw new Exception("Failed to build atlas.");
+
+            var bitmap = atlas.Texture.GetBitmap();
+            bitmap.SavePng("atlas.png");
         }
 
         static void Update()
@@ -31,7 +47,9 @@ namespace Rise.GuiTest
         {
             batch.Begin();
 
-            batch.DrawTexture(face, Mouse.Position, Color4.White);
+            var star = atlas.GetImage("star");
+            batch.DrawImage(star, Mouse.Position, Color4.White);
+            //batch.DrawTexture(face, Mouse.Position, Color4.White);
 
             batch.End();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 namespace Rise
 {
     //TODO: detect duplicates (eg. if 2 different bitmaps, when trimmed, are equal, we should only pack one)
@@ -41,6 +42,11 @@ namespace Rise
                 bitmap.Premultiply();
             AddBitmap(name, bitmap, trim);
         }
+        public void AddBitmap(string file, bool premultiply, bool trim)
+        {
+            var name = Path.GetFileNameWithoutExtension(file);
+            AddBitmap(name, file, premultiply, trim);
+        }
 
         public void AddFont(string name, FontSize font, bool premultiply)
         {
@@ -56,11 +62,8 @@ namespace Rise
         {
             var packer = new RectanglePacker(maxSize, maxSize, packCount);
 
-            //Add the white pixel
-            packer.Add(0, 1 + pad, 1 + pad, false);
-
             //This ID is used to keep the rectangles ordered (we need to unpack in the same order we packed)
-            int nextID = 1;
+            int nextID = 0;
 
             //Add all the bitmaps (padding them)
             foreach (var pair in bitmaps)
@@ -100,19 +103,13 @@ namespace Rise
             atlasH = atlasH.ToPowerOf2();
 
             ///Create the atlas with an empty texture for now
-            var atlas = new Atlas(new Texture2D(atlasW, atlasH, TextureFormat.RGBA), Vector2.Zero);
+            var atlas = new Atlas(new Texture2D(atlasW, atlasH, TextureFormat.RGBA));
             var atlasBitmap = new Bitmap(atlasW, atlasH);
             var rotBitmap = new Bitmap(1, 1);
             var trimBitmap = new Bitmap(1, 1);
 
-            //Add the white pixel
-            var pixRect = packed[0].Rect;
-            pixRect.W -= pad;
-            pixRect.H -= pad;
-            atlas.WhitePixel = new Vector2(pixRect.CenterX / (float)atlasW, pixRect.CenterY / (float)atlasH);
-
             //Reset the ID so we get the correct packed rectangles as we go
-            nextID = 1;
+            nextID = 0;
 
             //Add the images
             foreach (var pair in bitmaps)
