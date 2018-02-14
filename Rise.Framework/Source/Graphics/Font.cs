@@ -255,9 +255,14 @@ namespace Rise
             return Font.IsEmpty(chr);
         }
 
-        public void GetCharAt(int i, out FontChar info)
+        public void GetCharInfoAt(int i, out FontChar info)
         {
             info = chars[i];
+        }
+
+        public char GetCharAt(int i)
+        {
+            return chars[i].Char;
         }
 
         public void GetCharInfo(char chr, out FontChar info)

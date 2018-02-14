@@ -80,7 +80,7 @@ namespace Rise
                 FontChar chr;
                 for (int i = 0; i < pair.Value.CharCount; ++i)
                 {
-                    pair.Value.GetCharAt(i, out chr);
+                    pair.Value.GetCharInfoAt(i, out chr);
                     if (!pair.Value.IsEmpty(chr.Char))
                         packer.Add(++nextID, chr.Width + pad, chr.Height + pad, true);
                 }
@@ -163,7 +163,7 @@ namespace Rise
                 RectangleI rect;
                 for (int i = 0; i < size.CharCount; ++i)
                 {
-                    size.GetCharAt(i, out chr);
+                    size.GetCharInfoAt(i, out chr);
 
                     if (!size.IsEmpty(chr.Char))
                     {
@@ -185,7 +185,16 @@ namespace Rise
                     else
                         rect = RectangleI.Empty;
                     
-                    font.AddChar(chr.Char, chr.Width, chr.Height, chr.Advance, chr.OffsetX, chr.OffsetY, rect, chr.Width != rect.W);
+                    var atlasChar = font.AddChar(chr.Char, chr.Width, chr.Height, chr.Advance, chr.OffsetX, chr.OffsetY, rect, chr.Width != rect.W);
+
+                    //Set character kerning
+                    for (int j = 0; j < size.CharCount; ++j)
+                    {
+                        char nextChar = size.GetCharAt(j);
+                        int kern = size.GetKerning(chr.Char, nextChar);
+                        if (kern != 0)
+                            atlasChar.SetKerning(nextChar, kern);
+                    }
                 }
             }
 

@@ -271,9 +271,25 @@ namespace Rise
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
         }
 
-        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
+        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color, bool useKerning)
         {
-            //TODO: implement
+            var pos = position;
+
+            AtlasChar prev = null;
+            AtlasChar chr;
+            for (int i = 0; i < text.Length; ++i)
+            {
+                chr = font.GetChar(text[i]);
+
+                if (useKerning && prev != null)
+                    pos.X += prev.GetKerning(chr.Char);
+
+                if (chr.Image != null)
+                    DrawImage(chr.Image, pos, color);
+                
+                pos.X += chr.Advance;
+                prev = chr;
+            }
         }
     }
 }

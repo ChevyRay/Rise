@@ -20,10 +20,10 @@ namespace Rise.GuiTest
         {
             batch = new DrawBatch2D();
 
-            var font = new Font("Assets/Inconsolata.otf");
-            var size = new FontSize(font, 32f);
+            var font = new Font("Assets/NotoSans-Regular.ttf", CharSet.BasicLatin);
+            var size = new FontSize(font, 128f);
 
-            var builder = new AtlasBuilder(512);
+            var builder = new AtlasBuilder(2048);
             builder.AddBitmap("Assets/star.png", true, true);
             builder.AddBitmap("Assets/face.png", true, true);
             builder.AddBitmap("Assets/maritte.png", true, true);
@@ -37,17 +37,27 @@ namespace Rise.GuiTest
             bitmap.SavePng("atlas.png");
         }
 
+        static bool kern = false;
+
         static void Update()
         {
-            
+            if (Keyboard.Pressed(KeyCode.Space))
+            {
+                kern = !kern;
+            }
         }
 
         static void Render()
         {
             batch.Begin();
 
-            var star = atlas.GetImage("star");
-            batch.DrawImage(star, Mouse.Position, Color4.White);
+            var font = atlas.GetFont("font");
+            int h = font.Height + font.LineGap;
+            var p = new Vector2(32, font.Ascent);
+            batch.DrawText(font, "ATAVAWAYAvAwAyFaFeFoKv", p + new Vector2(0f, 0f), Color4.White, kern);
+            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h), Color4.White, kern);
+            batch.DrawText(font, "TeTiToTrTsTuTyUAVAVaVe", p + new Vector2(0f, h * 2f), Color4.White, kern);
+            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White, kern);
             //batch.DrawTexture(face, Mouse.Position, Color4.White);
 
             batch.End();

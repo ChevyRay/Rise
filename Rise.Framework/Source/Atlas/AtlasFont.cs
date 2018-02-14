@@ -20,7 +20,7 @@ namespace Rise
             Ascent = ascent;
             Descent = descent;
             LineGap = lineGap;
-            Height = ascent - ascent;
+            Height = ascent - descent;
         }
 
         public AtlasChar AddChar(char chr, int width, int height, int advance, int offsetX, int offsetY, RectangleI subRect, bool rotate90)
@@ -43,7 +43,7 @@ namespace Rise
             if (width > 0)
                 image = new AtlasImage(Atlas, ref name, width, height, offsetX, offsetY, width, height, ref uvRect, rotate90);
 
-            var result = new AtlasChar(chr, advance, image);
+            var result = new AtlasChar(this, chr, advance, image);
             chars.Add(chr, result);
 
             return result;
