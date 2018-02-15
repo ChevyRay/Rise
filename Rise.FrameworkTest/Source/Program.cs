@@ -10,6 +10,8 @@ namespace Rise.FrameworkTest
         static Mesh2D mesh;
         static Material material;
 
+        static Rectangle[] positions = new Rectangle[20];
+
         public static void Main(string[] args)
         {
             App.OnInit += Init;
@@ -61,39 +63,51 @@ namespace Rise.FrameworkTest
                 prevSecond = (int)Time.Total;
                 Console.WriteLine("Running time: {0}s", prevSecond);
             }
+
+            for (int i = 1; i < positions.Length; ++i)
+                positions[i - 1] = positions[i];
+            positions[positions.Length - 1] = new Rectangle(Mouse.X - star.Width / 2, Mouse.Y - star.Height / 2, star.Width, star.Height);;
         }
 
         //Called every frame, after update has completed. It is wrapped in code that
         //managed the render state, so don't call DrawCall.Perform() outside of here.
         static void Render()
         {
-            //The material is how we interact with shaders
-            material.SetTexture("Texture", logo);
+            //First we setup our draw call
+            var draw = new DrawCall(null, material, mesh, BlendMode.Premultiplied);
             material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f));
 
-            //A mesh defines the geometry of what we're drawing
-            mesh.Clear();
-            var rect = Rectangle.Box(new Vector2(Screen.DrawWidth / 2, Screen.DrawHeight / 2 - 32), logo.Width, logo.Height);
-            mesh.AddRect(rect, Vector2.Zero, Vector2.One);
-            mesh.Update();
+            //Then we'll draw the logo
+            {
+                //The material is how we interact with shaders
+                material.SetTexture("Texture", logo);
 
-            //To render, we setup a draw call and then perform it
-            var draw = new DrawCall(null, material, mesh, BlendMode.Premultiplied);
-            draw.Perform();
+                //A mesh defines the geometry of what we're drawing
+                mesh.Clear();
+                var rect = Rectangle.Box(new Vector2(Screen.DrawWidth / 2, Screen.DrawHeight / 2 - 32), logo.Width, logo.Height);
+                mesh.AddRect(rect, Vector2.Zero, Vector2.One);
+                mesh.Update();
 
+                //To render, we setup a draw call and then perform it
+
+                draw.Perform();
+            }
 
             //After we call Perform(), we can change stuff and then call Perform() again
             //The the rendering system will internally optimize the draw state
+            {
+                material.SetTexture("Texture", star);
 
+                mesh.Clear();
+                for (int i = 0; i < positions.Length; ++i)
+                {
+                    float a = i / (positions.Length - 1f);
+                    mesh.AddRect(positions[i], Vector2.Zero, Vector2.One, Color4.White * a, Color4.Transparent);
+                }
+                mesh.Update();
 
-            material.SetTexture("Texture", star);
-
-            mesh.Clear();
-            rect = new Rectangle(Mouse.X - star.Width / 2, Mouse.Y - star.Height / 2, star.Width, star.Height);
-            mesh.AddRect(rect, Vector2.Zero, Vector2.One);
-            mesh.Update();
-
-            draw.Perform();
+                draw.Perform();
+            }
 
 
             //This might seem tedious, but in reality this will be wrapped in components
