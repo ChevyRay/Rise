@@ -5,6 +5,7 @@ namespace Rise.FrameworkTest
     static class Program
     {
         static int prevSecond;
+        static Texture2D logo;
         static Texture2D star;
         static Mesh2D mesh;
         static Material material;
@@ -30,6 +31,7 @@ namespace Rise.FrameworkTest
         //Basically, don't interact with the Rise API until this is called
         static void Init()
         {
+            logo = new Texture2D("Assets/rise_logo.png", true);
             star = new Texture2D("Assets/star.png", true);
 
             mesh = new Mesh2D();
@@ -65,18 +67,32 @@ namespace Rise.FrameworkTest
         //managed the render state, so don't call DrawCall.Perform() outside of here.
         static void Render()
         {
+            //The material is how we interact with shaders
+            material.SetTexture("Texture", logo);
+            material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f));
+
             //A mesh defines the geometry of what we're drawing
             mesh.Clear();
-            var rect = new Rectangle(Mouse.X - star.Width / 2, Mouse.Y - star.Height / 2, star.Width, star.Height);
+            var rect = Rectangle.Box(new Vector2(Screen.DrawWidth / 2, Screen.DrawHeight / 2 - 32), logo.Width, logo.Height);
             mesh.AddRect(rect, Vector2.Zero, Vector2.One);
             mesh.Update();
 
-            //The material is how we interact with shaders
-            material.SetTexture("Texture", star);
-            material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f));
-
             //To render, we setup a draw call and then perform it
             var draw = new DrawCall(null, material, mesh, BlendMode.Premultiplied);
+            draw.Perform();
+
+
+            //After we call Perform(), we can change stuff and then call Perform() again
+            //The the rendering system will internally optimize the draw state
+
+
+            material.SetTexture("Texture", star);
+
+            mesh.Clear();
+            rect = new Rectangle(Mouse.X - star.Width / 2, Mouse.Y - star.Height / 2, star.Width, star.Height);
+            mesh.AddRect(rect, Vector2.Zero, Vector2.One);
+            mesh.Update();
+
             draw.Perform();
         }
     }
