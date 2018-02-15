@@ -54,10 +54,10 @@ namespace Rise.FrameworkTest
                 Console.WriteLine("Space is held down...");
             }
 
-            if ((int)Time.Total > prevSecond)
+            if (Time.Total > prevSecond + 1)
             {
-                Console.WriteLine("Running time: {0}s", (int)Time.Total);
                 prevSecond = (int)Time.Total;
+                Console.WriteLine("Running time: {0}s", prevSecond);
             }
         }
 
