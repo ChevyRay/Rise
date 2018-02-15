@@ -94,6 +94,13 @@ namespace Rise.FrameworkTest
             mesh.Update();
 
             draw.Perform();
+
+
+            //This might seem tedious, but in reality this will be wrapped in components
+            //or some kind of rendering class! For example, the Atlas automatically allows
+            //us to pack textures/fonts into atlases, and the DrawBatch2D allows us to
+            //use simple draw functions between a Begin() and End()
+            //We just want to provide a low-level API so you have lots of options
         }
     }
 }
