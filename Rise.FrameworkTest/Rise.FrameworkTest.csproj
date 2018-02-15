@@ -3,10 +3,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D09C6DDB-A578-4C4D-BCE8-EF7DE99596CE}</ProjectGuid>
+    <ProjectGuid>{F87C9703-87E8-43FF-A64E-2D3FF32F2761}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Rise.GuiTest</RootNamespace>
-    <AssemblyName>Rise.GuiTest</AssemblyName>
+    <RootNamespace>Rise.FrameworkTest</RootNamespace>
+    <AssemblyName>Rise.FrameworkTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -34,6 +34,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Rise.PlatformSDL\Dependencies\libSDL2.dylib">
+      <Link>libSDL2.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\risetools\Build\Products\Release\librisetools.dylib">
+      <Link>librisetools.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Rise.Framework\Rise.Framework.csproj">
       <Project>{B374B137-D5DE-41F2-AA8A-EDD234D400CA}</Project>
       <Name>Rise.Framework</Name>
@@ -42,39 +52,10 @@
       <Project>{D8759F06-AD59-4F88-9B3B-09B8D71BF5EC}</Project>
       <Name>Rise.Numerics</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Rise.Gui\Rise.Gui.csproj">
-      <Project>{84A4D697-C8A4-4D51-9B5D-42897FC3717E}</Project>
-      <Name>Rise.Gui</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Rise.PlatformSDL\Rise.PlatformSDL.csproj">
       <Project>{9930176E-AACB-47FB-A549-84582DBFA9D2}</Project>
       <Name>Rise.PlatformSDL</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\Rise.PlatformSDL\Dependencies\libSDL2.dylib">
-      <Link>libSDL2.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\Inconsolata.otf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\face.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\maritte.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\star.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\NotoSans-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\risetools\Build\Products\Release\librisetools.dylib">
-      <Link>librisetools.dylib</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
