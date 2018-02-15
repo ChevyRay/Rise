@@ -30,8 +30,8 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source\Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Rise.PlatformSDL\Dependencies\libSDL2.dylib">
@@ -40,6 +40,9 @@
     </None>
     <None Include="..\risetools\Build\Products\Release\librisetools.dylib">
       <Link>librisetools.dylib</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Assets\star.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -56,6 +59,10 @@
       <Project>{9930176E-AACB-47FB-A549-84582DBFA9D2}</Project>
       <Name>Rise.PlatformSDL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+    <Folder Include="Source\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

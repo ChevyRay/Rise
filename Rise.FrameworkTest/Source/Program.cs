@@ -5,6 +5,9 @@ namespace Rise.FrameworkTest
     static class Program
     {
         static int prevSecond;
+        static Texture2D star;
+        static Mesh2D mesh;
+        static Material material;
 
         public static void Main(string[] args)
         {
@@ -27,7 +30,14 @@ namespace Rise.FrameworkTest
         //Basically, don't interact with the Rise API until this is called
         static void Init()
         {
-            
+            star = new Texture2D("Assets/star.png", true);
+
+            mesh = new Mesh2D();
+
+            var shader = new Shader(Shader.Basic2D);
+            material = new Material(shader);
+
+            Screen.ClearColor = 0x1e4e50ff;
         }
 
         //Called every frame (default is 60 FPS). This is where you can interact with
@@ -55,7 +65,19 @@ namespace Rise.FrameworkTest
         //managed the render state, so don't call DrawCall.Perform() outside of here.
         static void Render()
         {
-            
+            //A mesh defines the geometry of what we're drawing
+            mesh.Clear();
+            var rect = new Rectangle(Mouse.X - star.Width / 2, Mouse.Y - star.Height / 2, star.Width, star.Height);
+            mesh.AddRect(rect, Vector2.Zero, Vector2.One);
+            mesh.Update();
+
+            //The material is how we interact with shaders
+            material.SetTexture("Texture", star);
+            material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f));
+
+            //To render, we setup a draw call and then perform it
+            var draw = new DrawCall(null, material, mesh, BlendMode.Premultiplied);
+            draw.Perform();
         }
     }
 }
