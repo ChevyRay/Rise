@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using Rise.OpenGL;
 namespace Rise
 {
@@ -72,15 +70,19 @@ namespace Rise
             vertexCount = 0;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void GetVertex(int i, out Vertex2D result)
         {
             vertices[i].CopyTo(out result);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vertex2D GetVertex(int i)
         {
             return vertices[i];
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SetVertex(int i, ref Vertex2D vert)
         {
             vert.CopyTo(out vertices[i]);
@@ -111,17 +113,21 @@ namespace Rise
             vertexCount = count;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertex(ref Vertex2D vert)
         {
             if (vertexCount == vertices.Length)
                 Array.Resize(ref vertices, vertexCount * 2);
             vert.CopyTo(out vertices[vertexCount++]);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertex(Vertex2D vert)
         {
             AddVertex(ref vert);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertices(ref Vertex2D a, ref Vertex2D b)
         {
             while (vertexCount + 2 > vertices.Length)
@@ -129,6 +135,8 @@ namespace Rise
             a.CopyTo(out vertices[vertexCount++]);
             b.CopyTo(out vertices[vertexCount++]);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertices(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c)
         {
             while (vertexCount + 3 > vertices.Length)
@@ -137,6 +145,8 @@ namespace Rise
             b.CopyTo(out vertices[vertexCount++]);
             c.CopyTo(out vertices[vertexCount++]);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertices(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c, ref Vertex2D d)
         {
             while (vertexCount + 4 > vertices.Length)
@@ -146,6 +156,8 @@ namespace Rise
             c.CopyTo(out vertices[vertexCount++]);
             d.CopyTo(out vertices[vertexCount++]);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddVertices(Vertex2D[] verts)
         {
             while (vertexCount + verts.Length > vertices.Length)
@@ -153,6 +165,7 @@ namespace Rise
             Array.Copy(verts, 0, vertices, vertexCount, verts.Length);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddTriangle(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c)
         {
             while (indexCount + 3 > indices.Length)
@@ -164,11 +177,14 @@ namespace Rise
 
             AddVertices(ref a, ref b, ref c);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddTriangle(Vertex2D a, Vertex2D b, Vertex2D c)
         {
             AddTriangle(ref a, ref b, ref c);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddQuad(ref Vertex2D a, ref Vertex2D b, ref Vertex2D c, ref Vertex2D d)
         {
             while (indexCount + 6 > indices.Length)
@@ -181,13 +197,22 @@ namespace Rise
             indices[indexCount++] = i + 2;
             indices[indexCount++] = i + 3;
 
-            AddVertices(ref a, ref b, ref c, ref d);
+            //AddVertices(ref a, ref b, ref c, ref d);
+            while (vertexCount + 4 > vertices.Length)
+                Array.Resize(ref vertices, vertexCount * 2);
+            a.CopyTo(out vertices[vertexCount++]);
+            b.CopyTo(out vertices[vertexCount++]);
+            c.CopyTo(out vertices[vertexCount++]);
+            d.CopyTo(out vertices[vertexCount++]);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddQuad(Vertex2D a, Vertex2D b, Vertex2D c, Vertex2D d)
         {
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
         {
             Vertex2D a, b, c, d;
@@ -207,10 +232,14 @@ namespace Rise
             a.Add = b.Add = c.Add = d.Add = add;
             AddQuad(ref a, ref b, ref c, ref d);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
         {
             AddRect(ref rect, texMin, texMax, mul, add);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
         {
             AddRect(ref rect, texMin, texMax, Color4.White, Color4.Transparent);

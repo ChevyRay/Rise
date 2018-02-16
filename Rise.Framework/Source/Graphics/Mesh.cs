@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 using Rise.OpenGL;
 namespace Rise
 {
@@ -113,6 +111,7 @@ namespace Rise
             indices[indexCount++] = ind;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int a, int b)
         {
             while (indexCount + 2 > indices.Length)
@@ -120,6 +119,8 @@ namespace Rise
             indices[indexCount++] = a;
             indices[indexCount++] = b;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int a, int b, int c)
         {
             while (indexCount + 3 > indices.Length)
@@ -128,6 +129,8 @@ namespace Rise
             indices[indexCount++] = b;
             indices[indexCount++] = c;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int a, int b, int c, int d)
         {
             while (indexCount + 4 > indices.Length)
@@ -137,6 +140,8 @@ namespace Rise
             indices[indexCount++] = c;
             indices[indexCount++] = d;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int a, int b, int c, int d, int e)
         {
             while (indexCount + 5 > indices.Length)
@@ -147,6 +152,8 @@ namespace Rise
             indices[indexCount++] = d;
             indices[indexCount++] = e;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int a, int b, int c, int d, int e, int f)
         {
             while (indexCount + 6 > indices.Length)
@@ -158,6 +165,8 @@ namespace Rise
             indices[indexCount++] = e;
             indices[indexCount++] = f;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddIndices(int[] inds)
         {
             while (indexCount + inds.Length > indices.Length)

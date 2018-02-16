@@ -218,6 +218,29 @@ namespace Rise
         {
             return rand.NextChoose(a, b, c, d);
         }
+
+        public static Vector2 NextPointInRect(this Random rand, ref Rectangle rect)
+        {
+            return new Vector2(
+                rand.NextFloat(rect.X, rect.Right),
+                rand.NextFloat(rect.Y, rect.Bottom)
+            );
+        }
+
+        public static Vector2 NextPointInRect(this Random rand, Rectangle rect)
+        {
+            return rand.NextPointInRect(ref rect);
+        }
+
+        public static Vector2 PointInRect(ref Rectangle rect)
+        {
+            return rand.NextPointInRect(ref rect);
+        }
+
+        public static Vector2 PointInRect(Rectangle rect)
+        {
+            return rand.NextPointInRect(ref rect);
+        }
     }
 }
 

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 namespace Rise
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -32,6 +33,7 @@ namespace Rise
 
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void CopyTo(out Vertex2D other)
         {
             other.Pos = Pos;
