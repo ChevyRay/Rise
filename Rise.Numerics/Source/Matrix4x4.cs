@@ -326,13 +326,13 @@ namespace Rise
             return quad;
         }
         
-        public void TransformRectangle(ref Rectangle r, out Rectangle result)
+        public void TransformRect(ref Rectangle r, out Rectangle result)
         {
             var q = new Quad(ref r);
             TransformQuad(ref q, out q);
             q.GetBounds(out result);
         }
-        public Rectangle TransformRectangle(Rectangle r)
+        public Rectangle TransformRect(Rectangle r)
         {
             var q = new Quad(ref r);
             TransformQuad(ref q, out q);
@@ -786,6 +786,21 @@ namespace Rise
             result.M24 = 0f;
             result.M34 = 0f;
             result.M44 = 1f;
+        }
+
+        public static void CreateTransform2D(Vector2 origin, Vector2 position, Vector2 scale, float rotation, out Matrix4x4 result)
+        {
+            //TODO: this can be optimized like the above function
+            result = CreateTranslation(-position)
+                   * CreateRotation(Quaternion.Euler(0f, 0f, rotation))
+                   * CreateScale(scale.X, scale.Y, 1f)
+                   * CreateTranslation(origin);
+        }
+        public static Matrix4x4 CreateTransform2D(Vector2 origin, Vector2 position, Vector2 scale, float rotation)
+        {
+            Matrix4x4 result;
+            CreateTransform2D(origin, position, scale, rotation, out result);
+            return result;
         }
 
         public static void CreateShadow(ref Vector3 light, ref Plane plane, out Matrix4x4 result)
