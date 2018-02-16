@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 namespace Rise
 {
     //TODO: matrix stack? probably... pretty handy to have
@@ -74,7 +73,6 @@ namespace Rise
             rendering = false;
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Flush()
         {
             if (mesh.IndexCount > 0)
@@ -148,7 +146,6 @@ namespace Rise
             }
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void SetTexture(Texture texture)
         {
             if (currTexture != texture)
@@ -255,7 +252,6 @@ namespace Rise
         }
 
         //TODO: more image functions (scaling, rotating, etc.)
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
         {
             SetTexture(image.Atlas.Texture);
