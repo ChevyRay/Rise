@@ -66,7 +66,7 @@ namespace Rise.DrawBatchTest
         }
 
         static int fpsCount;
-        static int fpsAverage;
+        static double fpsAverage;
 
         static void Update()
         {
@@ -77,7 +77,7 @@ namespace Rise.DrawBatchTest
             }
             else
             {
-                Console.WriteLine("FPS: " + (fpsAverage / fpsCount));
+                Console.WriteLine("FPS: " + Math.Round(fpsAverage / fpsCount));
                 fpsCount = 0;
                 fpsAverage = 0;
             }
@@ -85,9 +85,7 @@ namespace Rise.DrawBatchTest
 
         static void Render()
         {
-            //Create a camera matrix (0,0 is the center of the screen, and we'll zoom in 5x)
-            //var camera = Matrix4x4.CreateScale(2f) *
-            //             Matrix4x4.CreateTranslation(Screen.DrawWidth / 2f, Screen.DrawHeight / 2f);
+            //Create a camera matrix (0,0 is the center of the camera, and we'll zoom in 5x)
             var camera = Matrix4x4.CreateTransform2D(Screen.Center, Vector2.Zero, Vector2.One, 0f);
 
             //The inverse of our camera matrix is how we convert screen to world coordinates
