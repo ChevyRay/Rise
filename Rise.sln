@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.GuiTest", "Rise.GuiTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.FrameworkTest", "Rise.FrameworkTest\Rise.FrameworkTest.csproj", "{F87C9703-87E8-43FF-A64E-2D3FF32F2761}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.DrawBatchTest", "Rise.DrawBatchTest\Rise.DrawBatchTest.csproj", "{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,14 @@ Global
 		{F87C9703-87E8-43FF-A64E-2D3FF32F2761}.Debug|x86.Build.0 = Debug|Any CPU
 		{F87C9703-87E8-43FF-A64E-2D3FF32F2761}.Release|x86.ActiveCfg = Release|Any CPU
 		{F87C9703-87E8-43FF-A64E-2D3FF32F2761}.Release|x86.Build.0 = Release|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Debug|x86.Build.0 = Debug|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Release|x86.ActiveCfg = Release|Any CPU
+		{AFD76C8C-6BDC-4694-ADCC-435881D8A8E8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0
