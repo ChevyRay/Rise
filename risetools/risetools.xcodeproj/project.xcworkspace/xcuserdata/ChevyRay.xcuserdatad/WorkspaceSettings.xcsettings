@@ -5,13 +5,13 @@
 	<key>BuildLocationStyle</key>
 	<string>CustomLocation</string>
 	<key>CustomBuildIntermediatesPath</key>
-	<string>Build/Intermediates.noindex</string>
+	<string>temp/Intermediates.noindex</string>
 	<key>CustomBuildLocationType</key>
 	<string>RelativeToWorkspace</string>
 	<key>CustomBuildProductsPath</key>
-	<string>Build/Products</string>
+	<string>lib/mac</string>
 	<key>CustomIndexStorePath</key>
-	<string>Index/DataStore</string>
+	<string>temp/Index/DataStore</string>
 	<key>DerivedDataLocationStyle</key>
 	<string>Default</string>
 	<key>EnabledFullIndexStoreVisibility</key>

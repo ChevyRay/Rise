@@ -71,7 +71,7 @@
     <None Include="Assets\NotoSans-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\risetools\Build\Products\Release\librisetools.dylib">
+    <None Include="..\risetools\lib\mac\Release\librisetools.dylib">
       <Link>librisetools.dylib</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
