@@ -75,7 +75,7 @@ namespace Rise.FrameworkTest
         {
             //First we setup our draw call
             var draw = new DrawCall(null, material, mesh, BlendMode.Premultiplied);
-            material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f));
+            material.SetMatrix4x4("Matrix", Matrix4x4.CreateOrthographic(Screen.Width, Screen.Height, -1f, 1f));
 
             //Then we'll draw the logo
             {
@@ -84,7 +84,7 @@ namespace Rise.FrameworkTest
 
                 //A mesh defines the geometry of what we're drawing
                 mesh.Clear();
-                var rect = Rectangle.Box(new Vector2(Screen.DrawWidth / 2, Screen.DrawHeight / 2 - 32), logo.Width, logo.Height);
+                var rect = Rectangle.Box(new Vector2(Screen.Width / 2, Screen.Height / 2 - 32), logo.Width, logo.Height);
                 mesh.AddRect(rect, Vector2.Zero, Vector2.One);
                 mesh.Update();
 

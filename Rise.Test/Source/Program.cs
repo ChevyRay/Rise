@@ -18,8 +18,8 @@ namespace Rise.Test
 
         static void Init()
         {       
-            int screenW = Screen.DrawWidth;
-            int screenH = Screen.DrawHeight;
+            int screenW = Screen.Width;
+            int screenH = Screen.Height;
             Texture.DefaultMinFilter = TextureFilter.Nearest;
             Texture.DefaultMagFilter = TextureFilter.Nearest;
 

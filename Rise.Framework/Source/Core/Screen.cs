@@ -3,12 +3,8 @@ namespace Rise
 {
     public static class Screen
     {
-        static int x;
-        static int y;
-        static int width;
-        static int height;
-        static int drawWidth;
-        static int drawHeight;
+        static RectangleI position;
+        static Point2 drawSize;
 
         public static float PixelW { get; private set; }
         public static float PixelH { get; private set; }
@@ -16,15 +12,16 @@ namespace Rise
         public static bool Fullscreen { get { return App.platform.Fullscreen; } }
         public static bool VSync { get { return App.platform.VSync; } }
 
-        public static int X { get { return x; } }
-        public static int Y { get { return y; } }
-        public static int Width { get { return width; } }
-        public static int Height { get { return height; } }
+        public static int WindowX { get { return position.X; } }
+        public static int WindowY { get { return position.Y; } }
+        public static int WindowWidth { get { return position.W; } }
+        public static int WindowHeight { get { return position.H; } }
+        public static RectangleI WindowPos { get { return position; } }
 
-        public static int DrawWidth { get { return drawWidth; } }
-        public static int DrawHeight { get { return drawHeight; } }
-
-        public static RectangleI Position { get { return new RectangleI(x, y, width, height); } }
+        public static int Width { get { return drawSize.X; } }
+        public static int Height { get { return drawSize.Y; } }
+        public static Point2 Size { get { return drawSize; } }
+        public static Vector2 Center { get { return new Vector2(drawSize.X / 2, drawSize.Y / 2); } }
 
         public static Color4 ClearColor = Color4.Black;
 
@@ -43,15 +40,15 @@ namespace Rise
 
         static void UpdatePosition()
         {
-            App.platform.GetPosition(out x, out y);
+            App.platform.GetPosition(out position.X, out position.Y);
         }
 
         static void UpdateSize()
         {
-            App.platform.GetSize(out width, out height);
-            App.platform.GetDrawSize(out drawWidth, out drawHeight);
-            PixelW = width / (float)drawWidth;
-            PixelH = height / (float)drawHeight;
+            App.platform.GetSize(out position.W, out position.H);
+            App.platform.GetDrawSize(out drawSize.X, out drawSize.Y);
+            PixelW = position.W / (float)drawSize.X;
+            PixelH = position.H / (float)drawSize.Y;
         }
 
         public static void Resize(int w, int h)

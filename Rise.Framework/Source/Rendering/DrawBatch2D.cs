@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 namespace Rise
 {
     //TODO: matrix stack? probably... pretty handy to have
     public class DrawBatch2D
     {
         //Vertices for rendering images
-        static Vertex2D v0;
-        static Vertex2D v1;
-        static Vertex2D v2;
-        static Vertex2D v3;
+        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
+        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
+        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
+        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
 
         //Vertices for rendering shapes
         static Vertex2D c0 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
@@ -73,6 +74,7 @@ namespace Rise
             rendering = false;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Flush()
         {
             if (mesh.IndexCount > 0)
@@ -89,7 +91,7 @@ namespace Rise
             if (draw.Target != null)
                 Matrix4x4.CreateOrthographic(draw.Target.Width, draw.Target.Height, -1f, 1f, out projMatrix);
             else
-                Matrix4x4.CreateOrthographic(Screen.DrawWidth, Screen.DrawHeight, -1f, 1f, out projMatrix);
+                Matrix4x4.CreateOrthographic(Screen.Width, Screen.Height, -1f, 1f, out projMatrix);
 
             //Calculate the final matrix and upload it
             Matrix4x4.Multiply(ref viewMatrix, ref projMatrix, out viewProjMatrix);
@@ -146,6 +148,7 @@ namespace Rise
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         void SetTexture(Texture texture)
         {
             if (currTexture != texture)
@@ -252,18 +255,15 @@ namespace Rise
         }
 
         //TODO: more image functions (scaling, rotating, etc.)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
         {
             SetTexture(image.Atlas.Texture);
 
-            v0.Pos.X = position.X + image.OffsetX;
-            v0.Pos.Y = position.Y + image.OffsetY;
-            v1.Pos.X = position.X + image.OffsetX + image.TrimWidth;
-            v1.Pos.Y = position.Y + image.OffsetY;
-            v2.Pos.X = position.X + image.OffsetX + image.TrimWidth;
-            v2.Pos.Y = position.Y + image.OffsetY + image.TrimHeight;
-            v3.Pos.X = position.X + image.OffsetX;
-            v3.Pos.Y = position.Y + image.OffsetY + image.TrimHeight;
+            v0.Pos.X = v3.Pos.X = position.X + image.OffsetX;
+            v0.Pos.Y = v1.Pos.Y = position.Y + image.OffsetY;
+            v1.Pos.X = v2.Pos.X = v0.Pos.X + image.TrimWidth;
+            v2.Pos.Y = v3.Pos.Y = v0.Pos.Y + image.TrimHeight;
 
             image.GetUVs(out v0.Tex, out v1.Tex, out v2.Tex, out v3.Tex);
             v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
