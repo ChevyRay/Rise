@@ -217,7 +217,7 @@ namespace Rise
         public void DrawLine(Vector2 a, Vector2 b, float width, Color4 color)
         {
             var normal = (b - a).Normalized;
-            var perp = new Vector2(-normal.Y, normal.X) * width * 0.5f;
+            var perp = new Vector2(normal.Y, -normal.X) * width * 0.5f;
 
             c0.Pos = a + perp;
             c1.Pos = b + perp;
