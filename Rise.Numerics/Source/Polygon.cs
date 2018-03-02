@@ -22,6 +22,11 @@ namespace Rise
             axes = new List<Vector2>();
         }
 
+        public int PointCount
+        {
+            get { return points.Count; }
+        }
+
         public Vector2 Centroid
         {
             get
@@ -37,6 +42,15 @@ namespace Rise
             {
                 Update();
                 return isConvex;
+            }
+        }
+
+        public void Clear()
+        {
+            if (points.Count > 0)
+            {
+                points.Clear();
+                dirty = true;
             }
         }
 
@@ -240,6 +254,29 @@ namespace Rise
                 }
                 centroid /= (signedArea * 3f);
             }
+        }
+
+        public void ExtendFromCentroid(float distance)
+        {
+            if (distance != 0f)
+            {
+                Update();
+                for (int i = 0; i < points.Count; ++i)
+                    points[i] += Vector2.Normalize(points[i] - centroid, distance);
+                dirty = true;
+            }
+        }
+
+        public float GetArea()
+        {
+            float area = 0;
+            int j = points.Count - 1;
+            for (int i = 0; i < points.Count; ++i)
+            {
+                area += (points[j].X + points[i].X) * (points[j].Y - points[i].Y);
+                j = i;
+            }
+            return Math.Abs(area * 0.5f);
         }
     }
 }

@@ -45,9 +45,19 @@ namespace Rise
             return string.Format("{0},{1}", X, Y);
         }
 
+        public static int Cross(Point2 a, Point2 b)
+        {
+            return a.X * b.Y - a.Y * b.X;
+        }
+
         public static implicit operator Vector2(Point2 p)
         {
             return new Vector2(p.X, p.Y);
+        }
+
+        public static explicit operator Point2(Vector2 p)
+        {
+            return new Point2((int)p.X, (int)p.Y);
         }
 
         public static bool operator ==(Point2 a, Point2 b)

@@ -7,28 +7,27 @@ namespace Rise
     {
         public Vector2 Pos;
         public Vector2 Tex;
-        public Color4 Mul;
-        public Color4 Add;
+        public Color4 Col;
+        public byte Mult;
+        public byte Wash;
+        public byte Veto;
 
-        public Vertex2D(Vector2 pos, Vector2 tex, Color4 mul, Color4 add)
+        public Vertex2D(Vector2 pos, Vector2 tex, Color4 col, byte mult, byte wash, byte veto)
         {
             Pos = pos;
             Tex = tex;
-            Mul = mul;
-            Add = add;
+            Col = col;
+            Mult = mult;
+            Wash = wash;
+            Veto = veto;
         }
-        public Vertex2D(Vector2 pos, Vector2 tex, Color4 mul)
-            : this(pos, tex, mul, Color4.Transparent)
+        public Vertex2D(Vector2 pos, Vector2 tex, Color4 col)
+            : this(pos, tex, col, 255, 0, 0)
         {
             
         }
         public Vertex2D(Vector2 pos, Vector2 tex)
-            : this(pos, tex, Color4.White, Color4.Transparent)
-        {
-
-        }
-        public Vertex2D(Vector2 pos, Color4 add)
-            : this(pos, Vector2.Zero, Color4.Transparent, add)
+            : this(pos, tex, Color4.White, 255, 0, 0)
         {
 
         }
@@ -38,8 +37,10 @@ namespace Rise
         {
             other.Pos = Pos;
             other.Tex = Tex;
-            other.Mul = Mul;
-            other.Add = Add;
+            other.Col = Col;
+            other.Mult = Mult;
+            other.Wash = Wash;
+            other.Veto = Veto;
         }
     }
 }

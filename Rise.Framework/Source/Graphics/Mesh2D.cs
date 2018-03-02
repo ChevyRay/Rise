@@ -5,7 +5,7 @@ namespace Rise
 {
     public class Mesh2D : Mesh
     {
-        const int vertexSize = 24;
+        const int vertexSize = 23;
 
         Vertex2D[] vertices;
         int vertexCount;
@@ -20,10 +20,14 @@ namespace Rise
             GL.EnableVertexAttribArray(1);
             GL.EnableVertexAttribArray(2);
             GL.EnableVertexAttribArray(3);
+            GL.EnableVertexAttribArray(4);
+            GL.EnableVertexAttribArray(5);
             GL.VertexAttribPointer(0, 2, VertexType.Float, false, vertexSize, new IntPtr(0));
             GL.VertexAttribPointer(1, 2, VertexType.Float, false, vertexSize, new IntPtr(8));
             GL.VertexAttribPointer(2, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(16));
-            GL.VertexAttribPointer(3, 4, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+            GL.VertexAttribPointer(3, 1, VertexType.UnsignedByte, true, vertexSize, new IntPtr(20));
+            GL.VertexAttribPointer(4, 1, VertexType.UnsignedByte, true, vertexSize, new IntPtr(21));
+            GL.VertexAttribPointer(5, 1, VertexType.UnsignedByte, true, vertexSize, new IntPtr(22));
 
             GL.BindBuffer(BufferTarget.ElementArray, 0);
             GL.BindBuffer(BufferTarget.Array, 0);
@@ -34,24 +38,24 @@ namespace Rise
 
         }
 
-        public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
+        public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 col)
         {
             var mesh = new Mesh2D(4, 6);
-            mesh.AddRect(ref rect, texMin, texMax, mul, add);
+            mesh.AddRect(ref rect, texMin, texMax, col);
             mesh.Update();
             return mesh;
         }
         public static Mesh2D CreateRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
         {
             var mesh = new Mesh2D(4, 6);
-            mesh.AddRect(ref rect, texMin, texMax, Color4.White, Color4.Transparent);
+            mesh.AddRect(ref rect, texMin, texMax, Color4.White);
             mesh.Update();
             return mesh;
         }
         public static Mesh2D CreateRect(Rectangle rect)
         {
             var mesh = new Mesh2D(4, 6);
-            mesh.AddRect(ref rect, Vector2.Zero, Vector2.One, Color4.White, Color4.Transparent);
+            mesh.AddRect(ref rect, Vector2.Zero, Vector2.One, Color4.White);
             mesh.Update();
             return mesh;
         }
@@ -212,37 +216,40 @@ namespace Rise
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
+        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
+        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
+        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
+        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
+        public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 col)
         {
-            Vertex2D a, b, c, d;
-            a.Pos = rect.TopLeft;
-            b.Pos = rect.TopRight;
-            c.Pos = rect.BottomRight;
-            d.Pos = rect.BottomLeft;
-            a.Tex.X = texMin.X;
-            a.Tex.Y = texMin.Y;
-            b.Tex.X = texMax.X;
-            b.Tex.Y = texMin.Y;
-            c.Tex.X = texMax.X;
-            c.Tex.Y = texMax.Y;
-            d.Tex.X = texMin.X;
-            d.Tex.Y = texMax.Y;
-            a.Mul = b.Mul = c.Mul = d.Mul = mul;
-            a.Add = b.Add = c.Add = d.Add = add;
-            AddQuad(ref a, ref b, ref c, ref d);
+            v0.Pos = rect.TopLeft;
+            v1.Pos = rect.TopRight;
+            v2.Pos = rect.BottomRight;
+            v3.Pos = rect.BottomLeft;
+            v0.Tex.X = texMin.X;
+            v0.Tex.Y = texMin.Y;
+            v1.Tex.X = texMax.X;
+            v1.Tex.Y = texMin.Y;
+            v2.Tex.X = texMax.X;
+            v2.Tex.Y = texMax.Y;
+            v3.Tex.X = texMin.X;
+            v3.Tex.Y = texMax.Y;
+            v0.Col = v1.Col = v2.Col = v3.Col = col;
+            AddQuad(ref v0, ref v1, ref v2, ref v3);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 mul, Color4 add)
+        public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 col)
         {
-            AddRect(ref rect, texMin, texMax, mul, add);
+            AddRect(ref rect, texMin, texMax, col);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRect(Rectangle rect, Vector2 texMin, Vector2 texMax)
         {
-            AddRect(ref rect, texMin, texMax, Color4.White, Color4.Transparent);
+            AddRect(ref rect, texMin, texMax, Color4.White);
         }
     }
 }

@@ -4,18 +4,19 @@ namespace Rise.TriangulationTest
 {
     public class BitmapTriangulator
     {
-        public List<Point2> edge = new List<Point2>();
-        public List<Point2> hull = new List<Point2>();
+        List<Point2> edge = new List<Point2>();
+        List<Point2> hull = new List<Point2>();
 
         public BitmapTriangulator()
         {
             
         }
 
-        public bool Triangulate(Bitmap bitmap)
+        public bool Triangulate(Bitmap bitmap, float angleThreshold, float extend, Polygon result)
         {
             edge.Clear();
             hull.Clear();
+            result.Clear();
 
             var left = new Point2(int.MaxValue, 0);
 
@@ -59,13 +60,54 @@ namespace Rise.TriangulationTest
             }
             while (b != hull[0]);
 
-            //Remove colinear points in the hull
-            for (int i = 0; i < hull.Count; ++i)
+            //Extend the hull
+            if (extend != 0f)
             {
-                b = hull[(i + 1) % hull.Count];
-                if (b - hull[i] == hull[(i + 2) % hull.Count] - b)
-                    hull.RemoveAt(i--);
+                var centroid = Vector2.Zero;
+                int signedArea = 0;
+                for (int i = 0; i < hull.Count; ++i)
+                {
+                    a = hull[i];
+                    b = hull[(i + 1) % hull.Count];
+                    var area = a.X * b.Y - b.X * a.Y;
+                    signedArea += area;
+                    centroid += (a + b) * area;
+                }
+                centroid /= signedArea * 3f;
+
+                //Move all points out from the centroid
+                for (int i = 0; i < hull.Count; ++i)
+                {
+                    a = (Point2)(hull[i] + Vector2.Normalize(hull[i] - centroid, extend));
+
+                    //This breaks everything :(
+                    //a.X = Calc.Clamp(a.X, 0, bitmap.Width);
+                    //a.Y = Calc.Clamp(a.Y, 0, bitmap.Height);
+
+                    hull[i] = a;
+                }
             }
+
+            //Remove colinear points in the hull
+            int prevCount = 0;
+            while (prevCount != hull.Count)
+            {
+                prevCount = hull.Count;
+                for (int i = 0; i < hull.Count; ++i)
+                {
+                    a = hull[i];
+                    b = hull[(i + 1) % hull.Count];
+                    c = hull[(i + 2) % hull.Count];
+                    Vector2 ab = b - a;
+                    Vector2 cb = c - b;
+                    if (Math.Abs(ab.Angle - cb.Angle) <= angleThreshold)
+                        hull.RemoveAt(i);
+                }
+            }
+
+            //Build polygon
+            for (int i = 0; i < hull.Count; ++i)
+                result.AddPoint(hull[i]);
 
             return true;
         }

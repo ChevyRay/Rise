@@ -44,6 +44,7 @@ namespace Rise
         {
             Delta = dt * Rate;
             Total += Delta;
+            ++Frames;
         }
 
         //Sin wave back and forth between two numbers
