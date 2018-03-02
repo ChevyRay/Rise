@@ -38,6 +38,9 @@ namespace Rise.TriangulationTest
 
             points = tri.hull;
 
+            Console.WriteLine("Bitmap Area: {0}", bitmap.Width * bitmap.Height);
+            Console.WriteLine("Convex Area: {0}", GetArea(points));
+
             tris = new List<Triangle>();
             var list = new List<Point2>(points);
             while (list.Count > 2)
@@ -57,6 +60,19 @@ namespace Rise.TriangulationTest
             }
 
             Console.WriteLine("Triangles: {0}", tris.Count);
+        }
+
+
+        static float GetArea(List<Point2> points)
+        {
+            int area = 0;
+            int j = points.Count - 1;
+            for (int i = 0; i < points.Count; ++i)
+            {
+                area += (points[j].X + points[i].X) * (points[j].Y - points[i].Y);
+                j = i;
+            }
+            return Math.Abs(area / 2);
         }
 
         static void Update()
