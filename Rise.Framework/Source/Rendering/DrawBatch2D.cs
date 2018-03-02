@@ -29,6 +29,7 @@ namespace Rise
         int textureLoc;
         DrawCall draw;
         Texture currTexture;
+        Matrix3x2 modelMatrix;
         Matrix4x4 projMatrix;
         Matrix4x4 viewMatrix;
         Matrix4x4 viewProjMatrix;
@@ -52,6 +53,7 @@ namespace Rise
             
             rendering = true;
             draw.Target = target;
+            modelMatrix = Matrix3x2.Identity;
             viewMatrix = matrix;
             draw.Blend = true;
             draw.BlendMode = blendMode;
@@ -123,7 +125,7 @@ namespace Rise
             }
         }
 
-        public void SetMatrix(ref Matrix4x4 matrix)
+        public void SetViewMatrix(ref Matrix4x4 matrix)
         {
             Flush();
             viewMatrix = matrix;
@@ -132,7 +134,16 @@ namespace Rise
             UpdateMatrix();
             draw.Material.SetMatrix4x4(matrixLoc, ref viewProjMatrix);
         }
-        public void SetMatrix(Matrix4x4 matrix)
+        public void SetViewMatrix(Matrix4x4 matrix)
+        {
+            SetViewMatrix(ref matrix);
+        }
+
+        public void SetMatrix(ref Matrix3x2 matrix)
+        {
+            matrix.CopyTo(out modelMatrix);
+        }
+        public void SetMatrix(Matrix3x2 matrix)
         {
             SetMatrix(ref matrix);
         }
@@ -158,25 +169,21 @@ namespace Rise
 
         public void DrawRect(float x, float y, float w, float h, Color4 color)
         {
-            c0.Pos.X = x;
-            c0.Pos.Y = y;
-            c1.Pos.X = x + w;
-            c1.Pos.Y = y;
-            c2.Pos.X = x + w;
-            c2.Pos.Y = y + h;
-            c3.Pos.X = x;
-            c3.Pos.Y = y + h;
-
+            c0.Pos = modelMatrix.TransformPoint(x, y);
+            c1.Pos = modelMatrix.TransformPoint(x + w, y);
+            c2.Pos = modelMatrix.TransformPoint(x + w, y + h);
+            c3.Pos = modelMatrix.TransformPoint(x, y + h);
+            
             c0.Add = c1.Add = c2.Add = c3.Add = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
         public void DrawRect(ref Rectangle rect, Color4 color)
         {
-            c0.Pos = rect.TopLeft;
-            c1.Pos = rect.TopRight;
-            c2.Pos = rect.BottomRight;
-            c3.Pos = rect.BottomLeft;
+            c0.Pos = modelMatrix.TransformPoint(rect.TopLeft);
+            c1.Pos = modelMatrix.TransformPoint(rect.TopRight);
+            c2.Pos = modelMatrix.TransformPoint(rect.BottomRight);
+            c3.Pos = modelMatrix.TransformPoint(rect.BottomLeft);
 
             c0.Add = c1.Add = c2.Add = c3.Add = color;
 
@@ -189,10 +196,10 @@ namespace Rise
 
         public void DrawQuad(Vector2 a, Vector2 b, Vector2 c, Vector2 d, Color4 color)
         {
-            c0.Pos = a;
-            c1.Pos = b;
-            c2.Pos = c;
-            c3.Pos = d;
+            c0.Pos = modelMatrix.TransformPoint(a);
+            c1.Pos = modelMatrix.TransformPoint(b);
+            c2.Pos = modelMatrix.TransformPoint(c);
+            c3.Pos = modelMatrix.TransformPoint(d);
 
             c0.Add = c1.Add = c2.Add = c3.Add = color;
 
@@ -200,10 +207,10 @@ namespace Rise
         }
         public void DrawQuad(ref Quad quad, Color4 color)
         {
-            c0.Pos = quad.A;
-            c1.Pos = quad.B;
-            c2.Pos = quad.C;
-            c3.Pos = quad.D;
+            c0.Pos = modelMatrix.TransformPoint(quad.A);
+            c1.Pos = modelMatrix.TransformPoint(quad.B);
+            c2.Pos = modelMatrix.TransformPoint(quad.C);
+            c3.Pos = modelMatrix.TransformPoint(quad.D);
 
             c0.Add = c1.Add = c2.Add = c3.Add = color;
 
@@ -219,30 +226,25 @@ namespace Rise
             var normal = (b - a).Normalized;
             var perp = new Vector2(normal.Y, -normal.X) * width * 0.5f;
 
-            c0.Pos = a + perp;
-            c1.Pos = b + perp;
-            c2.Pos = b - perp;
-            c3.Pos = a - perp;
+            c0.Pos = modelMatrix.TransformPoint(a + perp);
+            c1.Pos = modelMatrix.TransformPoint(b + perp);
+            c2.Pos = modelMatrix.TransformPoint(b - perp);
+            c3.Pos = modelMatrix.TransformPoint(a - perp);
 
             c0.Add = c1.Add = c2.Add = c3.Add = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
-
-        //TODO: more texture functions (sub-rect, etc.)
+        
         public void DrawTexture(Texture texture, Vector2 position, Color4 color)
         {
             SetTexture(texture);
 
-            v0.Pos.X = position.X;
-            v0.Pos.Y = position.Y;
-            v1.Pos.X = position.X + texture.Width;
-            v1.Pos.Y = position.Y;
-            v2.Pos.X = position.X + texture.Width;
-            v2.Pos.Y = position.Y + texture.Height;
-            v3.Pos.X = position.X;
-            v3.Pos.Y = position.Y + texture.Height;
-
+            v0.Pos = modelMatrix.TransformPoint(position.X, position.Y);
+            v1.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y);
+            v2.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y + texture.Height);
+            v3.Pos = modelMatrix.TransformPoint(position.X, position.Y + texture.Height);
+            
             v0.Tex.X = v0.Tex.Y =  v1.Tex.Y = v3.Tex.X = 0f;
             v1.Tex.X = v2.Tex.X = v2.Tex.Y = v3.Tex.Y = 1f;
 
@@ -250,17 +252,16 @@ namespace Rise
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
         }
-
-        //TODO: more image functions (scaling, rotating, etc.)
+        
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
         {
             SetTexture(image.Atlas.Texture);
 
-            v0.Pos.X = v3.Pos.X = position.X + image.OffsetX;
-            v0.Pos.Y = v1.Pos.Y = position.Y + image.OffsetY;
-            v1.Pos.X = v2.Pos.X = v0.Pos.X + image.TrimWidth;
-            v2.Pos.Y = v3.Pos.Y = v0.Pos.Y + image.TrimHeight;
-
+            v0.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY);
+            v1.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX + image.TrimWidth, position.Y + image.OffsetY);
+            v2.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX + image.TrimWidth, position.Y + image.OffsetY + image.TrimHeight);
+            v3.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY + image.TrimHeight);
+            
             image.GetUVs(out v0.Tex, out v1.Tex, out v2.Tex, out v3.Tex);
             v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
 
