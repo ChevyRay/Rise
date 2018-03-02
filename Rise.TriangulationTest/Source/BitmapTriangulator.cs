@@ -41,7 +41,7 @@ namespace Rise.TriangulationTest
             if (edge.Count < 3)
                 return false;
 
-            //Find the convex hull
+            //Find the convex hull (gift-wrapping algorithm... faster algorithms exist if we want to optimize)
             Point2 a, b, c;
             a = left;
             do
