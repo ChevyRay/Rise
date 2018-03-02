@@ -216,10 +216,10 @@ namespace Rise
             AddQuad(ref a, ref b, ref c, ref d);
         }
 
-        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
-        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
-        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
-        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 1f, 0f, 0f);
+        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddRect(ref Rectangle rect, Vector2 texMin, Vector2 texMax, Color4 col)

@@ -5,16 +5,22 @@ namespace Rise
     public class DrawBatch2D
     {
         //Vertices for rendering images
-        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
-        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
-        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
-        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White);
+        static Vertex2D v0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+        static Vertex2D v3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 255, 0, 0);
+
+        //Vertices for rendering images
+        static Vertex2D w0 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 0, 255, 0);
+        static Vertex2D w1 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 0, 255, 0);
+        static Vertex2D w2 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 0, 255, 0);
+        static Vertex2D w3 = new Vertex2D(Vector2.Zero, Vector2.One, Color4.White, 0, 255, 0);
 
         //Vertices for rendering shapes
-        static Vertex2D c0 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
-        static Vertex2D c1 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
-        static Vertex2D c2 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
-        static Vertex2D c3 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.Transparent, Color4.White);
+        static Vertex2D c0 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.White, 0, 0, 255);
+        static Vertex2D c1 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.White, 0, 0, 255);
+        static Vertex2D c2 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.White, 0, 0, 255);
+        static Vertex2D c3 = new Vertex2D(Vector2.Zero, Vector2.Zero, Color4.White, 0, 0, 255);
 
         //The default material and texture used when nothing is assigned
         static Texture2D defaultTexture;
@@ -174,7 +180,7 @@ namespace Rise
             c2.Pos = modelMatrix.TransformPoint(x + w, y + h);
             c3.Pos = modelMatrix.TransformPoint(x, y + h);
             
-            c0.Add = c1.Add = c2.Add = c3.Add = color;
+            c0.Col = c1.Col = c2.Col = c3.Col = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
@@ -185,7 +191,7 @@ namespace Rise
             c2.Pos = modelMatrix.TransformPoint(rect.BottomRight);
             c3.Pos = modelMatrix.TransformPoint(rect.BottomLeft);
 
-            c0.Add = c1.Add = c2.Add = c3.Add = color;
+            c0.Col = c1.Col = c2.Col = c3.Col = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
@@ -201,7 +207,7 @@ namespace Rise
             c2.Pos = modelMatrix.TransformPoint(c);
             c3.Pos = modelMatrix.TransformPoint(d);
 
-            c0.Add = c1.Add = c2.Add = c3.Add = color;
+            c0.Col = c1.Col = c2.Col = c3.Col = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
@@ -212,7 +218,7 @@ namespace Rise
             c2.Pos = modelMatrix.TransformPoint(quad.C);
             c3.Pos = modelMatrix.TransformPoint(quad.D);
 
-            c0.Add = c1.Add = c2.Add = c3.Add = color;
+            c0.Col = c1.Col = c2.Col = c3.Col = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
@@ -231,7 +237,7 @@ namespace Rise
             c2.Pos = modelMatrix.TransformPoint(b - perp);
             c3.Pos = modelMatrix.TransformPoint(a - perp);
 
-            c0.Add = c1.Add = c2.Add = c3.Add = color;
+            c0.Col = c1.Col = c2.Col = c3.Col = color;
 
             mesh.AddQuad(ref c0, ref c1, ref c2, ref c3);
         }
@@ -248,9 +254,26 @@ namespace Rise
             v0.Tex.X = v0.Tex.Y =  v1.Tex.Y = v3.Tex.X = 0f;
             v1.Tex.X = v2.Tex.X = v2.Tex.Y = v3.Tex.Y = 1f;
 
-            v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
+            v0.Col = v1.Col = v2.Col = v3.Col = color;
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+
+        public void DrawTextureWashed(Texture texture, Vector2 position, Color4 color)
+        {
+            SetTexture(texture);
+
+            w0.Pos = modelMatrix.TransformPoint(position.X, position.Y);
+            w1.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y);
+            w2.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y + texture.Height);
+            w3.Pos = modelMatrix.TransformPoint(position.X, position.Y + texture.Height);
+
+            w0.Tex.X = w0.Tex.Y = w1.Tex.Y = w3.Tex.X = 0f;
+            w1.Tex.X = w2.Tex.X = w2.Tex.Y = w3.Tex.Y = 1f;
+
+            w0.Col = w1.Col = w2.Col = w3.Col = color;
+
+            mesh.AddQuad(ref w0, ref w1, ref w2, ref w3);
         }
         
         public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
@@ -263,7 +286,7 @@ namespace Rise
             v3.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY + image.TrimHeight);
             
             image.GetUVs(out v0.Tex, out v1.Tex, out v2.Tex, out v3.Tex);
-            v0.Mul = v1.Mul = v2.Mul = v3.Mul = color;
+            v0.Col = v1.Col = v2.Col = v3.Col = color;
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
         }

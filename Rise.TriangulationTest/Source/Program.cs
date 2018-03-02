@@ -73,7 +73,7 @@ namespace Rise.TriangulationTest
             var m = Matrix4x4.CreateTranslation(new Vector2(200f, 100f));
             batch.Begin(null, null, m, BlendMode.Premultiplied);
 
-            batch.DrawTexture(texture, Vector2.Zero, Color4.White * 0.5f);
+            batch.DrawTextureWashed(texture, Vector2.Zero, Color4.Red * 0.5f);
 
             foreach (var tri in tris)
             {

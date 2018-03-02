@@ -105,7 +105,7 @@ namespace Rise.FrameworkTest
                 for (int i = 0; i < positions.Length; ++i)
                 {
                     float a = i / (positions.Length - 1f);
-                    mesh.AddRect(positions[i], Vector2.Zero, Vector2.One, Color4.White * a, Color4.Transparent);
+                    mesh.AddRect(positions[i], Vector2.Zero, Vector2.One);
                 }
                 mesh.Update();
 

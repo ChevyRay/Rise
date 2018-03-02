@@ -163,8 +163,8 @@ layout(location = 0) in vec2 vertPos;
 layout(location = 1) in vec2 vertUV;
 layout(location = 2) in vec4 vertCol;
 layout(location = 3) in float vertMult;
-layout(location = 3) in float vertWash;
-layout(location = 3) in float vertVeto;
+layout(location = 4) in float vertWash;
+layout(location = 5) in float vertVeto;
 out vec2 fragUV;
 out vec4 fragCol;
 out float fragMult;
@@ -192,9 +192,9 @@ void main(void)
 {
     vec4 color = texture(Texture, fragUV);
     outColor = 
-        fragMult * color * fragColor + 
-        fragWash * color.a * fragColor + 
-        fragVeto * fragColor;
+        fragMult * color * fragCol + 
+        fragWash * color.a * fragCol + 
+        fragVeto * fragCol;
 }";
     }
 }
