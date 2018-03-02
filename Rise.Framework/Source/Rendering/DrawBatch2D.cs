@@ -280,15 +280,32 @@ namespace Rise
         {
             SetTexture(image.Atlas.Texture);
 
-            v0.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY);
-            v1.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX + image.TrimWidth, position.Y + image.OffsetY);
-            v2.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX + image.TrimWidth, position.Y + image.OffsetY + image.TrimHeight);
-            v3.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY + image.TrimHeight);
+            var pos = new Vector2(position.X + image.OffsetX, position.Y + image.OffsetY);
+            v0.Pos = modelMatrix.TransformPoint(pos);
+            v1.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth, pos.Y);
+            v2.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth, pos.Y + image.TrimHeight);
+            v3.Pos = modelMatrix.TransformPoint(pos.X, pos.Y + image.TrimHeight);
             
             image.GetUVs(out v0.Tex, out v1.Tex, out v2.Tex, out v3.Tex);
             v0.Col = v1.Col = v2.Col = v3.Col = color;
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+
+        public void DrawImageWashed(AtlasImage image, Vector2 position, Color4 color)
+        {
+            SetTexture(image.Atlas.Texture);
+
+            var pos = new Vector2(position.X + image.OffsetX, position.Y + image.OffsetY);
+            w0.Pos = modelMatrix.TransformPoint(pos);
+            w1.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth, pos.Y);
+            w2.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth, pos.Y + image.TrimHeight);
+            w3.Pos = modelMatrix.TransformPoint(pos.X, pos.Y + image.TrimHeight);
+
+            image.GetUVs(out w0.Tex, out w1.Tex, out w2.Tex, out w3.Tex);
+            w0.Col = w1.Col = w2.Col = w3.Col = color;
+
+            mesh.AddQuad(ref w0, ref w1, ref w2, ref w3);
         }
 
         public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
