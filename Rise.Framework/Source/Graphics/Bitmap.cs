@@ -123,6 +123,16 @@ namespace Rise
             return pixels[y * Width + x];
         }
 
+        public bool IsPixelTransparent(int x, int y)
+        {
+            return x < 0 || y < 0 || x >= Width || y >= Height || pixels[y * Width + x].A == 0;
+        }
+
+        public bool IsPixelVisible(int x, int y)
+        {
+            return x >= 0 && y >= 0 && x < Width && y < Height && pixels[y * Width + x].A > 0;
+        }
+
         public void SetPixel(int x, int y, Color4 color)
         {
             pixels[y * Width + x] = color;
