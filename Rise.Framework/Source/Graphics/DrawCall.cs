@@ -99,7 +99,7 @@ namespace Rise
             //Clear render state
             state = new DrawCall();
             RenderTarget.Bind(null);
-            GL.Viewport(0, 0, Screen.Width, Screen.Height);
+            GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
             GL.Disable(EnableCap.Blend);
             GL.Disable(EnableCap.ScissorTest);
             GL.UseProgram(0);
@@ -144,7 +144,7 @@ namespace Rise
                 if (Target != null)
                     GL.Viewport(0, 0, Target.Width, Target.Height);
                 else
-                    GL.Viewport(0, 0, Screen.Width, Screen.Height);
+                    GL.Viewport(0, 0, Screen.DrawWidth, Screen.DrawHeight);
             }
 
             //Set blend mode

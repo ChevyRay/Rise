@@ -52,8 +52,8 @@ namespace Rise
 
             int mx, my;
             App.platform.GetMousePosition(out mx, out my);
-            mx = (int)((mx - Screen.WindowX) / Screen.PixelW);
-            my = (int)((my - Screen.WindowY) / Screen.PixelH);
+            mx = (int)((mx - Screen.X) / Screen.PixelW);
+            my = (int)((my - Screen.Y) / Screen.PixelH);
             Position = new Point2(mx, my);
 
             if (LastPosition != Position)

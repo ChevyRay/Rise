@@ -44,7 +44,7 @@ namespace Rise.FrameworkTest
             Screen.ClearColor = 0x1e4e50ff;
 
             Console.WriteLine("WIDTH: " + Screen.Width);
-            Console.WriteLine("WINDOW_WIDTH: " + Screen.WindowWidth);
+            Console.WriteLine("WINDOW_WIDTH: " + Screen.Width);
         }
 
         //Called every frame (default is 60 FPS). This is where you can interact with

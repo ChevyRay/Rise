@@ -12,16 +12,16 @@ namespace Rise
         public static bool Fullscreen { get { return App.platform.Fullscreen; } }
         public static bool VSync { get { return App.platform.VSync; } }
 
-        public static int WindowX { get { return position.X; } }
-        public static int WindowY { get { return position.Y; } }
-        public static int WindowWidth { get { return position.W; } }
-        public static int WindowHeight { get { return position.H; } }
+        public static int X { get { return position.X; } }
+        public static int Y { get { return position.Y; } }
+        public static int Width { get { return position.W; } }
+        public static int Height { get { return position.H; } }
         public static RectangleI WindowPos { get { return position; } }
 
-        public static int Width { get { return drawSize.X; } }
-        public static int Height { get { return drawSize.Y; } }
-        public static Point2 Size { get { return drawSize; } }
-        public static Vector2 Center { get { return new Vector2(drawSize.X / 2, drawSize.Y / 2); } }
+        public static int DrawWidth { get { return drawSize.X; } }
+        public static int DrawHeight { get { return drawSize.Y; } }
+        //public static Point2 Size { get { return drawSize; } }
+        //public static Vector2 Center { get { return new Vector2(drawSize.X / 2, drawSize.Y / 2); } }
 
         public static Color4 ClearColor = Color4.Black;
 
