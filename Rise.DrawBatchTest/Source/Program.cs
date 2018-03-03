@@ -76,7 +76,7 @@ namespace Rise.DrawBatchTest
             batch.Begin(null, null, camera, BlendMode.Premultiplied);
             {
                 Rand.SetSeed(123);
-                for (int i = 0; i < 1000; ++i)
+                for (int i = 0; i < 15000; ++i)
                 {
                     var icon = icons.GetTile(i % 5);
                     var pos = Rand.PointInRect(ref cameraBounds);
