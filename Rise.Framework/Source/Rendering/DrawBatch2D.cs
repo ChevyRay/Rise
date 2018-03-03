@@ -276,9 +276,9 @@ namespace Rise
             mesh.AddQuad(ref w0, ref w1, ref w2, ref w3);
         }
         
-        public void DrawImage(AtlasImage image, Vector2 position, Color4 color)
+        public void DrawImage(SubTexture image, Vector2 position, Color4 color)
         {
-            SetTexture(image.Atlas.Texture);
+            SetTexture(image.Texture);
 
             v0.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX, position.Y + image.OffsetY);
             v1.Pos = modelMatrix.TransformPoint(position.X + image.OffsetX + image.TrimWidth, position.Y + image.OffsetY);
