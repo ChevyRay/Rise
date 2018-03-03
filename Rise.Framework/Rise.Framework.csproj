@@ -105,6 +105,8 @@
     <Compile Include="Source\Atlas\AtlasFont.cs" />
     <Compile Include="Source\Atlas\AtlasChar.cs" />
     <Compile Include="Source\Rendering\DrawBatch2D.cs" />
+    <Compile Include="Source\Atlas\AtlasTiles.cs" />
+    <Compile Include="Source\Rendering\SubTexture.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

@@ -57,7 +57,7 @@ namespace Rise.PlatformSDL
             //SDL.GLSetAttribute(GLAttr.MultisampleSamples, 3);
 
             //Create the window
-            var windowFlags = WindowFlags.Shown | WindowFlags.OpenGL | WindowFlags.AllowHighDpi | WindowFlags.Resizable;
+            var windowFlags = WindowFlags.Shown | WindowFlags.OpenGL;// | WindowFlags.AllowHighDpi | WindowFlags.Resizable;
             window = SDL.CreateWindow(title, SDL.WindowPosCentered, SDL.WindowPosCentered, width, height, windowFlags);
             if (!window)
             {

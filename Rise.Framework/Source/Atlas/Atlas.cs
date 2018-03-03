@@ -8,6 +8,7 @@ namespace Rise
         public Texture2D Texture { get; private set; }
         Dictionary<string, AtlasImage> images = new Dictionary<string, AtlasImage>(StringComparer.Ordinal);
         Dictionary<string, AtlasFont> fonts = new Dictionary<string, AtlasFont>(StringComparer.Ordinal);
+        Dictionary<string, AtlasTiles> tiles = new Dictionary<string, AtlasTiles>(StringComparer.Ordinal);
 
         public int Width { get { return Texture.Width; } }
         public int Height { get { return Texture.Height; } }
@@ -57,6 +58,26 @@ namespace Rise
             return GetFont(ref name);
         }
 
+        public bool TryGetTiles(ref string name, out AtlasTiles result)
+        {
+            return tiles.TryGetValue(name, out result);
+        }
+        public bool TryGetTiles(string name, out AtlasTiles result)
+        {
+            return tiles.TryGetValue(name, out result);
+        }
+        public AtlasTiles GetTiles(ref string name)
+        {
+            AtlasTiles result;
+            if (!tiles.TryGetValue(name, out result))
+                throw new Exception($"Atlas does not have tiles with name: \"{name}\"");
+            return result;
+        }
+        public AtlasTiles GetTiles(string name)
+        {
+            return GetTiles(ref name);
+        }
+
         public AtlasImage AddImage(ref string name, int width, int height, int offsetX, int offsetY, int trimW, int trimH, ref Rectangle uvRect, bool rotate90)
         {
             if (images.ContainsKey(name))
@@ -102,5 +123,6 @@ namespace Rise
             fonts.Add(name, font);
             return font;
         }
+
     }
 }

@@ -12,6 +12,12 @@ namespace Rise
             public RectangleI Rect;
         }
 
+        class Tiles
+        {
+            public int Cols;
+            public int Rows;
+        }
+
         int maxSize;
         Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>(StringComparer.Ordinal);
         Dictionary<string, FontSize> fonts = new Dictionary<string, FontSize>(StringComparer.Ordinal);
@@ -46,6 +52,33 @@ namespace Rise
         {
             var name = Path.GetFileNameWithoutExtension(file);
             AddBitmap(name, file, premultiply, trim);
+        }
+
+        public void AddTiles(string prefix, Bitmap bitmap, int tileWidth, int tileHeight, bool premultiply, bool trim)
+        {
+            int cols = bitmap.Width / tileWidth;
+            int rows = bitmap.Height / tileHeight;
+
+            if (cols * tileWidth != bitmap.Width)
+                throw new Exception("tileWidth is not a factor of bitmap.Width");
+            if (rows * tileHeight != bitmap.Height)
+                throw new Exception("tileHeight is not a factor of bitmap.Height");
+
+            for (int y = 0; y < rows; ++y)
+            {
+                for (int x = 0; x < cols; ++x)
+                {
+                    var tile = new Bitmap(tileWidth, tileHeight);
+                    tile.CopyPixels(bitmap, x * tileWidth, y * tileHeight, tileWidth, tileHeight, 0, 0);
+                    AddBitmap($"{prefix}:{x},{y}", tile, true);
+                }
+            }
+        }
+        public void AddTiles(string file, int tileWidth, int tileHeight, bool premultiply, bool trim)
+        {
+            var prefix = Path.GetFileNameWithoutExtension(file);
+            var bitmap = new Bitmap(file);
+            AddTiles(prefix, bitmap, tileWidth, tileHeight, premultiply, trim);
         }
 
         public void AddFont(string name, FontSize font, bool premultiply)

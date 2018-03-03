@@ -132,18 +132,22 @@ namespace Rise
             }
         }
 
+        void UpdateMatrix()
+        {
+            if (dirty)
+            {
+                Matrix3x2.Transform(scale, rotation, position, out matrix);
+                if (parent != null)
+                    matrix = parent.Matrix * matrix;
+                dirty = false;
+            }
+        }
+
         public Matrix3x2 Matrix
         {
             get
             {
-                if (dirty)
-                {
-                    Matrix3x2.Transform(scale, rotation, position, out matrix);
-                    if (parent != null)
-                        matrix = parent.Matrix * matrix;
-                    dirty = false;
-                }
-
+                UpdateMatrix();
                 return matrix;
             }
         }
@@ -156,6 +160,45 @@ namespace Rise
                     return parent.Matrix.TransformPoint(position);
                 return position;
             }
+        }
+
+        public bool IsAncestorOf(Transform2D t)
+        {
+            if (t.parent != null)
+            {
+                var p = t.parent;
+                while (p != null)
+                {
+                    if (p == this)
+                        return true;
+                    p = p.parent;
+                }
+            }
+            return false;
+        }
+
+        public bool IsDescendantOf(Transform2D t)
+        {
+            return t.IsAncestorOf(this);
+        }
+
+        public void LookAt(Vector2 position)
+        {
+            Rotation = (position - GlobalPosition).Angle;
+        }
+
+        public Vector2 LocalToGlobal(Vector2 p)
+        {
+            UpdateMatrix();
+            return matrix.TransformPoint(p);
+        }
+
+        public Vector2 GlobalToLocal(Vector2 p)
+        {
+            UpdateMatrix();
+            Matrix3x2 inv;
+            matrix.Invert(out inv);
+            return inv.TransformPoint(p);
         }
     }
 }

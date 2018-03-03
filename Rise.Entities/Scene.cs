@@ -90,7 +90,7 @@ namespace Rise.Entities
         public void RemoveChildren(Entity entity)
         {
             for (int i = 0, n = entities.Count; i < n; ++i)
-                if (entities[i] != null && entity.IsAncestorOf(entities[i]))
+                if (entities[i] != null && entity.Transform.IsAncestorOf(entities[i].Transform))
                     Remove(entities[i]);
         }
 

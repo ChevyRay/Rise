@@ -32,7 +32,7 @@ namespace Rise.TriangulationTest
 
             poly = new Polygon();
             var tri = new BitmapTriangulator();
-            tri.Triangulate(bitmap, 0.1f * Calc.Rad, 1f, poly);
+            tri.Triangulate(bitmap, 0.1f * Calc.Rad, 4f, poly);
 
             Console.WriteLine("Time: {0} ms", Time.ClockMilliseconds - time);
             Console.WriteLine("Points: {0}", poly.PointCount);
@@ -73,7 +73,7 @@ namespace Rise.TriangulationTest
             var m = Matrix4x4.CreateTranslation(new Vector2(200f, 100f));
             batch.Begin(null, null, m, BlendMode.Premultiplied);
 
-            batch.DrawTextureWashed(texture, Vector2.Zero, Color4.Red * 0.5f);
+            batch.DrawTexture(texture, Vector2.Zero, Color4.White);
 
             foreach (var tri in tris)
             {
