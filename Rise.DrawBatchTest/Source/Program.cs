@@ -5,7 +5,7 @@ namespace Rise.DrawBatchTest
     static class Program
     {
         static Atlas atlas;
-        static AtlasImage[] icons;
+        static AtlasTiles icons;
         static DrawBatch2D batch;
 
         public static void Main(string[] args)
@@ -38,13 +38,7 @@ namespace Rise.DrawBatchTest
             if (atlas == null)
                 throw new Exception("Failed to build the atlas.");
 
-            icons = new AtlasImage[] {
-                atlas.GetImage("icons:0,0"),
-                atlas.GetImage("icons:1,0"),
-                atlas.GetImage("icons:2,0"),
-                atlas.GetImage("icons:3,0"),
-                atlas.GetImage("icons:4,0")
-            };
+            icons = atlas.GetTiles("icons");
 
             batch = new DrawBatch2D();
         }
@@ -84,7 +78,7 @@ namespace Rise.DrawBatchTest
                 Rand.SetSeed(123);
                 for (int i = 0; i < 1000; ++i)
                 {
-                    var icon = icons[i % icons.Length];
+                    var icon = icons.GetTile(i % 5);
                     var pos = Rand.PointInRect(ref cameraBounds);
                     pos.X -= icon.Width / 2f;
                     pos.Y -= icon.Height / 2f;

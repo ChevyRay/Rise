@@ -9,6 +9,7 @@ namespace Rise
         public int Rows { get; private set; }
         public int TileWidth { get; private set; }
         public int TileHeight { get; private set; }
+        public int TileCount { get; private set; }
 
         AtlasImage[] tiles;
 
@@ -20,17 +21,27 @@ namespace Rise
             Rows = rows;
             TileWidth = tw;
             TileHeight = th;
+            TileCount = cols * rows;
             tiles = new AtlasImage[cols * rows];
         }
 
-        public void SetTile(int col, int row, AtlasImage tile)
+        public void SetTile(int x, int y, AtlasImage tile)
         {
             if (tile.Width != TileWidth)
                 throw new Exception("Tile width mismatch.");
             if (tile.Height != TileHeight)
                 throw new Exception("Tile height mismatch.");
 
-            tiles[row * Cols + col] = tile;
+            tiles[y * Cols + x] = tile;
+        }
+
+        public AtlasImage GetTile(int x, int y)
+        {
+            return tiles[y * Cols + x];
+        }
+        public AtlasImage GetTile(int i)
+        {
+            return tiles[i];
         }
     }
 }
