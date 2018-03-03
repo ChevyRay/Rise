@@ -124,5 +124,11 @@ namespace Rise
             return font;
         }
 
+        public AtlasTiles AddTiles(string name, int cols, int rows, int tileWidth, int tileHeight)
+        {
+            var tileset = new AtlasTiles(this, name, cols, rows, tileWidth, tileHeight);
+            tiles.Add(name, tileset);
+            return tileset;
+        }
     }
 }

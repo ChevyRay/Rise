@@ -223,6 +223,21 @@ namespace Rise
             CopyPixels(source, dest.X, dest.Y);
         }
 
+        public bool HasVisiblePixelsInRect(int x, int y, int w, int h)
+        {
+            w += x;
+            h += y;
+            for (int yy = 0; yy < w; ++yy)
+                for (int xx = 0; xx < h; ++xx)
+                    if (pixels[yy * Width + xx].A > 0)
+                        return true;
+            return false;
+        }
+        public bool HasVisiblePixelsInRect(RectangleI rect)
+        {
+            return HasVisiblePixelsInRect(rect.X, rect.Y, rect.W, rect.H);
+        }
+
         public void Clear(Color4 color)
         {
             for (int i = 0; i < PixelCount; ++i)

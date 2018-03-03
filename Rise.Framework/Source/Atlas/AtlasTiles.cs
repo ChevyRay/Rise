@@ -23,7 +23,7 @@ namespace Rise
             tiles = new AtlasImage[cols * rows];
         }
 
-        public void SetTile(AtlasImage tile, int col, int row)
+        public void SetTile(int col, int row, AtlasImage tile)
         {
             if (tile.Width != TileWidth)
                 throw new Exception("Tile width mismatch.");

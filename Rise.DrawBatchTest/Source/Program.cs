@@ -27,39 +27,23 @@ namespace Rise.DrawBatchTest
             var builder = new AtlasBuilder(1024);
 
             //Pack a font
-            {
-                var font = new Font("Assets/NotoSans-Regular.ttf", CharSet.BasicLatin);
-                var size32 = new FontSize(font, 32);
-                builder.AddFont("font", size32, true);
-            }
+            var font = new Font("Assets/NotoSans-Regular.ttf", CharSet.BasicLatin);
+            var size32 = new FontSize(font, 32);
+            builder.AddFont("font", size32, true);
 
             //Pack a bunch of icons
-            {
-                var icons = new Bitmap("Assets/icons.png");
-                icons.Premultiply();
-
-                var rect = new RectangleI(16, 16);
-                for (rect.Y = 0; rect.Y < icons.Height; rect.Y += 16)
-                {
-                    for (rect.X = 0; rect.X < icons.Width; rect.X += 16)
-                    {
-                        var tile = new Bitmap(16, 16);
-                        tile.CopyPixels(icons, rect, Point2.Zero);
-                        builder.AddBitmap($"icon_{rect.X/16}_{rect.Y/16}", tile, true);
-                    }
-                }
-            }
+            builder.AddTiles("Assets/icons.png", 16, 16, true, true);
 
             atlas = builder.Build(1);
             if (atlas == null)
                 throw new Exception("Failed to build the atlas.");
 
             icons = new AtlasImage[] {
-                atlas.GetImage("icon_0_0"),
-                atlas.GetImage("icon_1_0"),
-                atlas.GetImage("icon_2_0"),
-                atlas.GetImage("icon_3_0"),
-                atlas.GetImage("icon_4_0")
+                atlas.GetImage("icons:0,0"),
+                atlas.GetImage("icons:1,0"),
+                atlas.GetImage("icons:2,0"),
+                atlas.GetImage("icons:3,0"),
+                atlas.GetImage("icons:4,0")
             };
 
             batch = new DrawBatch2D();
@@ -98,7 +82,7 @@ namespace Rise.DrawBatchTest
             batch.Begin(null, null, camera, BlendMode.Premultiplied);
             {
                 Rand.SetSeed(123);
-                for (int i = 0; i < 15000; ++i)
+                for (int i = 0; i < 1000; ++i)
                 {
                     var icon = icons[i % icons.Length];
                     var pos = Rand.PointInRect(ref cameraBounds);

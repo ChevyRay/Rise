@@ -12,15 +12,20 @@ namespace Rise
             public RectangleI Rect;
         }
 
-        class Tiles
+        struct Tiles
         {
+            public string Name;
             public int Cols;
             public int Rows;
+            public int TileWidth;
+            public int TileHeight;
+            public Bitmap[,] Bitmaps;
         }
 
         int maxSize;
         Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>(StringComparer.Ordinal);
         Dictionary<string, FontSize> fonts = new Dictionary<string, FontSize>(StringComparer.Ordinal);
+        Dictionary<string, Tiles> tiles = new Dictionary<string, Tiles>(StringComparer.Ordinal);
         List<FontSize> fontsToPremultiply = new List<FontSize>();
         Dictionary<Bitmap, RectangleI> trims = new Dictionary<Bitmap, RectangleI>();
         int packCount = 1;
@@ -54,31 +59,48 @@ namespace Rise
             AddBitmap(name, file, premultiply, trim);
         }
 
-        public void AddTiles(string prefix, Bitmap bitmap, int tileWidth, int tileHeight, bool premultiply, bool trim)
+        public void AddTiles(string prefix, Bitmap bitmap, int tileWidth, int tileHeight, bool trim)
         {
-            int cols = bitmap.Width / tileWidth;
-            int rows = bitmap.Height / tileHeight;
+            Tiles tileset;
+            tileset.Name = prefix;
+            tileset.Cols = bitmap.Width / tileWidth;
+            tileset.Rows = bitmap.Height / tileHeight;
+            tileset.TileWidth = tileWidth;
+            tileset.TileHeight = tileHeight;
+            tileset.Bitmaps = new Bitmap[tileset.Cols, tileset.Rows];
 
-            if (cols * tileWidth != bitmap.Width)
+            if (tileset.Cols * tileWidth != bitmap.Width)
                 throw new Exception("tileWidth is not a factor of bitmap.Width");
-            if (rows * tileHeight != bitmap.Height)
+            if (tileset.Rows * tileHeight != bitmap.Height)
                 throw new Exception("tileHeight is not a factor of bitmap.Height");
 
-            for (int y = 0; y < rows; ++y)
+            for (int y = 0; y < tileset.Rows; ++y)
             {
-                for (int x = 0; x < cols; ++x)
+                for (int x = 0; x < tileset.Cols; ++x)
                 {
-                    var tile = new Bitmap(tileWidth, tileHeight);
-                    tile.CopyPixels(bitmap, x * tileWidth, y * tileHeight, tileWidth, tileHeight, 0, 0);
-                    AddBitmap($"{prefix}:{x},{y}", tile, true);
+                    if (bitmap.HasVisiblePixelsInRect(x * tileWidth, y * tileHeight, tileWidth, tileHeight))
+                    {
+                        var tile = new Bitmap(tileWidth, tileHeight);
+                        tile.CopyPixels(bitmap, x * tileWidth, y * tileHeight, tileWidth, tileHeight, 0, 0);
+                        tileset.Bitmaps[x, y] = tile;
+
+                        if (trim)
+                            trims[tile] = tile.GetPixelBounds(0);
+
+                        ++packCount;
+                    }
                 }
             }
+
+            tiles.Add(prefix, tileset);
         }
         public void AddTiles(string file, int tileWidth, int tileHeight, bool premultiply, bool trim)
         {
             var prefix = Path.GetFileNameWithoutExtension(file);
             var bitmap = new Bitmap(file);
-            AddTiles(prefix, bitmap, tileWidth, tileHeight, premultiply, trim);
+            if (premultiply)
+                bitmap.Premultiply();
+            AddTiles(prefix, bitmap, tileWidth, tileHeight, trim);
         }
 
         public void AddFont(string name, FontSize font, bool premultiply)
@@ -119,6 +141,26 @@ namespace Rise
                 }
             }
 
+            //Add all the tiles (padding them)
+            foreach (var pair in tiles)
+            {
+                var tileset = pair.Value;
+                RectangleI rect;
+                for (int y = 0; y < tileset.Rows; ++y)
+                {
+                    for (int x = 0; x < tileset.Cols; ++x)
+                    {
+                        var tile = tileset.Bitmaps[x, y];
+                        if (tile != null)
+                        {
+                            if (!trims.TryGetValue(tile, out rect))
+                                rect = new RectangleI(tile.Width, tile.Height);
+                            packer.Add(++nextID, rect.W + pad, rect.H + pad, true);
+                        }
+                    }
+                }
+            }
+
             //Pack the rectangles
             if (!packer.Pack())
                 return null;
@@ -144,11 +186,8 @@ namespace Rise
             //Reset the ID so we get the correct packed rectangles as we go
             nextID = 0;
 
-            //Add the images
-            foreach (var pair in bitmaps)
+            AtlasImage AddImage(string name, Bitmap bitmap)
             {
-                var bitmap = pair.Value;
-
                 RectangleI trim;
                 if (!trims.TryGetValue(bitmap, out trim))
                     trim = new RectangleI(bitmap.Width, bitmap.Height);
@@ -158,7 +197,7 @@ namespace Rise
                 rect.W -= pad;
                 rect.H -= pad;
 
-                atlas.AddImage(pair.Key, bitmap.Width, bitmap.Height, trim.X, trim.Y, trim.W, trim.H, rect, trim.W != rect.W);
+                var img = atlas.AddImage(name, bitmap.Width, bitmap.Height, trim.X, trim.Y, trim.W, trim.H, rect, trim.W != rect.W);
 
                 //Blit the bitmap onto the atlas, optionally rotating it
                 if (trim.W != rect.W)
@@ -176,7 +215,13 @@ namespace Rise
                 }
                 else
                     atlasBitmap.CopyPixels(bitmap, trim.X, trim.Y, trim.W, trim.H, rect.X, rect.Y);
+
+                return img;
             }
+
+            //Add the images
+            foreach (var pair in bitmaps)
+                AddImage(pair.Key, pair.Value);
 
             //Add the fonts
             Bitmap charBitmap = null;
@@ -227,6 +272,27 @@ namespace Rise
                         int kern = size.GetKerning(chr.Char, nextChar);
                         if (kern != 0)
                             atlasChar.SetKerning(nextChar, kern);
+                    }
+                }
+            }
+
+            //Add the tiles
+            foreach (var pair in tiles)
+            {
+                var prefix = pair.Key;
+                var tileset = pair.Value;
+                var atlasTiles = atlas.AddTiles(prefix, tileset.Cols, tileset.Rows, tileset.TileWidth, tileset.TileHeight);
+                
+                for (int y = 0; y < tileset.Rows; ++y)
+                {
+                    for (int x = 0; x < tileset.Cols; ++x)
+                    {
+                        var tile = tileset.Bitmaps[x, y];
+                        if (tile != null)
+                        {
+                            var image = AddImage($"{prefix}:{x},{y}", tile);
+                            atlasTiles.SetTile(x, y, image);
+                        }
                     }
                 }
             }

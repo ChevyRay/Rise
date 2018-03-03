@@ -8,6 +8,7 @@
         internal AtlasImage(Atlas atlas, ref string name, int w, int h, int ox, int oy, int tw, int th, ref Rectangle uvRect, bool rotate90)
         {
             Atlas = atlas;
+            Texture = atlas.Texture;
             Name = name;
             Width = w;
             Height = h;
