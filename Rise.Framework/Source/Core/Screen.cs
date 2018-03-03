@@ -16,12 +16,15 @@ namespace Rise
         public static int Y { get { return position.Y; } }
         public static int Width { get { return position.W; } }
         public static int Height { get { return position.H; } }
-        public static RectangleI WindowPos { get { return position; } }
+        public static RectangleI Rect { get { return position; } }
+
+        public static float CenterX { get { return position.X + position.W * 0.5f; } }
+        public static float CenterY { get { return position.Y + position.H * 0.5f; } }
+        public static Vector2 Center { get { return new Vector2(CenterX, CenterY); } }
+        public static Point2 Size { get { return new Point2(position.W, position.H); }}
 
         public static int DrawWidth { get { return drawSize.X; } }
         public static int DrawHeight { get { return drawSize.Y; } }
-        //public static Point2 Size { get { return drawSize; } }
-        //public static Vector2 Center { get { return new Vector2(drawSize.X / 2, drawSize.Y / 2); } }
 
         public static Color4 ClearColor = Color4.Black;
 
