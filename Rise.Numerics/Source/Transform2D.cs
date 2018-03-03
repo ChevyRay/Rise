@@ -157,5 +157,25 @@ namespace Rise
                 return position;
             }
         }
+
+        public bool IsAncestorOf(Transform2D t)
+        {
+            if (t.parent != null)
+            {
+                var p = t.parent;
+                while (p != null)
+                {
+                    if (p == this)
+                        return true;
+                    p = p.parent;
+                }
+            }
+            return false;
+        }
+
+        public bool IsDescendantOf(Transform2D t)
+        {
+            return t.IsAncestorOf(this);
+        }
     }
 }
