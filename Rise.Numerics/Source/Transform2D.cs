@@ -140,7 +140,7 @@ namespace Rise
                 {
                     Matrix3x2.Transform(scale, rotation, position, out matrix);
                     if (parent != null)
-                        matrix = parent.Matrix * matrix;
+                        matrix = matrix * parent.Matrix;
                     dirty = false;
                 }
 
