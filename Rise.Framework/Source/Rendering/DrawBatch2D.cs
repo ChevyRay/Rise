@@ -86,7 +86,7 @@ namespace Rise
             if (mesh.IndexCount > 0)
             {
                 mesh.Update();
-                draw.Perform();
+                draw.Perform(PrimitiveType.Triangles);
                 mesh.Clear();
             }
         }

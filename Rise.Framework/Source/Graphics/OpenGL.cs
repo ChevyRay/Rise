@@ -666,9 +666,9 @@ namespace Rise.OpenGL
             CheckError();
         }
 
-        delegate void _glDrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices);
+        delegate void _glDrawElements(PrimitiveType mode, GLSizei count, IndexType type, IntPtr indices);
         static _glDrawElements glDrawElements;
-        public static void DrawElements(DrawMode mode, GLSizei count, IndexType type, IntPtr indices)
+        public static void DrawElements(PrimitiveType mode, GLSizei count, IndexType type, IntPtr indices)
         {
             glDrawElements(mode, count, type, indices);
             CheckError();
@@ -1210,7 +1210,7 @@ namespace Rise.OpenGL
 
 namespace Rise
 {
-    public enum DrawMode : GLEnum
+    public enum PrimitiveType : GLEnum
     {
         Points = 0x0000,
         Lines = 0x0001,

@@ -107,6 +107,7 @@
     <Compile Include="Source\Rendering\DrawBatch2D.cs" />
     <Compile Include="Source\Atlas\AtlasTiles.cs" />
     <Compile Include="Source\Rendering\SubTexture.cs" />
+    <Compile Include="Source\Rendering\LineBatch2D.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

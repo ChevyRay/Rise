@@ -111,7 +111,7 @@ namespace Rise.Test
                     draw.Material.SetMatrix4x4(mvpID, model.MvpMatrix);
                     draw.Material.SetTexture(textureID, model.Texture);
                     draw.Mesh = model.Mesh;
-                    draw.Perform();
+                    draw.Perform(PrimitiveType.Triangles);
                 }
 
                 //toScreen.Perform(Color3.Black);
@@ -121,7 +121,7 @@ namespace Rise.Test
 
                 toScreen.Material.SetMatrix4x4("ProjMatrix", scene.ProjMatrix);
                 toScreen.Material.SetMatrix4x4("ViewMatrix", scene.ViewMatrix);
-                toScreen.Perform();
+                toScreen.Perform(PrimitiveType.Triangles);
             }
         }
     }

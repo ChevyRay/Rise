@@ -123,16 +123,16 @@ namespace Rise
             GL.BindVertexArray(0);
         }
 
-        public void Perform(Color4 clearColor)
+        public void Perform(Color4 clearColor, PrimitiveType type)
         {
             RenderTarget.Bind(Target);
 
             GL.ClearColor(clearColor.R / 255f, clearColor.G / 255f, clearColor.B / 255f, clearColor.A / 255f);
             GL.Clear(BufferBit.Color | BufferBit.Depth);
 
-            Perform();
+            Perform(type);
         }
-        public void Perform()
+        public void Perform(PrimitiveType type)
         {
             //Make sure the render target is binded
             RenderTarget.Bind(Target);
@@ -216,7 +216,7 @@ namespace Rise
             }
 
             //Draw the mesh triangles
-            GL.DrawElements(DrawMode.Triangles, Mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);
+            GL.DrawElements(type, Mesh.uploadedIndexCount, IndexType.UnsignedInt, IntPtr.Zero);
         }
 
         public bool Equals(ref DrawCall call)
