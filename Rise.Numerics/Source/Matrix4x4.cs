@@ -791,10 +791,10 @@ namespace Rise
         public static void CreateTransform2D(Vector2 origin, Vector2 position, Vector2 scale, float rotation, out Matrix4x4 result)
         {
             //TODO: this can be optimized like the above function
-            result = CreateTranslation(-position)
+            result = CreateTranslation(-origin)
                    * CreateRotation(Quaternion.Euler(0f, 0f, rotation))
                    * CreateScale(scale.X, scale.Y, 1f)
-                   * CreateTranslation(origin);
+                   * CreateTranslation(position);
         }
         public static Matrix4x4 CreateTransform2D(Vector2 origin, Vector2 position, Vector2 scale, float rotation)
         {
