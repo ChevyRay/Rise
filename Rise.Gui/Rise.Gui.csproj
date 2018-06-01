@@ -37,6 +37,7 @@
     <Compile Include="Source\Scrollbar.cs" />
     <Compile Include="Source\View.cs" />
     <Compile Include="Source\Enums.cs" />
+    <Compile Include="Source\Rect.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

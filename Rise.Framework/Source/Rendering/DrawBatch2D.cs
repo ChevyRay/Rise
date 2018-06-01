@@ -55,7 +55,7 @@ namespace Rise
             draw.Mesh = mesh;
         }
 
-        public void Begin(RenderTarget target, Material material, Matrix4x4 matrix, BlendMode blendMode)
+        public void Begin(RenderTarget target, Material material, Matrix4x4 viewMatrix, BlendMode blendMode)
         {
             if (rendering)
                 throw new Exception("Must call End() before you can call Begin() again.");
@@ -63,7 +63,7 @@ namespace Rise
             rendering = true;
             draw.Target = target;
             modelMatrix = Matrix3x2.Identity;
-            viewMatrix = matrix;
+            this.viewMatrix = viewMatrix;
             draw.Blend = true;
             draw.BlendMode = blendMode;
             currTexture = defaultTexture;
@@ -122,13 +122,13 @@ namespace Rise
         }
         public void PushClipRect(RectangleI rect)
         {
-            Flush();
-
             PushClipRect(ref rect);
         }
 
         public void PopClipRect()
         {
+            Flush();
+
             if (clipIndex >= 0)
             {
                 --clipIndex;
@@ -290,6 +290,23 @@ namespace Rise
             
             v0.Tex.X = v0.Tex.Y =  v1.Tex.Y = v3.Tex.X = 0f;
             v1.Tex.X = v2.Tex.X = v2.Tex.Y = v3.Tex.Y = 1f;
+
+            v0.Col = v1.Col = v2.Col = v3.Col = color;
+
+            mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+
+        public void DrawTextureFlipped(Texture texture, Vector2 position, Color4 color)
+        {
+            SetTexture(texture);
+
+            v0.Pos = modelMatrix.TransformPoint(position.X, position.Y);
+            v1.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y);
+            v2.Pos = modelMatrix.TransformPoint(position.X + texture.Width, position.Y + texture.Height);
+            v3.Pos = modelMatrix.TransformPoint(position.X, position.Y + texture.Height);
+
+            v0.Tex.X = v2.Tex.Y = v3.Tex.X = v3.Tex.Y = 0f;
+            v0.Tex.Y = v1.Tex.X = v1.Tex.Y = v2.Tex.X = 1f;
 
             v0.Col = v1.Col = v2.Col = v3.Col = color;
 

@@ -184,7 +184,8 @@ namespace Rise
                     state.Clip = true;
                     GL.Enable(EnableCap.ScissorTest);
                 }
-                GL.Scissor(ClipRect.X, ClipRect.Y, ClipRect.W, ClipRect.H);
+                //GL.Scissor(ClipRect.X, ClipRect.Y, ClipRect.W, ClipRect.H);
+                GL.Scissor(ClipRect.X, (Target != null ? Target.Height : Screen.DrawHeight) - ClipRect.MaxY, ClipRect.W, ClipRect.H);
             }
             else if (state.Clip)
             {

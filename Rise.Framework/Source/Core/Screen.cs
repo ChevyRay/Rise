@@ -3,6 +3,12 @@ namespace Rise
 {
     public static class Screen
     {
+        public static Action OnMoved;
+        public static Action OnResized;
+        public static Action OnMaximized;
+        public static Action OnMinimized;
+        public static Action OnRestored;
+
         static RectangleI position;
         static Point2 drawSize;
 
@@ -38,11 +44,16 @@ namespace Rise
             UpdateSize();
 
             App.platform.OnWinMoved += UpdatePosition;
+            App.platform.OnWinMoved += () => OnMoved?.Invoke();
             App.platform.OnWinResized += UpdateSize;
+            App.platform.OnWinResized += () => OnResized?.Invoke();
+            App.platform.OnWinMinimized += () => OnMinimized?.Invoke();
             App.platform.OnWinMaximized += UpdatePosition;
             App.platform.OnWinMaximized += UpdateSize;
+            App.platform.OnWinMaximized += () => OnMaximized?.Invoke();
             App.platform.OnWinRestored += UpdatePosition;
             App.platform.OnWinRestored += UpdateSize;
+            App.platform.OnWinRestored += () => OnRestored?.Invoke();
         }
 
         static void UpdatePosition()

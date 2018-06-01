@@ -422,7 +422,8 @@ namespace Rise.Gui
                 if (clip)
                 {
                     //Make sure to retain the clip state as we enter/exit child containers
-                    batch.PushClipRect(new RectangleI(rect.X, View.RectH - rect.MaxY, rect.W, rect.H));
+                    //batch.PushClipRect(new RectangleI(rect.X, View.RectH - rect.MaxY, rect.W, rect.H));
+                    batch.PushClipRect(new RectangleI(rect.X, rect.Y, rect.W, rect.H));
                     RenderChildren();
                     batch.PopClipRect();
                 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace Rise.Gui
 {
-    public abstract class Element
+    public class Element
     {
         public event Action OnAdded;
         public event Action OnRemoved;
