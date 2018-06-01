@@ -17,9 +17,7 @@ namespace Rise.Gui
 
     public enum LayoutMode
     {
-        Row,
-        Col,
-        Horizontal = Col,
-        Vertical = Row
+        Horizontal,
+        Vertical
     }
 }

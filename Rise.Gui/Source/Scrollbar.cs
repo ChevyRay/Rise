@@ -38,7 +38,7 @@ namespace Rise.Gui
         public Color4 HoverHandleColor = Color4.Black;
         public Color4 HoverHandleBorderColor = Color4.Transparent;
 
-        public Scrollbar(LayoutMode layout, Container container, int thickness = 16) 
+        public Scrollbar(LayoutMode layout, Container container, int thickness) 
             : base(thickness, thickness, layout == LayoutMode.Horizontal, layout == LayoutMode.Vertical)
         {
             Layout = layout;
@@ -128,7 +128,7 @@ namespace Rise.Gui
             base.DoRender(batch);
         }
 
-        private void DrawHandle(DrawBatch2D batch, RectangleI handle, Color4 color)
+        void DrawHandle(DrawBatch2D batch, RectangleI handle, Color4 color)
         {
             /*if (RoundedHandle)
             {

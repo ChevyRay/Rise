@@ -33,11 +33,11 @@ namespace Rise.Gui
         public Container(int sizeX, int sizeY)
             : base(sizeX, sizeY, false, false)
         {
-            
+
         }
         public Container() : this(16, 16)
         {
-            
+
         }
 
         public int ScrollX
@@ -151,7 +151,7 @@ namespace Rise.Gui
                 {
                     if (Layout == LayoutMode.Horizontal)
                     {
-                        //Your height is all your children's height added up (flexible elements are ignored)
+                        //Your width is all your children's height added up (flexible elements are ignored)
                         rect.W = (enabledChildren - 1) * spacing;
                         foreach (var child in Children)
                             if (child.Enabled)
@@ -159,7 +159,7 @@ namespace Rise.Gui
                     }
                     else
                     {
-                        //Your height is your tallest child's height
+                        //Your width is your widest child's width
                         foreach (var child in Children)
                             if (child.Enabled)
                                 rect.W = Math.Max(rect.W, child.SizeX);
@@ -416,16 +416,19 @@ namespace Rise.Gui
             if (BackgroundColor.A > 0)
                 batch.DrawRect(rect.X, rect.Y, rect.W, rect.H, BackgroundColor);
 
-            var clip = AlwaysClip || !rect.Equals(ref contentRect);
-            if (clip)
+            if (children.Count > 0)
             {
-                //Make sure to retain the clip state as we enter/exit child containers
-                batch.PushClipRect(new RectangleI(rect.X, View.RectH - rect.MaxY, rect.W, rect.H));
-                RenderChildren();
-                batch.PopClipRect();
+                var clip = AlwaysClip || !rect.Equals(ref contentRect);
+                if (clip)
+                {
+                    //Make sure to retain the clip state as we enter/exit child containers
+                    batch.PushClipRect(new RectangleI(rect.X, View.RectH - rect.MaxY, rect.W, rect.H));
+                    RenderChildren();
+                    batch.PopClipRect();
+                }
+                else
+                    RenderChildren();
             }
-            else
-                RenderChildren();
 
             base.DoRender(batch);
         }

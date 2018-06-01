@@ -1,11 +1,12 @@
 ﻿using System;
-
+using Rise.Gui;
 namespace Rise.GuiTest
 {
     static class Program
     {
         static DrawBatch2D batch;
         static Atlas atlas;
+        static View view;
 
         public static void Main(string[] args)
         {
@@ -18,8 +19,6 @@ namespace Rise.GuiTest
 
         static void Init()
         {
-            batch = new DrawBatch2D();
-
             var font = new Font("Assets/NotoSans-Regular.ttf", CharSet.BasicLatin);
             var size = new FontSize(font, 128f);
 
@@ -33,31 +32,39 @@ namespace Rise.GuiTest
             if (atlas == null)
                 throw new Exception("Failed to build atlas.");
 
-            var bitmap = atlas.Texture.GetBitmap();
-            bitmap.SavePng("atlas.png");
+            batch = new DrawBatch2D();
+
+            view = new View(Screen.Width, Screen.Height);
+            view.BackgroundColor = Color4.Grey;
+            view.Layout = LayoutMode.Horizontal;
+            view.Spacing = 16;
+            view.SetPadding(16);
+
+            var left = view.AddChild(new Container());
+            left.BackgroundColor = Color4.Red;
+            left.Layout = LayoutMode.Vertical;
+            left.FlexX = left.FlexY = true;
+
+            var right = view.AddChild(new Container());
+            right.BackgroundColor = Color4.Blue;
+            right.Layout = LayoutMode.Vertical;
+            right.FlexX = right.FlexY = true;
+
+            Screen.ClearColor = Color4.Black;
         }
 
         static void Update()
         {
-            
+            view.SetSize(Screen.Width, Screen.Height);
+            view.Update();
         }
 
         static void Render()
         {
+            view.Render();
+
             batch.Begin();
-            var font = atlas.GetFont("font");
-            int h = font.Height + font.LineGap;
-
-            int w = font.GetWidth("VoVrVuVyWAWOWaWeWrWvWy");
-            batch.DrawRect(32f, h, w, font.Height, Color4.Red * 0.5f);
-
-            var p = new Vector2(32, font.Ascent);
-            batch.DrawText(font, "ATAVAWAYAvAwAyFaFeFoKv", p + new Vector2(0f, 0f), Color4.White);
-            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h), Color4.White);
-            batch.DrawText(font, "TeTiToTrTsTuTyUAVAVaVe", p + new Vector2(0f, h * 2f), Color4.White);
-            batch.DrawText(font, "VoVrVuVyWAWOWaWeWrWvWy", p + new Vector2(0f, h * 3f), Color4.White);
-            //batch.DrawTexture(face, Mouse.Position, Color4.White);
-
+            batch.DrawTexture(view.Texture, Vector2.Zero, Color4.White);
             batch.End();
         }
     }

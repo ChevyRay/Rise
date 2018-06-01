@@ -31,6 +31,18 @@ namespace Rise
                 SetTexture(i, textures[i]);
         }
 
+        public void Resize(int w, int h)
+        {
+            if (Width != w || Height != h)
+            {
+                Width = w;
+                Height = h;
+                DepthTexture?.Resize(w, h);
+                for (int i = 0; i < textures.Length; ++i)
+                    textures[i]?.Resize(w, h);
+            }
+        }
+
         protected override void Dispose()
         {
             GL.DeleteFramebuffer(id);

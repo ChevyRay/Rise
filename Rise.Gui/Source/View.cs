@@ -7,9 +7,10 @@ namespace Rise.Gui
     {
         public event Action OnUpdate;
 
+        public Texture2D Texture { get; private set; }
+
         bool updateLayout = true;
         DrawBatch2D batch = new DrawBatch2D();
-        Texture2D texture;
         RenderTarget target;
         Material material;
 
@@ -21,8 +22,8 @@ namespace Rise.Gui
             FlexX = false;
             FlexY = false;
             View = this;
-            texture = new Texture2D(width, height, TextureFormat.RGBA);
-            target = new RenderTarget(texture);
+            Texture = new Texture2D(width, height, TextureFormat.RGBA);
+            target = new RenderTarget(Texture);
             material = new Material(new Shader(Shader.Basic2D));
         }
 
@@ -35,6 +36,7 @@ namespace Rise.Gui
         {
             SizeX = width;
             SizeY = height;
+            target.Resize(width, height);
         }
 
         //TODO: Maybe user should send these events to the view manually,
@@ -83,6 +85,7 @@ namespace Rise.Gui
                 DoLayout();
             }
 
+            target.Clear(Color4.Transparent);
             batch.Begin(target, material, Matrix4x4.Identity, BlendMode.Premultiplied);
             DoRender(batch);
             batch.End();

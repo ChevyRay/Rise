@@ -28,8 +28,12 @@ namespace Rise
 
         public static Color4 ClearColor = Color4.Black;
 
+        static bool resizable = true;
+
         internal static void Init()
         {
+            App.platform.SetResizable(resizable);
+
             UpdatePosition();
             UpdateSize();
 
@@ -77,6 +81,19 @@ namespace Rise
         public static void SetVSync(bool vsync)
         {
             App.platform.SetVSync(vsync);
+        }
+
+        public static bool Resizable
+        {
+            get { return resizable; }
+            set
+            {
+                if (resizable != value)
+                {
+                    resizable = value;
+                    App.platform.SetResizable(value);
+                }
+            }
         }
     }
 }

@@ -39,6 +39,17 @@ namespace Rise
             
         }
 
+        public void Resize(int w, int h)
+        {
+            if (Width != w || Height != h)
+            {
+                Width = w;
+                Height = h;
+                MakeCurrent();
+                GL.TexImage2D(DataTarget, 0, Format, Width, Height, 0, PixelFormat.RGBA, PixelType.UnsignedByte, IntPtr.Zero);
+            }
+        }
+
         public void SetPixels(Bitmap bitmap)
         {
             if (Width != bitmap.Width || Height != bitmap.Height)
