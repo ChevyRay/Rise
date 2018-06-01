@@ -31,10 +31,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\GuiState.cs" />
-    <Compile Include="Source\Button.cs" />
-    <Compile Include="Source\Label.cs" />
-    <Compile Include="Source\Checkbox.cs" />
+    <Compile Include="Source\Container.cs" />
+    <Compile Include="Source\Element.cs" />
+    <Compile Include="Source\Image.cs" />
+    <Compile Include="Source\Scrollbar.cs" />
+    <Compile Include="Source\View.cs" />
+    <Compile Include="Source\Enums.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

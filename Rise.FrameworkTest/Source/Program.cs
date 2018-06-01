@@ -93,7 +93,7 @@ namespace Rise.FrameworkTest
 
                 //To render, we setup a draw call and then perform it
 
-                draw.Perform();
+                draw.Perform(PrimitiveType.Triangles);
             }
 
             //After we call Perform(), we can change stuff and then call Perform() again
@@ -109,7 +109,7 @@ namespace Rise.FrameworkTest
                 }
                 mesh.Update();
 
-                draw.Perform();
+                draw.Perform(PrimitiveType.Triangles);
             }
 
 

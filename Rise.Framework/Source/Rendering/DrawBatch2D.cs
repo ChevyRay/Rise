@@ -40,6 +40,9 @@ namespace Rise
         Matrix4x4 viewMatrix;
         Matrix4x4 viewProjMatrix;
 
+        RectangleI[] clipRects = new RectangleI[4];
+        int clipIndex;
+
         public DrawBatch2D()
         {
             if (defaultTexture == null)
@@ -66,6 +69,8 @@ namespace Rise
             currTexture = defaultTexture;
             draw.Material = null;
             SetMaterial(material ?? defaultMaterial);
+            clipIndex = -1;
+            draw.Clip = false;
         }
         public void Begin()
         {
@@ -102,6 +107,38 @@ namespace Rise
             //Calculate the final matrix and upload it
             Matrix4x4.Multiply(ref viewMatrix, ref projMatrix, out viewProjMatrix);
             draw.Material.SetMatrix4x4(matrixLoc, ref viewProjMatrix);
+        }
+
+        public void PushClipRect(ref RectangleI rect)
+        {
+            Flush();
+
+            ++clipIndex;
+            if (clipIndex == clipRects.Length)
+                Array.Resize(ref clipRects, clipIndex * 2);
+            clipRects[clipIndex] = rect;
+            draw.Clip = true;
+            draw.ClipRect = rect;
+        }
+        public void PushClipRect(RectangleI rect)
+        {
+            Flush();
+
+            PushClipRect(ref rect);
+        }
+
+        public void PopClipRect()
+        {
+            if (clipIndex >= 0)
+            {
+                --clipIndex;
+                if (clipIndex >= 0)
+                    draw.ClipRect = clipRects[clipIndex];
+                else
+                    draw.Clip = false;
+            }
+            else
+                throw new Exception("No clip rects to pop.");
         }
 
         public void SetTarget(RenderTarget target)
@@ -290,6 +327,28 @@ namespace Rise
             v0.Col = v1.Col = v2.Col = v3.Col = color;
 
             mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+        public void DrawImage(SubTexture image, ref Rectangle position, Color4 color)
+        {
+            SetTexture(image.Texture);
+
+            float sx = position.W / image.Width;
+            float sy = position.H / image.Height;
+
+            var pos = new Vector2(position.X + image.OffsetX * sx, position.Y + image.OffsetY * sy);
+            v0.Pos = modelMatrix.TransformPoint(pos);
+            v1.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth * sx, pos.Y);
+            v2.Pos = modelMatrix.TransformPoint(pos.X + image.TrimWidth * sx, pos.Y + image.TrimHeight * sy);
+            v3.Pos = modelMatrix.TransformPoint(pos.X, pos.Y + image.TrimHeight * sy);
+
+            image.GetUVs(out v0.Tex, out v1.Tex, out v2.Tex, out v3.Tex);
+            v0.Col = v1.Col = v2.Col = v3.Col = color;
+
+            mesh.AddQuad(ref v0, ref v1, ref v2, ref v3);
+        }
+        public void DrawImage(SubTexture image, Rectangle position, Color4 color)
+        {
+            DrawImage(image, ref position, color);
         }
 
         public void DrawImageWashed(AtlasImage image, Vector2 position, Color4 color)

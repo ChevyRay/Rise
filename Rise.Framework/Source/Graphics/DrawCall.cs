@@ -81,10 +81,14 @@ namespace Rise
             BlendMode = blendMode;
         }
 
-        public void SetCliprect(RectangleI clipRect)
+        public void SetClipRect(ref RectangleI clipRect)
         {
             Clip = true;
             ClipRect = clipRect;
+        }
+        public void SetClipRect(RectangleI clipRect)
+        {
+            SetClipRect(ref clipRect);
         }
 
         public void Clear(Color4 color)
