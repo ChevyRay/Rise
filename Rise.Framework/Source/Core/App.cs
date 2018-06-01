@@ -13,8 +13,8 @@ namespace Rise
 
         internal static ErrorHandler errorHandler;
         internal static Platform platform;
-        static bool running;
-        static bool focused;
+        public static bool Running { get; private set; }
+        public static bool Focused { get; private set; }
 
         public static bool UpdateWhileFocused;
         public static bool FixedFramerate = true;
@@ -61,17 +61,17 @@ namespace Rise
             {
                 if (platform == null)
                     throw new Exception("App has not been initialized.");
-                if (running)
+                if (Running)
                     throw new Exception("App is already running.");
 
-                running = true;
+                Running = true;
                 platform.Init(title, width, height);
                 platform.CenterWindow();
 
                 platform.OnQuit += Quit;
                 platform.OnWinClose += Quit;
-                platform.OnWinFocusGained += () => focused = true;
-                platform.OnWinFocusLost += () => focused = false;
+                platform.OnWinFocusGained += () => Focused = true;
+                platform.OnWinFocusLost += () => Focused = false;
 
                 GL.Init();
                 Time.Init(1f / 60f);
@@ -85,17 +85,17 @@ namespace Rise
                 double prevTime = platform.GetTime();
                 double frameTimer = 0.0;
 
-                while (running)
+                while (Running)
                 {
                     platform.PollEvents();
 
-                    if (!focused && !UpdateWhileFocused)
+                    if (!Focused && !UpdateWhileFocused)
                     {
                         prevTime = (float)platform.GetTime();
                         continue;
                     }
 
-                    if (running)
+                    if (Running)
                     {
                         double currTime = platform.GetTime();
                         double deltaTime = currTime - prevTime;
@@ -144,8 +144,6 @@ namespace Rise
 
                 OnQuit?.Invoke();
 
-                ResourceHandle.DisposeAll();
-
                 platform.Quit();
             }
         }
@@ -155,7 +153,7 @@ namespace Rise
             //if (!running)
             //    throw new Exception("App is not running.");
 
-            running = false;
+            Running = false;
         }
     }
 }
