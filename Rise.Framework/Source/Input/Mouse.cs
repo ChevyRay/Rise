@@ -41,7 +41,7 @@ namespace Rise
 
             App.platform.OnMouseScroll += (x, y) =>
             {
-                Scroll = new Point2((int)(x / Screen.PixelW), (int)(y / Screen.PixelH));
+                Scroll += new Point2((int)(x / Screen.PixelW), (int)(y / Screen.PixelH));
                 OnScroll?.Invoke();
             };
         }
