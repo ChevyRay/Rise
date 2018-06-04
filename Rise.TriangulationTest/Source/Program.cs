@@ -70,7 +70,7 @@ namespace Rise.TriangulationTest
 
         static void Render()
         {
-            var m = Matrix4x4.CreateTranslation(new Vector2(200f, 100f)) * Matrix4x4.CreateScale(Screen.PixelW, Screen.PixelH);
+            var m = Matrix4x4.CreateTranslation(new Vector2(200f, 100f)) * Matrix4x4.CreateScale(Screen.PixelSize, Screen.PixelSize);
 
             batch.Begin(null, null, m, BlendMode.Premultiplied);
 

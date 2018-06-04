@@ -62,20 +62,23 @@ namespace Rise
         public int GetWidth(ref string text)
         {
             int w = 0;
-            AtlasChar prev = null;
-            AtlasChar chr;
-            for (int i = 0; i < text.Length; ++i)
+            if (text != null)
             {
-                chr = GetChar(text[i]);
-                if (prev != null)
-                    w += prev.GetKerning(text[i]);
-                w += chr.Advance;
-                prev = chr;
-            }
+                AtlasChar prev = null;
+                AtlasChar chr;
+                for (int i = 0; i < text.Length; ++i)
+                {
+                    chr = GetChar(text[i]);
+                    if (prev != null)
+                        w += prev.GetKerning(text[i]);
+                    w += chr.Advance;
+                    prev = chr;
+                }
 
-            //For the final character, we want to slice off the character spacing
-            if (prev != null)
-                w -= prev.Advance - prev.Image.Width;
+                //For the final character, we want to slice off the character spacing
+                if (prev != null)
+                    w -= prev.Advance - prev.Image.Width;
+            }
 
             return w;
         }

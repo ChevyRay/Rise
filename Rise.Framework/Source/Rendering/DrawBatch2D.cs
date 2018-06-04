@@ -384,7 +384,7 @@ namespace Rise
             mesh.AddQuad(ref w0, ref w1, ref w2, ref w3);
         }
 
-        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
+        public void DrawText(AtlasFont font, ref string text, Vector2 position, Color4 color)
         {
             var pos = position;
 
@@ -403,6 +403,10 @@ namespace Rise
                 pos.X += chr.Advance;
                 prev = chr;
             }
+        }
+        public void DrawText(AtlasFont font, string text, Vector2 position, Color4 color)
+        {
+            DrawText(font, ref text, position, color);
         }
     }
 }

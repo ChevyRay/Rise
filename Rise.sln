@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.PlatformSDL", "Rise.Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Entities", "Rise.Entities\Rise.Entities.csproj", "{32F7D13B-49E4-4B66-B265-3B34A3CC9EA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Models", "Rise.Models\Rise.Models.csproj", "{BE309DD3-1C88-49C0-A506-2485934C709D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.Serialization", "Rise.Serialization\Rise.Serialization.csproj", "{79DADF15-46C3-4E8B-8B4B-727F494FF570}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rise.SerializationTest", "Rise.SerializationTest\Rise.SerializationTest.csproj", "{6B0C5B89-6F70-4EC0-A541-701CF1D2F5CF}"
@@ -77,14 +75,6 @@ Global
 		{32F7D13B-49E4-4B66-B265-3B34A3CC9EA9}.Debug|x86.Build.0 = Debug|Any CPU
 		{32F7D13B-49E4-4B66-B265-3B34A3CC9EA9}.Release|x86.ActiveCfg = Release|Any CPU
 		{32F7D13B-49E4-4B66-B265-3B34A3CC9EA9}.Release|x86.Build.0 = Release|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Debug|x86.Build.0 = Debug|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Release|x86.ActiveCfg = Release|Any CPU
-		{BE309DD3-1C88-49C0-A506-2485934C709D}.Release|x86.Build.0 = Release|Any CPU
 		{79DADF15-46C3-4E8B-8B4B-727F494FF570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79DADF15-46C3-4E8B-8B4B-727F494FF570}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79DADF15-46C3-4E8B-8B4B-727F494FF570}.Release|Any CPU.ActiveCfg = Release|Any CPU

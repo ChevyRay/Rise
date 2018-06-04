@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Rise.Gui</RootNamespace>
     <AssemblyName>Rise.Gui</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,13 +31,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Source\Container.cs" />
-    <Compile Include="Source\Element.cs" />
-    <Compile Include="Source\Image.cs" />
-    <Compile Include="Source\Scrollbar.cs" />
-    <Compile Include="Source\View.cs" />
-    <Compile Include="Source\Enums.cs" />
-    <Compile Include="Source\Rect.cs" />
+    <Compile Include="Source\GuiContainer.cs" />
+    <Compile Include="Source\GuiElement.cs" />
+    <Compile Include="Source\GuiImage.cs" />
+    <Compile Include="Source\GuiScrollbar.cs" />
+    <Compile Include="Source\GuiView.cs" />
+    <Compile Include="Source\GuiRect.cs" />
+    <Compile Include="Source\AlignX.cs" />
+    <Compile Include="Source\AlignY.cs" />
+    <Compile Include="Source\LayoutMode.cs" />
+    <Compile Include="Source\FillMode.cs" />
+    <Compile Include="Source\GuiLabel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\" />

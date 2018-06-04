@@ -12,8 +12,7 @@ namespace Rise
         static RectangleI position;
         static Point2 drawSize;
 
-        public static float PixelW { get; private set; }
-        public static float PixelH { get; private set; }
+        public static float PixelSize { get; private set; }
 
         public static bool Fullscreen { get { return App.platform.Fullscreen; } }
         public static bool VSync { get { return App.platform.VSync; } }
@@ -65,8 +64,7 @@ namespace Rise
         {
             App.platform.GetSize(out position.W, out position.H);
             App.platform.GetDrawSize(out drawSize.X, out drawSize.Y);
-            PixelW = position.W / (float)drawSize.X;
-            PixelH = position.H / (float)drawSize.Y;
+            PixelSize = position.W / (float)drawSize.X;
         }
 
         public static void Resize(int w, int h)

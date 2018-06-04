@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1B2468C420C1C1A3002DE9E5 /* tinyfiledialogs.c in Sources */ = {isa = PBXBuildFile; fileRef = 1B2468C220C1C1A3002DE9E5 /* tinyfiledialogs.c */; };
+		1B2468C520C1C1A3002DE9E5 /* tinyfiledialogs.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B2468C320C1C1A3002DE9E5 /* tinyfiledialogs.h */; };
+		1B2468C820C1C1B3002DE9E5 /* tinyfiledialogs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B2468C620C1C1B3002DE9E5 /* tinyfiledialogs.cpp */; };
 		1B29991C202FA2DD000AC08A /* stb_truetype.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B299913202FA2DC000AC08A /* stb_truetype.h */; };
 		1B29991D202FA2DD000AC08A /* stb_image.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B299914202FA2DC000AC08A /* stb_image.h */; };
 		1B29991E202FA2DD000AC08A /* stb_image_write.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B299915202FA2DC000AC08A /* stb_image_write.h */; };
@@ -19,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1B2468C220C1C1A3002DE9E5 /* tinyfiledialogs.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tinyfiledialogs.c; sourceTree = "<group>"; };
+		1B2468C320C1C1A3002DE9E5 /* tinyfiledialogs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tinyfiledialogs.h; sourceTree = "<group>"; };
+		1B2468C620C1C1B3002DE9E5 /* tinyfiledialogs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tinyfiledialogs.cpp; sourceTree = "<group>"; };
 		1B29990C202FA2C3000AC08A /* librisetools.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = librisetools.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B299913202FA2DC000AC08A /* stb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_truetype.h; sourceTree = "<group>"; };
 		1B299914202FA2DC000AC08A /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
@@ -45,6 +51,9 @@
 		1B299903202FA2C3000AC08A = {
 			isa = PBXGroup;
 			children = (
+				1B2468C220C1C1A3002DE9E5 /* tinyfiledialogs.c */,
+				1B2468C320C1C1A3002DE9E5 /* tinyfiledialogs.h */,
+				1B2468C620C1C1B3002DE9E5 /* tinyfiledialogs.cpp */,
 				1B299919202FA2DD000AC08A /* extern_decl.h */,
 				1B299917202FA2DC000AC08A /* rect_packer.cpp */,
 				1B29991B202FA2DD000AC08A /* rect_packer.hpp */,
@@ -77,6 +86,7 @@
 				1B29991D202FA2DD000AC08A /* stb_image.h in Headers */,
 				1B29991E202FA2DD000AC08A /* stb_image_write.h in Headers */,
 				1B299924202FA2DD000AC08A /* rect_packer.hpp in Headers */,
+				1B2468C520C1C1A3002DE9E5 /* tinyfiledialogs.h in Headers */,
 				1B29991C202FA2DD000AC08A /* stb_truetype.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -142,6 +152,8 @@
 				1B299923202FA2DD000AC08A /* stb_image_write.cpp in Sources */,
 				1B299920202FA2DD000AC08A /* rect_packer.cpp in Sources */,
 				1B299921202FA2DD000AC08A /* stb_truetype.cpp in Sources */,
+				1B2468C420C1C1A3002DE9E5 /* tinyfiledialogs.c in Sources */,
+				1B2468C820C1C1B3002DE9E5 /* tinyfiledialogs.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -255,6 +267,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -267,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_STYLE = Automatic;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;

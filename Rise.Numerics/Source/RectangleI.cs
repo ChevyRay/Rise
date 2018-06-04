@@ -170,6 +170,14 @@ namespace Rise
         {
             return p.X >= X && p.Y >= Y && p.X < Right && p.Y < Bottom;
         }
+        public bool Contains(ref RectangleI rect)
+        {
+            return rect.X >= X && rect.Y >= Y && rect.Right <= Right && rect.Bottom <= Bottom;
+        }
+        public bool Contains(RectangleI rect)
+        {
+            return Contains(ref rect);
+        }
 
         public void CopyTo(out RectangleI other)
         {

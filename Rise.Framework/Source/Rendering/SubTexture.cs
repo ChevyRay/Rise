@@ -36,7 +36,7 @@ namespace Rise
         }
         protected SubTexture()
         {
-
+            
         }
 
         public void GetUVs(out Vector2 a, out Vector2 b, out Vector2 c, out Vector2 d)

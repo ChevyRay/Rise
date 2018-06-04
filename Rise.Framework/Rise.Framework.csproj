@@ -7,7 +7,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Rise</RootNamespace>
     <AssemblyName>Rise.Framework</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -107,6 +107,7 @@
     <Compile Include="Source\Rendering\DrawBatch2D.cs" />
     <Compile Include="Source\Atlas\AtlasTiles.cs" />
     <Compile Include="Source\Rendering\SubTexture.cs" />
+    <Compile Include="Source\Tools\NativeDialog.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

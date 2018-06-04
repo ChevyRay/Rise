@@ -27,7 +27,7 @@ namespace Rise.DrawBatchTest
             var builder = new AtlasBuilder(1024);
 
             //Pack a font
-            var font = new Font("Assets/NotoSans-Regular.ttf", CharSet.BasicLatin);
+            var font = new Font("Assets/NotoSans-Regular.ttf", FontCharSet.BasicLatin);
             var size32 = new FontSize(font, 32);
             builder.AddFont("font", size32, true);
 

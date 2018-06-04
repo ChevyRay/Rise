@@ -4,7 +4,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 namespace Rise
 {
-    public static class CharSet
+    public static class FontCharSet
     {
         public static readonly string Ascii;
         public static readonly string BasicLatin;
@@ -12,7 +12,7 @@ namespace Rise
         public static readonly string LatinExtendedA;
         public static readonly string LatinExtendedB;
 
-        static CharSet()
+        static FontCharSet()
         {
             var builder = new StringBuilder();
             for (char chr = (char)0x20; chr <= 0x7E; ++chr)
